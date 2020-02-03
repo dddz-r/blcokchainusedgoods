@@ -2,8 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="판매자 이름"
+            android:textColor="@color/darkGray"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -22,43 +25,60 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     <LinearLayout
+        android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="362dp"
+        android:layout_height="381dp"
         android:orientation="vertical">
 
         <Button
             android:id="@+id/button4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="구매내역" />
+            android:background="@drawable/button_fill_border"
+            android:text="구매내역"
+            android:textColor="@color/darkGray"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="판매내역" />
+            android:background="@drawable/button_fill_border"
+            android:text="판매내역"
+            android:textColor="@color/darkGray"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="후기" />
+            android:background="@drawable/button_fill_border"
+            android:text="후기"
+            android:textColor="@color/darkGray"
+            android:textStyle="bold" />
+
 
     </LinearLayout>
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:orientation="horizontal">
+        android:layout_height="50dp">
 
         <Button
             android:id="@+id/button7"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="톡 보내기" />
+            android:layout_height="50dp"
+            android:background="@drawable/button_fill_border"
+            android:text="톡 보내기"
+            android:textColor="@color/darkGray"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
 
-    </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
