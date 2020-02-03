@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".JoinActivity">
+
+
+    <LinearLayout
+        android:id="@+id/authPhoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.105">
+
+        <TextView
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/phone_number"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/phoneNumber"
+            android:layout_width="250dp"
+            android:layout_height="49dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/buttonborder_maintextcolor"
+            tools:layout_editor_absoluteX="80dp">
+
+        </EditText>
+
+        <Button
+            android:id="@+id/authPhoneNumberButton"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:background="@color/brightGray"
+            android:text="@string/phone_number_auth"
+            android:textColor="@color/darkGray">
+
+        </Button>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/userId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.211">
+
+        <TextView
+            android:id="@+id/userIdTextView"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/user_id"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/userIdEditText"
+            android:layout_width="250dp"
+            android:layout_height="49dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/buttonborder_maintextcolor"
+            tools:layout_editor_absoluteX="80dp">
+
+        </EditText>
+
+        <Button
+            android:id="@+id/check_user_id"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:background="@color/brightGray"
+            android:text="@string/check_user_id"
+            android:textColor="@color/darkGray">
+
+        </Button>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/userPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.178"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.319">
+
+        <TextView
+            android:id="@+id/userPasswordTextView"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/user_password"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/userPasswordEditText"
+            android:layout_width="250dp"
+            android:layout_height="49dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/buttonborder_maintextcolor"
+            tools:layout_editor_absoluteX="80dp">
+
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/userPasswordConfirm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.178"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.423">
+
+        <TextView
+            android:id="@+id/userPasswordConfirmTextView"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/user_password_confirm"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/userPasswordConfirmEditText"
+            android:layout_width="250dp"
+            android:layout_height="49dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/buttonborder_maintextcolor"
+            tools:layout_editor_absoluteX="80dp">
+
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/userName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.178"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.526">
+
+        <TextView
+            android:id="@+id/userNameTextView"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/user_name"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/userNameEditText"
+            android:layout_width="250dp"
+            android:layout_height="49dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/buttonborder_maintextcolor"
+            tools:layout_editor_absoluteX="80dp">
+
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/userAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.178"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.627">
+
+        <TextView
+            android:id="@+id/userAddressTextView"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/user_address"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/userAddressEditText"
+            android:layout_width="250dp"
+            android:layout_height="49dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/buttonborder_maintextcolor"
+            tools:layout_editor_absoluteX="80dp">
+
+        </EditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/userAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.178"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.73">
+
+        <TextView
+            android:id="@+id/userAccountTextView"
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/user_account"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/userAccountEditText"
+            android:layout_width="250dp"
+            android:layout_height="49dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/buttonborder_maintextcolor"
+            tools:layout_editor_absoluteX="80dp">
+
+        </EditText>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/caution1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/joining_caution"
+        android:textColor="@color/darkGray"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.9">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/caution2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/joining_cation_2"
+        android:textColor="@color/darkGray"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.926">
+
+    </TextView>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="104dp"
+        android:layout_marginLeft="104dp"
+        android:layout_marginTop="568dp"
+        android:background="@drawable/button_fill_border"
+        android:stateListAnimator="@null"
+        android:text="@string/joining"
+        android:textColor="@color/darkGray"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </Button>
+
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/backarrow"
+        android:stateListAnimator="@null"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </Button>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

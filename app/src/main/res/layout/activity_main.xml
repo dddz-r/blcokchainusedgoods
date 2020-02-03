@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/items"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="562dp"
+        android:orientation="horizontal"
+        android:weightSum="4"
+
+        app:layout_constraintBottom_toTopOf="@+id/addItems"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023">
+
+        <Button
+            android:id="@+id/menu"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:background="@drawable/menu_icon"
+            android:stateListAnimator="@null"
+            tools:layout_editor_absoluteX="18dp"
+            tools:layout_editor_absoluteY="21dp">
+
+        </Button>
+
+        <Button
+            android:id="@+id/dog"
+            android:layout_width="0dp"
+            android:layout_height="64dp"
+            android:layout_marginLeft="90dp"
+            android:layout_weight="1"
+            android:background="@drawable/onlydog"
+            android:stateListAnimator="@null"></Button>
+
+        <Button
+            android:id="@+id/talk"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:background="@drawable/talking_icon"
+            android:stateListAnimator="@null"></Button>
+
+        <Button
+            android:id="@+id/person"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:layout_weight="1"
+            android:background="@drawable/personal_icon"
+            android:stateListAnimator="@null"></Button>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="350dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="544dp"
+        android:background="@drawable/buttonborder_maintextcolor"
+        android:orientation="horizontal"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <EditText
+            android:id="@+id/search"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
+            android:background="@android:color/transparent">
+
+        </EditText>
+
+        <Button
+            android:layout_width="45dp"
+            android:layout_height="50dp"
+            android:background="@drawable/mirror"
+            android:stateListAnimator="@null">
+
+        </Button>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/addItems"
+        android:layout_width="85dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/additem"
+        android:stateListAnimator="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/items">
+
+    </Button>
+</androidx.constraintlayout.widget.ConstraintLayout>
