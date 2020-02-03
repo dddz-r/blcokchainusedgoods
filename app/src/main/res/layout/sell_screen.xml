@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="50dp">
+
+        <Button
+            android:id="@+id/addItems"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginStart="250dp"
+            android:layout_marginLeft="250dp"
+            android:layout_marginTop="95dp"
+            android:background="@drawable/additem"
+            android:stateListAnimator="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </Button>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+        <CheckBox
+            android:id="@+id/checkBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="판매되거나 구매된 적이 있는 상품인가요?"
+            android:layout_gravity="center"
+            android:textColor="@color/darkGray"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+    <TextView
+        android:layout_width="55dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
+        android:text="상품명"
+        android:textAlignment="center"
+        android:textColor="@color/darkGray">
+
+    </TextView>
+
+    <EditText
+        android:id="@+id/device_name"
+        android:layout_width="250dp"
+        android:layout_height="49dp"
+        android:layout_marginLeft="5dp"
+        android:background="@drawable/buttonborder_maintextcolor">
+
+    </EditText>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:text="카테고리"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/device_category"
+            android:layout_width="250dp"
+            android:layout_height="49dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/buttonborder_maintextcolor">
+
+        </EditText>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp">
+
+        <TextView
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="30dp"
+            android:text="상품설명"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/device_inform"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/buttonborder_maintextcolor">
+
+        </EditText>
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/sell_Ok"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/button_fill_border"
+        android:text="물품등록"
+        android:textColor="@color/darkGray"
+        android:textStyle="bold" />
+
+
+</LinearLayout>
