@@ -33,6 +33,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:id="@+id/bs_device_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="상품명"
@@ -47,6 +48,7 @@
 
 
     <TextView
+        android:id="@+id/bs_device_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="상품가격"
@@ -60,13 +62,14 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/device_inform_btn"
+        android:id="@+id/bs_device_inform_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="300dp"
         android:text="상품정보" />
 
     <TextView
+        android:id="@+id/bs_device_description"
         android:layout_width="match_parent"
         android:layout_height="210dp"
         android:text="상품설명"

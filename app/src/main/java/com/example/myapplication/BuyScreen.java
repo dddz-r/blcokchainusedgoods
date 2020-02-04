@@ -24,7 +24,7 @@ public class BuyScreen extends AppCompatActivity {
         setContentView(R.layout.buy_screen);
 
         //물품 정보 팝업창 띄우기
-        device_inform_btn = (Button)findViewById(R.id.device_inform_btn);
+        device_inform_btn = (Button)findViewById(R.id.bs_device_inform_btn);
 
         device_inform_btn.setOnClickListener(new View.OnClickListener() {
             @Override
