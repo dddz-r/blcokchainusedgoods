@@ -74,6 +74,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
         android:gravity="center">
 
         <EditText
@@ -98,14 +99,18 @@
     </LinearLayout>
 
     <GridView
+        android:id="@+id/main_gridView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:numColumns="3">
 
 
     </GridView>
 
     <!--버튼이 원래 구현되있는거같아서-->
-    <Button
+ <!--   <Button
         android:id="@+id/addItems"
         android:layout_width="85dp"
         android:layout_height="85dp"
@@ -115,7 +120,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/items">
 
-    </Button>
+    </Button>-->
 
 </LinearLayout>
     <include layout="@layout/activity_main2"/>

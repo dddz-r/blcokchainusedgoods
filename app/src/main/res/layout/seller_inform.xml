@@ -7,10 +7,19 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:text="판매자 정보"
+    android:textColor="@color/mainTextColor"
+    android:textStyle="bold"
+    android:textSize="25dp"/>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp">
+        android:layout_height="250dp"
+        android:background="@color/brightBlue">
 
         <TextView
             android:id="@+id/textView"
@@ -28,7 +37,7 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="381dp"
+        android:layout_height="370dp"
         android:orientation="vertical">
 
         <Button

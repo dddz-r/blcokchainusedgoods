@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
+<!--판매/구매 같이 쓰자-->
 
     <LinearLayout
         android:layout_width="match_parent"

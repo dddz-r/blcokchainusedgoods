@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="My"
-            android:textColor="@color/mainTextColor"
+            android:textColor="@color/darkGray"
             android:textSize="15dp"
             android:textStyle="bold"
             android:layout_margin="10dp">
@@ -89,12 +89,34 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp">
         </Button>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="구매한 상품"
+            android:textSize="15dp"
+            android:gravity="left"
+            android:background="@color/white"
+            android:textColor="@color/mainTextColor"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+        </Button>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="판매한 상품"
+            android:textSize="15dp"
+            android:gravity="left"
+            android:background="@color/white"
+            android:textColor="@color/mainTextColor"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+        </Button>
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="카테고리"
-            android:textColor="@color/mainTextColor"
+            android:textColor="@color/darkGray"
             android:textSize="15dp"
             android:textStyle="bold"
             android:layout_margin="10dp">

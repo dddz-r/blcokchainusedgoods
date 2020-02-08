@@ -6,7 +6,15 @@ public class BuyListItem {
     private String bli_device_name;
     private String bli_device_price;
     private String bli_device_condition;
-    private Drawable bli_d;
+    private Drawable bli_d; //private int bli_d;
+
+    public BuyListItem(String bli_device_name,String bli_device_price, String bli_device_condition, Drawable bli_d){
+        this.bli_d=bli_d;
+        this.bli_device_condition=bli_device_condition;
+        this.bli_device_name=bli_device_name;
+        this.bli_device_price=bli_device_price;
+
+    }
 
 
     public void setD(Drawable d) {
