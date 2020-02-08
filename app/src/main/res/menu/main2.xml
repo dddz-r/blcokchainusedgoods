@@ -6,4 +6,35 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+
+    <item android:title="관심상품">
+        <menu>
+            <item
+                android:id="@+id/nav_heart"
+                android:icon="@drawable/ic_menu_share"
+                android:title="찜한상품♥"/>
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/ic_menu_send"
+                android:title="@string/menu_send"/>
+        </menu>
+    </item>
+
+    <item android:title="카테고리">
+        <menu>
+            <item
+                android:id="@+id/nav_phone"
+                android:icon="@drawable/ic_menu_share"
+                android:title="핸드폰"/>
+            <item
+                android:id="@+id/nav_computer"
+                android:icon="@drawable/ic_menu_send"
+                android:title="컴퓨터 / 노트북"/>
+
+            <item
+                android:id="@+id/nav_other"
+                android:icon="@drawable/ic_menu_send"
+                android:title="기타"/>
+        </menu>
+    </item>
 </menu>

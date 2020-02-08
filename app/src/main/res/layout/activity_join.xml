@@ -1,37 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".JoinActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="10dp">
+
+
+        <Button
+            android:id="@+id/backButton"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/backarrow"
+            android:stateListAnimator="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </Button>
+
+    </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/authPhoneNumber"
-        android:layout_width="wrap_content"
+        android:id="@+id/userName"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.105">
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:orientation="horizontal">
 
         <TextView
+            android:id="@+id/userNameTextView"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@string/phone_number"
+            android:layout_marginLeft="20dp"
+            android:text="@string/user_name"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="*"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
 
         </TextView>
 
         <EditText
-            android:id="@+id/phoneNumber"
+            android:id="@+id/userNameEditText"
             android:layout_width="250dp"
             android:layout_height="49dp"
             android:layout_marginLeft="5dp"
@@ -40,38 +72,34 @@
 
         </EditText>
 
-        <Button
-            android:id="@+id/authPhoneNumberButton"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="5dp"
-            android:background="@color/brightGray"
-            android:text="@string/phone_number_auth"
-            android:textColor="@color/darkGray">
-
-        </Button>
-
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/userId"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
         android:gravity="left"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.211">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/userIdTextView"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
             android:text="@string/user_id"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="*"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
 
@@ -102,17 +130,68 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/authPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        android:gravity="left"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/phone_number"
+            android:layout_marginLeft="20dp"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="*"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <EditText
+            android:id="@+id/phoneNumber"
+            android:layout_width="250dp"
+            android:layout_height="49dp"
+            android:layout_marginLeft="5dp"
+            android:background="@drawable/buttonborder_maintextcolor"
+            tools:layout_editor_absoluteX="80dp">
+
+        </EditText>
+
+        <Button
+            android:id="@+id/authPhoneNumberButton"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="5dp"
+            android:background="@color/brightGray"
+            android:text="@string/phone_number_auth"
+            android:textColor="@color/darkGray">
+
+        </Button>
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:id="@+id/userPassword"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.178"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.319">
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp">
 
         <TextView
             android:id="@+id/userPasswordTextView"
@@ -120,6 +199,17 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/user_password"
+            android:layout_marginLeft="20dp"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="*"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
 
@@ -138,16 +228,12 @@
 
     <LinearLayout
         android:id="@+id/userPasswordConfirm"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.178"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.423">
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp">
 
         <TextView
             android:id="@+id/userPasswordConfirmTextView"
@@ -155,6 +241,17 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/user_password_confirm"
+            android:layout_marginLeft="20dp"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="*"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
 
@@ -171,53 +268,16 @@
         </EditText>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/userName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="left"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.178"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.526">
 
-        <TextView
-            android:id="@+id/userNameTextView"
-            android:layout_width="55dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="@string/user_name"
-            android:textAlignment="center"
-            android:textColor="@color/darkGray">
-
-        </TextView>
-
-        <EditText
-            android:id="@+id/userNameEditText"
-            android:layout_width="250dp"
-            android:layout_height="49dp"
-            android:layout_marginLeft="5dp"
-            android:background="@drawable/buttonborder_maintextcolor"
-            tools:layout_editor_absoluteX="80dp">
-
-        </EditText>
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/userAddress"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.178"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.627">
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp">
 
         <TextView
             android:id="@+id/userAddressTextView"
@@ -225,6 +285,17 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/user_address"
+            android:layout_marginLeft="20dp"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="  "
             android:textAlignment="center"
             android:textColor="@color/darkGray">
 
@@ -243,16 +314,12 @@
 
     <LinearLayout
         android:id="@+id/userAccount"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="left"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.178"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.73">
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp">
 
         <TextView
             android:id="@+id/userAccountTextView"
@@ -260,6 +327,17 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/user_account"
+            android:layout_marginLeft="20dp"
+            android:textAlignment="center"
+            android:textColor="@color/darkGray">
+
+        </TextView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="  "
             android:textAlignment="center"
             android:textColor="@color/darkGray">
 
@@ -276,66 +354,58 @@
         </EditText>
     </LinearLayout>
 
-    <TextView
-        android:id="@+id/caution1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/joining_caution"
-        android:textColor="@color/darkGray"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9">
 
-    </TextView>
 
-    <TextView
-        android:id="@+id/caution2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/joining_cation_2"
-        android:textColor="@color/darkGray"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.926">
-
-    </TextView>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="6dp">
 
     <Button
         android:id="@+id/button"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
-        android:layout_marginLeft="104dp"
-        android:layout_marginTop="568dp"
         android:background="@drawable/button_fill_border"
         android:stateListAnimator="@null"
         android:text="@string/joining"
         android:textColor="@color/darkGray"
         android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:textStyle="bold">
 
     </Button>
 
-    <Button
-        android:id="@+id/backButton"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="12dp"
-        android:background="@drawable/backarrow"
-        android:stateListAnimator="@null"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+</LinearLayout>
 
-    </Button>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/caution1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/joining_caution"
+            android:textColor="@color/darkGray"
+            android:textStyle="bold">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/caution2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/joining_cation_2"
+            android:textColor="@color/darkGray"
+            android:textStyle="bold">
+
+        </TextView>
+
+    </LinearLayout>
+
+</LinearLayout>
