@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="0dp"
         android:background="@drawable/ic_menu_gallery">
 
         <Button
@@ -113,8 +113,11 @@
         <EditText
             android:id="@+id/device_inform"
             android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_height="160dp"
             android:layout_marginLeft="5dp"
+            android:selectAllOnFocus="false"
+            android:singleLine="false"
+            android:inputType="textMultiLine"
             android:background="@drawable/buttonborder_maintextcolor">
 
         </EditText>
@@ -125,9 +128,9 @@
     <Button
         android:id="@+id/sell_Ok"
         android:layout_width="100dp"
-        android:layout_height="50dp"
+        android:layout_height="40dp"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/button_fill_border"
         android:text="물품등록"
         android:textColor="@color/darkGray"

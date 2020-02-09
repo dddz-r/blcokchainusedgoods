@@ -17,11 +17,10 @@
 
         <Button
             android:id="@+id/backButton"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="12dp"
             android:background="@drawable/backarrow"
             android:stateListAnimator="@null"
             app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +44,8 @@
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
             android:text="@string/user_name"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
@@ -66,7 +66,9 @@
             android:id="@+id/userNameEditText"
             android:layout_width="250dp"
             android:layout_height="49dp"
+            android:layout_weight="6"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
             android:background="@drawable/buttonborder_maintextcolor"
             tools:layout_editor_absoluteX="80dp">
 
@@ -88,7 +90,8 @@
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
             android:text="@string/user_id"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
@@ -105,29 +108,40 @@
 
         </TextView>
 
-        <EditText
-            android:id="@+id/userIdEditText"
+        <LinearLayout
             android:layout_width="250dp"
             android:layout_height="49dp"
-            android:layout_marginLeft="5dp"
             android:background="@drawable/buttonborder_maintextcolor"
-            tools:layout_editor_absoluteX="80dp">
-
-        </EditText>
-
-        <Button
-            android:id="@+id/check_user_id"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:orientation="horizontal"
+            android:layout_weight="6"
             android:layout_marginLeft="5dp"
-            android:background="@color/brightGray"
-            android:text="@string/check_user_id"
-            android:textColor="@color/darkGray">
+            android:layout_marginRight="15dp">
 
-        </Button>
+            <EditText
+                android:id="@+id/userIdEditText"
+                android:layout_width="190dp"
+                android:layout_height="49dp"
+                android:layout_weight="5"
+                android:layout_marginLeft="2dp"
+                tools:layout_editor_absoluteX="80dp">
+            </EditText>
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/check_user_id"
+                android:layout_width="50dp"
+                android:layout_height="42dp"
+                android:layout_gravity="center"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:textSize="10dp"
+                android:background="@drawable/button_fill_border"
+                android:text="@string/check_user_id"
+                android:textColor="@color/darkGray">
+
+            </Button>
+        </LinearLayout>
+
+        </LinearLayout>
 
     <LinearLayout
         android:id="@+id/authPhoneNumber"
@@ -143,7 +157,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/phone_number"
-            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
 
@@ -159,27 +174,40 @@
 
         </TextView>
 
-        <EditText
-            android:id="@+id/phoneNumber"
+        <LinearLayout
             android:layout_width="250dp"
             android:layout_height="49dp"
-            android:layout_marginLeft="5dp"
             android:background="@drawable/buttonborder_maintextcolor"
+            android:orientation="horizontal"
+            android:layout_weight="6"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp">
+
+        <EditText
+            android:id="@+id/phoneNumber"
+            android:layout_width="190dp"
+            android:layout_height="49dp"
+            android:layout_weight="5"
+            android:layout_marginLeft="5dp"
             tools:layout_editor_absoluteX="80dp">
 
         </EditText>
 
         <Button
             android:id="@+id/authPhoneNumberButton"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="42dp"
             android:layout_gravity="center"
-            android:layout_marginLeft="5dp"
-            android:background="@color/brightGray"
+            android:layout_weight="1"
+            android:layout_margin="3dp"
+            android:background="@drawable/button_fill_border"
             android:text="@string/phone_number_auth"
+            android:textSize="10dp"
             android:textColor="@color/darkGray">
 
         </Button>
+
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -199,7 +227,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/user_password"
-            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
 
@@ -219,9 +248,11 @@
             android:id="@+id/userPasswordEditText"
             android:layout_width="250dp"
             android:layout_height="49dp"
+            android:layout_weight="5"
             android:layout_marginLeft="5dp"
-            android:background="@drawable/buttonborder_maintextcolor"
-            tools:layout_editor_absoluteX="80dp">
+            android:layout_marginRight="15dp"
+            tools:layout_editor_absoluteX="80dp"
+            android:background="@drawable/buttonborder_maintextcolor">
 
         </EditText>
     </LinearLayout>
@@ -241,7 +272,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/user_password_confirm"
-            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
 
@@ -261,7 +293,9 @@
             android:id="@+id/userPasswordConfirmEditText"
             android:layout_width="250dp"
             android:layout_height="49dp"
+            android:layout_weight="6"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/buttonborder_maintextcolor"
             tools:layout_editor_absoluteX="80dp">
 
@@ -285,7 +319,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/user_address"
-            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
 
@@ -305,7 +340,9 @@
             android:id="@+id/userAddressEditText"
             android:layout_width="250dp"
             android:layout_height="49dp"
+            android:layout_weight="6"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/buttonborder_maintextcolor"
             tools:layout_editor_absoluteX="80dp">
 
@@ -327,7 +364,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="@string/user_account"
-            android:layout_marginLeft="20dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
 
@@ -347,7 +385,9 @@
             android:id="@+id/userAccountEditText"
             android:layout_width="250dp"
             android:layout_height="49dp"
+            android:layout_weight="6"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/buttonborder_maintextcolor"
             tools:layout_editor_absoluteX="80dp">
 
