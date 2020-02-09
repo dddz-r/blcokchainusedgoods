@@ -27,7 +27,7 @@ public class BuyList extends AppCompatActivity {
 
         bl_listView.setAdapter(ItemAdapter);
         
-        //테스트
+        //테스트//순서 : 그림 이름 가격 상태
         ItemAdapter.addBuyItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억","판매중");
         //List<String> buy_data = new ArrayList<>();
 

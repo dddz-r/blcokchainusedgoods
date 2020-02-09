@@ -8,7 +8,8 @@ public class BuyListItem {
     private String bli_device_condition;
     private Drawable bli_d; //private int bli_d;
 
-    public BuyListItem(String bli_device_name,String bli_device_price, String bli_device_condition, Drawable bli_d){
+    //순서 : 그림 이름 가격 상태
+    public BuyListItem( Drawable bli_d, String bli_device_name,String bli_device_price, String bli_device_condition){
         this.bli_d=bli_d;
         this.bli_device_condition=bli_device_condition;
         this.bli_device_name=bli_device_name;

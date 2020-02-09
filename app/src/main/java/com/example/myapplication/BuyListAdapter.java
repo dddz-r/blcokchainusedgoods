@@ -58,8 +58,9 @@ public class BuyListAdapter extends BaseAdapter {
 
         return convertView;
     }
-    public void addBuyItem(Drawable d, String name, String price, String condition){
-        BuyListItem b = new BuyListItem();
+    //순서 : 그림 이름 가격 상태
+    public void addBuyItem(Drawable d,String name, String price, String condition){
+        BuyListItem b = new BuyListItem(d,name,price,condition);
 
         b.setD(d);
         b.setDevice_condition(condition);

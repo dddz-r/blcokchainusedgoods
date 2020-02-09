@@ -79,6 +79,7 @@
         </TextView>
 
         <Button
+            android:id="@+id/interested_product"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="관심상품♥"
@@ -90,6 +91,7 @@
             android:layout_marginRight="5dp">
         </Button>
         <Button
+            android:id="@+id/bought_product"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="구매한 상품"
@@ -101,6 +103,7 @@
             android:layout_marginRight="5dp">
         </Button>
         <Button
+            android:id="@+id/sold_product"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="판매한 상품"

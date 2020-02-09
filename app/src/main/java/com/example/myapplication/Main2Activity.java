@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -20,17 +21,50 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.Menu;
+import android.widget.Button;
 
 public class Main2Activity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
 
+    Button interested_product;
+    Button bought_product;
+    Button sold_product;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main2);
+
+        interested_product = (Button)findViewById(R.id.interested_product);
+        bought_product = (Button)findViewById(R.id.bought_product);
+        sold_product = (Button)findViewById(R.id.sold_product);
+
+        interested_product.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startActivity(new Intent(Main2Activity.this, BuyList.class));
+            }
+        });
+
+        bought_product.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Main2Activity.this, BuyList.class));
+            }
+        });
+
+        sold_product.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startActivity(new Intent(Main2Activity.this, BuyList.class));
+            }
+        });
+
+
         //setContentView(R.layout.activity_main2);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = findViewById(R.id.toolbar);
+        //setSupportActionBar(toolbar);
 
         //뭐띄우는거 오른쪽밑에 버튼!
         FloatingActionButton fab = findViewById(R.id.fab);
