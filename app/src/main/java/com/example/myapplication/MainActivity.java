@@ -24,14 +24,18 @@ public class MainActivity extends AppCompatActivity {
     private View drawerView;
     private GridView main_gridView;
 
-    Button person;
+    Button add_item;
+
+    Button interested_product;
+    Button bought_product;
+    Button sold_product;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //View
+        //View *그리드뷰 아직테스트안해봄
         main_gridView = (GridView)findViewById(R.id.main_gridView);
         //Data
         List<String> gredView_data = new ArrayList<>();
@@ -44,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
             gredView_data.add("data"+i);
         }
 
-        // 리스트 아이템 눌렸을 때 이벤트 (쓸지안쓸지모름)
         main_gridView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
@@ -55,12 +58,39 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        person = (Button)findViewById(R.id.person);
+        //
 
-        person.setOnClickListener(new View.OnClickListener() {
+        add_item = (Button)findViewById(R.id.add_item);
+
+        add_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                startActivity(new Intent(MainActivity.this, SellScreen.class));
+            }
+        });
+
+        interested_product = (Button)findViewById(R.id.interested_product);
+        bought_product = (Button)findViewById(R.id.bought_product);
+        sold_product = (Button)findViewById(R.id.sold_product);
+
+        interested_product.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startActivity(new Intent(Main2Activity.this, BuyList.class));
+            }
+        });
+
+        bought_product.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, BuyList.class));
+            }
+        });
+
+        sold_product.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startActivity(new Intent(Main2Activity.this, BuyList.class));
             }
         });
 
@@ -76,11 +106,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button btn_menu_close = (Button)findViewById(R.id.menu_close);
-        btn_menu_close.setOnClickListener(new View.OnClickListener() {
+        Button login_btn = (Button)findViewById(R.id.login_btn);
+        login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                drawerLayout.closeDrawers();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
             }
         });
 

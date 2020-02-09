@@ -58,11 +58,11 @@
             android:stateListAnimator="@null"></Button>
 
         <Button
-            android:id="@+id/person"
+            android:id="@+id/add_item"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_weight="1"
-            android:background="@drawable/personal_icon"
+            android:background="@drawable/additem"
             android:stateListAnimator="@null"></Button>
 
     </LinearLayout>
@@ -70,31 +70,31 @@
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="290dp"
+        android:layout_height="58dp"
         android:orientation="horizontal"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
-        android:gravity="center">
+        android:background="@drawable/buttonborder_maintextcolor"
+        android:layout_gravity="center">
 
         <EditText
             android:id="@+id/search"
-            android:layout_width="280dp"
-            android:layout_height="55dp"
-            android:background="@drawable/buttonborder_maintextcolor"
+            android:layout_width="235dp"
+            android:layout_height="53dp"
             android:singleLine="true"
             android:textColor="@color/darkGray">
 
 
         </EditText>
-
         <Button
             android:layout_width="45dp"
-            android:layout_height="50dp"
+            android:layout_height="48dp"
             android:background="@drawable/mirror"
-            android:stateListAnimator="@null">
-
+            android:stateListAnimator="@null"
+            android:layout_margin="2dp">
         </Button>
+
 
     </LinearLayout>
 
