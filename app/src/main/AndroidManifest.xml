@@ -17,6 +17,8 @@
         <activity android:name=".BuyList"/>
         <activity android:name=".BuyScreen"/>
         <activity android:name=".LoginActivity"/>
+        <activity android:name=".TalkRoom"/>
+        <activity android:name=".TalkList"/>
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"

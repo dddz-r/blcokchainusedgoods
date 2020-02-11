@@ -7,7 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import java.util.ArrayList;
+
 public class MainGridAdapter extends BaseAdapter {
+
+    ArrayList<BuyListItem> mainItem= new ArrayList<>();
 
     private  int icons[];
     private  String name[];

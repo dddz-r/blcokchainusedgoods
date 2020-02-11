@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private GridView main_gridView;
 
     Button add_item;
+    Button talk;
 
     Button interested_product;
     Button bought_product;
@@ -59,6 +60,14 @@ public class MainActivity extends AppCompatActivity {
         );
 
         //
+        talk = (Button)findViewById(R.id.talk);
+
+        talk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, TalkRoom.class));
+            }
+        });
 
         add_item = (Button)findViewById(R.id.add_item);
 
