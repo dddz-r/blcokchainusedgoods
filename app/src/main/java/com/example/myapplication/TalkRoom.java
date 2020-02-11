@@ -45,7 +45,7 @@ public class TalkRoom extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                getJSON();
+                //getJSON();
             }
         });
 
