@@ -8,10 +8,16 @@ import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
 
 public class JoinActivity extends AppCompatActivity {
 
@@ -23,35 +29,6 @@ public class JoinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
 
-        user_id = findViewById(R.id.userIdEditText);
-        InputFilter[] twentyCharFilter = new InputFilter[1];
-        twentyCharFilter[0] = new InputFilter.LengthFilter(20);
-        user_id.setFilters(twentyCharFilter);
-
-        user_password = findViewById(R.id.userPasswordEditText);
-        InputFilter[] fortyCharFilter = new InputFilter[1];
-        fortyCharFilter[0] = new InputFilter.LengthFilter(40);
-        user_password.setFilters(fortyCharFilter);
-
-        user_name = findViewById(R.id.userNameEditText);
-        InputFilter[] thirtyCharFilter = new InputFilter[1];
-        thirtyCharFilter[0] = new InputFilter.LengthFilter(30);
-        user_name.setFilters(thirtyCharFilter);
-
-        user_phone_number = findViewById(R.id.userPhoneNumberEditText);
-        user_phone_number.setFilters(thirtyCharFilter);
-
-        user_address = findViewById(R.id.userAddressEditText);
-        InputFilter[] hundredCharFilter = new InputFilter[1];
-        hundredCharFilter[0] = new InputFilter.LengthFilter(100);
-        user_address.setFilters(hundredCharFilter);
-
-        user_account = findViewById(R.id.userAccountEditText);
-        user_account.setFilters(fortyCharFilter);
-
-        user_password_confirm = findViewById(R.id.userPasswordConfirmEditText);
-        user_password_confirm.setFilters(fortyCharFilter);
-
         //final Intent back = getIntent();
         //final String after_phone_number;
         //final boolean afterAuth;
@@ -60,6 +37,63 @@ public class JoinActivity extends AppCompatActivity {
         auth_phone_number = findViewById(R.id.authPhoneNumberButton);
         join = findViewById(R.id.button);
 
+        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                user_id = findViewById(R.id.userIdEditText);
+                user_password = findViewById(R.id.userPasswordEditText);
+                user_name = findViewById(R.id.userNameEditText);
+                user_phone_number = findViewById(R.id.userPhoneNumberEditText);
+                user_address = findViewById(R.id.userAddressEditText);
+                user_account = findViewById(R.id.userAccountEditText);
+                user_password_confirm = findViewById(R.id.userPasswordConfirmEditText);
+
+                /*
+                user_id = findViewById(R.id.userIdEditText);
+                InputFilter[] userIdFileter = new InputFilter[1];
+                userIdFileter[0] = new InputFilter.LengthFilter(20);
+                user_id.setFilters(userIdFileter);
+
+                user_password = findViewById(R.id.userPasswordEditText);
+                InputFilter[] userPasswordFilter = new InputFilter[1];
+                userPasswordFilter[0] = new InputFilter.LengthFilter(40);
+                user_password.setFilters(userPasswordFilter);
+
+                user_name = findViewById(R.id.userNameEditText);
+                InputFilter[] userNameFilter = new InputFilter[1];
+                userNameFilter[0] = new InputFilter.LengthFilter(30);
+                user_name.setFilters(userNameFilter);
+
+                user_phone_number = findViewById(R.id.userPhoneNumberEditText);
+                InputFilter[] userPhoneNumberFilter = new InputFilter[1];
+                userPhoneNumberFilter[0] = new InputFilter.LengthFilter(30);
+                user_phone_number.setFilters(userPhoneNumberFilter);
+
+                user_address = findViewById(R.id.userAddressEditText);
+                InputFilter[] userAddressFilter = new InputFilter[1];
+                userAddressFilter[0] = new InputFilter.LengthFilter(100);
+                user_address.setFilters(userAddressFilter);
+
+                user_account = findViewById(R.id.userAccountEditText);
+                InputFilter[] userAccountFilter = new InputFilter[1];
+                userAccountFilter[0] = new InputFilter.LengthFilter(140);
+                user_account.setFilters(userAccountFilter);
+
+                user_password_confirm = findViewById(R.id.userPasswordConfirmEditText);
+                InputFilter[] userPasswordConfirmFilter = new InputFilter[1];
+                userPasswordConfirmFilter[0] = new InputFilter.LengthFilter(40);
+                user_password_confirm.setFilters(userPasswordConfirmFilter);
+
+                */
+
+                joinUser();
+
+            }
+
+
+        });
     }
 
     private void joinUser() {
@@ -101,6 +135,10 @@ public class JoinActivity extends AppCompatActivity {
             user_password_confirm.requestFocus();
             return;
         }
+
+        JoinUser ju = new JoinUser(userId, userPassword, userName, userPhoneNumber, userAddress, userAccount);
+        ju.execute();
+
     }
 
     private class JoinUser extends AsyncTask<Void, Void, String> {
@@ -111,7 +149,8 @@ public class JoinActivity extends AppCompatActivity {
 
             this.user_id = user_id;
             this.user_password = user_password;
-            this.user_name = user_phone_number;
+            this.user_name = user_name;
+            this.user_phone_number = user_phone_number;
             this.user_address = user_address;
             this.user_account = user_account;
 
@@ -126,7 +165,46 @@ public class JoinActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... voids) {
-            return null;
+
+            RequestHandler requestHandler = new RequestHandler();
+
+            HashMap<String, String> params = new HashMap<>();
+            params.put("user_id", user_id);
+            params.put("user_password", user_password);
+            params.put("user_name", user_name);
+            params.put("user_phone_number", user_phone_number);
+            params.put("user_address", user_address);
+            params.put("user_account", user_account);
+
+            return requestHandler.sendPostRequest(URLS.URL_JOIN, params);
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+            Log.i("Join", "Info" + s);
+
+            try {
+
+                JSONObject obj = new JSONObject(s);
+
+                if (!obj.getString("code").equals(404)) {
+
+                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                    JSONObject userJson = obj.getJSONObject("user");
+
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "Some error occur", Toast.LENGTH_SHORT).show();
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 }

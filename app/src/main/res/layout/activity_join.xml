@@ -67,10 +67,11 @@
             android:layout_width="250dp"
             android:layout_height="49dp"
             android:layout_weight="6"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/buttonborder_maintextcolor"
-            tools:layout_editor_absoluteX="80dp">
+            tools:layout_editor_absoluteX="80dp"
+            android:textColor="@color/darkGray">
 
         </EditText>
 
@@ -122,8 +123,9 @@
                 android:layout_width="190dp"
                 android:layout_height="49dp"
                 android:layout_weight="5"
-                android:layout_marginLeft="2dp"
-                tools:layout_editor_absoluteX="80dp">
+                android:layout_marginLeft="10dp"
+                tools:layout_editor_absoluteX="80dp"
+                android:textColor="@color/darkGray">
             </EditText>
 
             <Button
@@ -188,8 +190,9 @@
             android:layout_width="190dp"
             android:layout_height="49dp"
             android:layout_weight="5"
-            android:layout_marginLeft="5dp"
-            tools:layout_editor_absoluteX="80dp">
+            android:layout_marginLeft="10dp"
+            tools:layout_editor_absoluteX="80dp"
+            android:textColor="@color/darkGray">
 
         </EditText>
 
@@ -252,7 +255,8 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="15dp"
             tools:layout_editor_absoluteX="80dp"
-            android:background="@drawable/buttonborder_maintextcolor">
+            android:background="@drawable/buttonborder_maintextcolor"
+            android:textColor="@color/darkGray">
 
         </EditText>
     </LinearLayout>
@@ -294,10 +298,11 @@
             android:layout_width="250dp"
             android:layout_height="49dp"
             android:layout_weight="6"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/buttonborder_maintextcolor"
-            tools:layout_editor_absoluteX="80dp">
+            tools:layout_editor_absoluteX="80dp"
+            android:textColor="@color/darkGray">
 
         </EditText>
     </LinearLayout>
@@ -341,10 +346,11 @@
             android:layout_width="250dp"
             android:layout_height="49dp"
             android:layout_weight="6"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/buttonborder_maintextcolor"
-            tools:layout_editor_absoluteX="80dp">
+            tools:layout_editor_absoluteX="80dp"
+            android:textColor="@color/darkGray">
 
         </EditText>
     </LinearLayout>
@@ -386,10 +392,11 @@
             android:layout_width="250dp"
             android:layout_height="49dp"
             android:layout_weight="6"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="15dp"
             android:background="@drawable/buttonborder_maintextcolor"
-            tools:layout_editor_absoluteX="80dp">
+            tools:layout_editor_absoluteX="80dp"
+            android:textColor="@color/darkGray">
 
         </EditText>
     </LinearLayout>
