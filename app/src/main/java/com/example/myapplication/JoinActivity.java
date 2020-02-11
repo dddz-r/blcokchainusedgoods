@@ -45,7 +45,7 @@ public class JoinActivity extends AppCompatActivity {
                 user_id = findViewById(R.id.userIdEditText);
                 user_password = findViewById(R.id.userPasswordEditText);
                 user_name = findViewById(R.id.userNameEditText);
-                user_phone_number = findViewById(R.id.userPhoneNumberEditText);
+                user_phone_number = findViewById(R.id.phoneNumber);
                 user_address = findViewById(R.id.userAddressEditText);
                 user_account = findViewById(R.id.userAccountEditText);
                 user_password_confirm = findViewById(R.id.userPasswordConfirmEditText);
