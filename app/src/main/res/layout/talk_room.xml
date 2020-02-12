@@ -7,6 +7,7 @@
 
 
     <TextView
+        android:id="@+id/tr_opposit_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="대화상대이름"
@@ -21,7 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:dividerHeight="0dp"
-        android:transcriptMode="alwaysScroll">
+        android:transcriptMode="alwaysScroll"
+        android:background="@color/brightGray">
 
     </ListView>
 

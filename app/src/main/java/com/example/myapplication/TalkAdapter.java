@@ -50,12 +50,12 @@ public class TalkAdapter extends BaseAdapter {
 
         if(convertView == null){
             LayoutInflater li = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = li.inflate(R.layout.talk_contents_item,parent,false);
+            convertView = li.inflate(R.layout.received_talk,parent,false);
         }
 
-        TextView tci_opposit_id = (TextView) convertView.findViewById(R.id.tci_opposit_id);
-        TextView tci_contents = (TextView) convertView.findViewById(R.id.tci_contents);
-        TextView tci_time = (TextView) convertView.findViewById(R.id.tci_time);
+        TextView tci_opposit_id = (TextView) convertView.findViewById(R.id.received_talk_opposit);
+        TextView tci_contents = (TextView) convertView.findViewById(R.id.received_talk_contents);
+        TextView tci_time = (TextView) convertView.findViewById(R.id.received_talk_time);
 
         TalkItem t = talkItems.get(position);
 
@@ -68,7 +68,30 @@ public class TalkAdapter extends BaseAdapter {
 
     }
 
-    //순서 : 그림 이름 가격 상태
+/*    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        Context c = parent.getContext();
+
+        if(convertView == null){
+            LayoutInflater li = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = li.inflate(R.layout.received_talk,parent,false);
+        }
+
+        TextView tci_contents = (TextView) convertView.findViewById(R.id.sent_talk_contents);
+        TextView tci_time = (TextView) convertView.findViewById(R.id.sent_talk_time);
+
+        TalkItem t = talkItems.get(position);
+
+        tci_contents.setText(t.getContents());
+        tci_time.setText(t.getTime());
+
+        return convertView;
+
+
+    }*/
+
+
     public void addTalkItem(String owner_id, String opposit_id, String contents, String time){
         TalkItem t = new TalkItem(owner_id,opposit_id,contents,time);
 
