@@ -7,6 +7,7 @@
 
 
     <TextView
+        android:id="@+id/tr_opposit_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="대화상대이름"
@@ -15,9 +16,14 @@
         android:textColor="@color/mainTextColor">
 
     </TextView>
+
     <ListView
+        android:id="@+id/talk_contents"
         android:layout_width="match_parent"
-        android:layout_height="600dp">
+        android:layout_height="500dp"
+        android:dividerHeight="0dp"
+        android:transcriptMode="alwaysScroll"
+        android:background="@color/brightGray">
 
     </ListView>
 
@@ -29,7 +35,7 @@
     android:background="@drawable/buttonborder_maintextcolor">
 
     <EditText
-        android:id="@+id/search"
+        android:id="@+id/talk_edit"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_weight="5"
@@ -39,6 +45,7 @@
     </EditText>
 
     <Button
+        android:id="@+id/talk_send_btn"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
