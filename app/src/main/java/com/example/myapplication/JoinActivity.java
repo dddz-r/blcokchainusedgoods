@@ -242,7 +242,7 @@ public class JoinActivity extends AppCompatActivity {
 
     }
 
-    //회원가입 클래스
+    //회원가입 쓰레드
     private class JoinUser extends AsyncTask<Void, Void, String> {
 
         private String user_id, user_password, user_name, user_phone_number, user_address, user_account;
@@ -354,7 +354,7 @@ public class JoinActivity extends AppCompatActivity {
         }*/
     }
 
-    //아이디 중복 검사
+    //아이디 중복 검사 쓰레드
     private class  CheckIdDuplication extends AsyncTask<Void, Void, String> {
 
         private String user_id;
