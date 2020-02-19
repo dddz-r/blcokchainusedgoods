@@ -16,13 +16,18 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class JoinActivity extends AppCompatActivity {
 
     EditText user_name, user_id, user_phone_number, user_password, user_password_confirm, user_address, user_account;
-    Button check_id, auth_phone_number, join;
+    Button check_id, auth_phone_number, join, back;
+    private boolean afterCheckId = false;
+    private boolean afterAuth = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +41,32 @@ public class JoinActivity extends AppCompatActivity {
         check_id = findViewById(R.id.check_user_id);
         auth_phone_number = findViewById(R.id.authPhoneNumberButton);
         join = findViewById(R.id.button);
+        back = findViewById(R.id.backButton);
 
-        findViewById(R.id.button).setOnClickListener(new View.OnClickListener() {
+        //아이디 중복검사 버튼 클릭 리스너
+        check_id.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                user_id = findViewById(R.id.userIdEditText);
+                checkIdDuplicaton();
+            }
+
+        });
+
+        //휴대폰 번호 인증
+        join.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+
+            }
+        });
+
+        //회원가입 버튼 클릭 리스너
+        join.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
@@ -96,6 +125,43 @@ public class JoinActivity extends AppCompatActivity {
         });
     }
 
+    //아이디 중복검사 버튼 클릭 시 실행하는 메소드
+    private void checkIdDuplicaton() {
+
+        final String userId = user_id.getText().toString().trim();
+
+        if(TextUtils.isEmpty(userId)) {
+            user_id.setError("please Enter Id");
+            user_id.requestFocus();
+            return;
+        }
+
+        CheckIdDuplication ci = new CheckIdDuplication(userId);
+        ci.execute();
+
+    }
+
+    //휴대폰 번호 인증 버튼 클릭 시 실행하는 메소드
+    //하나의 휴대폰 번호로는 하나의 사용자만 존재해야 하므로
+    //휴대폰 번호에 대한 중복 검사도 필요
+    //휴대폰 번호 중복 검사 js 추가하고
+    //쓰레드 만들어서 phone_number받아서 넘기게 하기
+    private void authPhoneNumber() {
+
+        final String userPhoneNumber = user_phone_number.getText().toString().trim();
+
+        if(TextUtils.isEmpty(userPhoneNumber)) {
+            user_phone_number.setError("please Enter your PhoneNumber");
+            user_phone_number.requestFocus();
+            return;
+        }
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+
+    }
+
+    //회원가입 버튼 클릭 시 실행하는 메소드
     private void joinUser() {
 
         final String userId = user_id.getText().toString().trim();
@@ -136,11 +202,47 @@ public class JoinActivity extends AppCompatActivity {
             return;
         }
 
-        JoinUser ju = new JoinUser(userId, userPassword, userName, userPhoneNumber, userAddress, userAccount);
-        ju.execute();
+        if (checkPasswordSecurity(userPassword)) {
+
+            if (!userPassword.equals(userPasswordConfirm)) {
+
+                Toast.makeText(this, "비밀번호가 일치하지 않습니다. 재입력 해주시기 바랍니다.", Toast.LENGTH_SHORT).show();
+
+            } else {
+
+                //여기다가 final boolean 타입의 유무 확인 두 변수가 true일 경우 를 만들어야 함
+                //만들 것 1. 아이디 중복 체크 하는 AsyncTask
+                //만들 것 2. 문자 인증하는 AsyncTask
+
+                if(afterAuth == true && afterCheckId == true) {
+
+                    JoinUser ju = new JoinUser(userId, userPassword, userName, userPhoneNumber, userAddress, userAccount);
+                    ju.execute();
+
+                } else if(afterCheckId == false) {
+
+                    Toast.makeText(this, "아이디 중복검사를 진행해 주세요!", Toast.LENGTH_SHORT).show();
+
+                } else if(afterAuth == false) {
+
+                    Toast.makeText(this, "휴대폰 본인인증을 진행해 주세요!", Toast.LENGTH_SHORT).show();
+
+                } else {
+
+                    Toast.makeText(this, "에러 발생", Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        } else {
+
+            Toast.makeText(this, "비밀번호가 안전성 정책에 어긋납니다. 규칙대로 비밀번호를 생성해주세요.", Toast.LENGTH_SHORT).show();
+
+        }
 
     }
 
+    //회원가입 클래스
     private class JoinUser extends AsyncTask<Void, Void, String> {
 
         private String user_id, user_password, user_name, user_phone_number, user_address, user_account;
@@ -176,19 +278,63 @@ public class JoinActivity extends AppCompatActivity {
             params.put("user_address", user_address);
             params.put("user_account", user_account);
 
-            return requestHandler.sendPostRequest(URLS.URL_JOIN, params);
+            String json =  requestHandler.sendPostRequest(URLS.URL_JOIN, params);
 
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-
-            super.onPostExecute(s);
-            Log.i("Join", "Info" + s);
+            Log.i("Join", "Info" + json);
 
             try {
 
-                JSONObject obj = new JSONObject(s);
+                JSONObject obj = new JSONObject(json);
+
+                if (!obj.getString("code").equals(404)) {
+
+                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                    JSONObject userJson = obj.getJSONObject("user");
+
+                    User user = new User(
+
+                            userJson.getString("user_id"),
+                            userJson.getString("user_name"),
+                            userJson.getString("user_phone_number"),
+                            userJson.getString("user_address"),
+                            userJson.getString("user_account")
+                    );
+
+                    PrefManager.getInstance(getApplicationContext()).setUserLogin(user);
+                    finish();
+
+
+                    Intent intent = new Intent(JoinActivity.this, MainActivity.class);
+
+                    String inputUserId = user.getUser_id();
+                    String inputUserName = user.getUser_name();
+                    String inputUserPhoneNumber = user.getUser_phone_number();
+                    String inputUserAddress = user.getUser_address();
+                    String inputUserAccount = user.getUser_account();
+
+                    startActivity(intent);
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "Some error occur", Toast.LENGTH_SHORT).show();
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return json;
+        }
+
+        /*@Override
+        protected void onPostExecute(String json) {
+
+            super.onPostExecute(json);
+            Log.i("Join", "Info" + json);
+
+            try {
+
+                JSONObject obj = new JSONObject(json);
 
                 if (!obj.getString("code").equals(404)) {
 
@@ -205,6 +351,77 @@ public class JoinActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+        }*/
+    }
+
+    //아이디 중복 검사
+    private class  CheckIdDuplication extends AsyncTask<Void, Void, String> {
+
+        private String user_id;
+        CheckIdDuplication(String user_id) { this.user_id = user_id; }
+
+        @Override
+        protected void onPreExecute() { super.onPreExecute(); }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            RequestHandler requestHandler = new RequestHandler();
+
+            HashMap<String, String > params = new HashMap<>();
+            params.put("user_id", user_id);
+
+            String json = requestHandler.sendPostRequest(URLS.URL_CHECK_ID_DUPLICATION, params);
+
+            Log.i("check_id_duplication", "Info" + json);
+
+            try {
+
+                JSONObject obj = new JSONObject(json);
+
+                if (!obj.getString("code").equals(404)) {
+
+                    if (obj.getString("code").equals(204)){//해당 아이디가 이미 존재 할 경우
+
+                        Toast.makeText(getApplicationContext(), "해당 아이디는 이미 존재하는 아이디 입니다.", Toast.LENGTH_SHORT).show();
+
+                    } else { //code:200 해당 아이디가 사용 가능할 경우
+
+                        afterCheckId = true;
+                        Toast.makeText(getApplicationContext(), "사용가능한 아이디 입니다.", Toast.LENGTH_SHORT).show();
+                    }
+
+                } else { //code:404 에러 발생
+
+                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return json;
         }
+
+    }
+
+    //비밀번호 안전성 검사
+    public boolean checkPasswordSecurity(String user_password){
+
+        String passwordPattern = "^(?=.*\\d)(?=.*[~!@#$%^&*()-])(?=.*[a-z]).{8,14}$";
+        Matcher matcher = Pattern.compile(passwordPattern).matcher(user_password);
+
+        if (matcher.matches()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //뒤로가기 버튼
+    public void onClick_Back(View view) {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
     }
 }
