@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.regex.Matcher;
@@ -52,6 +53,16 @@ public class JoinActivity extends AppCompatActivity {
                 checkIdDuplicaton();
             }
 
+        });
+
+        //휴대폰 번호 인증
+        join.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+
+            }
         });
 
         //회원가입 버튼 클릭 리스너
@@ -127,6 +138,26 @@ public class JoinActivity extends AppCompatActivity {
 
         CheckIdDuplication ci = new CheckIdDuplication(userId);
         ci.execute();
+
+    }
+
+    //휴대폰 번호 인증 버튼 클릭 시 실행하는 메소드
+    //하나의 휴대폰 번호로는 하나의 사용자만 존재해야 하므로
+    //휴대폰 번호에 대한 중복 검사도 필요
+    //휴대폰 번호 중복 검사 js 추가하고
+    //쓰레드 만들어서 phone_number받아서 넘기게 하기
+    private void authPhoneNumber() {
+
+        final String userPhoneNumber = user_phone_number.getText().toString().trim();
+
+        if(TextUtils.isEmpty(userPhoneNumber)) {
+            user_phone_number.setError("please Enter your PhoneNumber");
+            user_phone_number.requestFocus();
+            return;
+        }
+
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
 
     }
 

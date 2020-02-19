@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.myapplication">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-sdk tools:overrideLibrary="android.support.*"></uses-sdk>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -24,14 +26,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".ChangePasswordActivity2"></activity>
+        <activity android:name=".AuthPhoneNumber"></activity>
+        <activity android:name=".ChangePasswordActivity2" />
         <activity android:name=".ChangePasswordActivity" />
         <activity android:name=".FindIdActivity" />
         <activity android:name=".JoinActivity" />
-        <activity android:name=".SellScreen"/>
-        <activity android:name=".BuyList"/>
-        <activity android:name=".BuyScreen"/>
-        <activity android:name=".LoginActivity"/>
+        <activity android:name=".SellScreen" />
+        <activity android:name=".BuyList" />
+        <activity android:name=".BuyScreen" />
+        <activity android:name=".LoginActivity" />
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
