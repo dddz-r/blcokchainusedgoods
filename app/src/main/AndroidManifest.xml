@@ -4,7 +4,7 @@
     package="com.example.myapplication">
 
     <uses-sdk tools:overrideLibrary="android.support.*"></uses-sdk>
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -31,10 +31,13 @@
         <activity android:name=".ChangePasswordActivity" />
         <activity android:name=".FindIdActivity" />
         <activity android:name=".JoinActivity" />
-        <activity android:name=".SellScreen" />
-        <activity android:name=".BuyList" />
-        <activity android:name=".BuyScreen" />
-        <activity android:name=".LoginActivity" />
+        <activity android:name=".SellScreen"/>
+        <activity android:name=".BuyList"/>
+        <activity android:name=".BuyScreen"/>
+        <activity android:name=".LoginActivity"/>
+        <activity android:name=".TalkRoom"/>
+        <activity android:name=".TalkList"/>
+
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
