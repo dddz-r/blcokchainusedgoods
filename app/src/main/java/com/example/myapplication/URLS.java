@@ -7,5 +7,5 @@ public class URLS {
     public static final String URL_JOIN = URL_ROOT + "/join";
     public static  final String URL_TALK = URL_ROOT+"/talk";
     public static final String URL_CHECK_ID_DUPLICATION = URL_ROOT + "/check_id";
-  
+    public static final String URL_AUTH_PHONENUMBER = URL_ROOT + "/auth";
 }
