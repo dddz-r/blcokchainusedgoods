@@ -10,21 +10,22 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="0dp"
-        android:background="@drawable/ic_menu_gallery">
+        android:background="@drawable/gallery3">
 
         <Button
             android:id="@+id/addItems"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_marginStart="250dp"
             android:layout_marginLeft="250dp"
             android:layout_marginTop="95dp"
             android:background="@drawable/additem"
-            android:stateListAnimator="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.802"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.76">
 
         </Button>
     </androidx.constraintlayout.widget.ConstraintLayout>
