@@ -44,6 +44,8 @@ public class RequestHandler {
             writer.close();
             os.close();
 
+            /* */
+
             int responseCode = connection.getResponseCode();
 
             Log.d("리스폰스",Integer.toString(responseCode));
