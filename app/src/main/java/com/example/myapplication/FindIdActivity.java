@@ -41,6 +41,7 @@ public class FindIdActivity extends AppCompatActivity {
                 user_name = findViewById(R.id.userNameEditText);
                 user_phone_number = findViewById(R.id.userPhoneNumberEditText);
 
+                findId();
             }
         });
     }
@@ -63,6 +64,9 @@ public class FindIdActivity extends AppCompatActivity {
         }
 
         //FindId 쓰레드를 실행하는 코드
+        FindId fi = new FindId(userName, userPhoneNumber);
+        fi.execute();
+
     }
 
     private class FindId extends AsyncTask<Void, Void, String > {
