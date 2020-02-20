@@ -8,4 +8,5 @@ public class URLS {
     public static  final String URL_TALK = URL_ROOT+"/talk";
     public static final String URL_CHECK_ID_DUPLICATION = URL_ROOT + "/check_id";
     public static final String URL_AUTH_PHONENUMBER = URL_ROOT + "/auth";
+    public static final String URL_FIND_ID = URL_ROOT + "/find_id";
 }

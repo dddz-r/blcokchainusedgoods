@@ -326,6 +326,12 @@ public class JoinActivity extends AppCompatActivity {
                     String inputUserAddress = user.getUser_address();
                     String inputUserAccount = user.getUser_account();
 
+                    intent.putExtra("inputUserId", inputUserId);
+                    intent.putExtra("inputUserName", inputUserName);
+                    intent.putExtra("inputUserPhoneNumber", inputUserPhoneNumber);
+                    intent.putExtra("inputUserAddress", inputUserAddress);
+                    intent.putExtra("inputUserAccount", inputUserAccount);
+
                     startActivity(intent);
 
                 } else {
