@@ -22,7 +22,7 @@
         android:layout_marginEnd="100dp"
         android:layout_marginRight="100dp"
         android:src="@drawable/bold"
-        app:layout_constraintBottom_toTopOf="@+id/username"
+        app:layout_constraintBottom_toTopOf="@+id/userId"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/change_password"
@@ -31,7 +31,7 @@
         app:layout_constraintVertical_bias="0.224"></ImageView>
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/userId"
         android:layout_width="0dp"
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
@@ -63,7 +63,7 @@
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/userId" />
 
     <Button
         android:id="@+id/login"
