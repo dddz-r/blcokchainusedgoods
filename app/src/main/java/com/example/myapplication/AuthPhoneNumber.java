@@ -3,9 +3,12 @@ package com.example.myapplication;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -30,10 +33,53 @@ public class AuthPhoneNumber extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth_phone_number);
 
-        Intent intent =getIntent();
+        auth_button = findViewById(R.id.AuthButton);
+        auth_number = findViewById(R.id.authNumberEditText);
+
+        Intent intent = getIntent();
         phone_Number = intent.getStringExtra("inputPhoneNumber");
 
+        final AuthAttribute aa = new AuthAttribute(phone_Number, personAllow);
 
+        String authNumber = executeGenerate();
+
+        //액티비티가 시작하자 마자 번호를 전송
+        //인증 버튼을 클릭하면 authNumber와 비교
+        PhoneNumberAuth pa = new PhoneNumberAuth(phone_Number, authNumber);
+        pa.execute();
+
+        //버튼 클릭 이벤트
+        auth_button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                final String inputNumber = auth_number.getText().toString().trim();
+
+                if(TextUtils.isEmpty(inputNumber)) {
+                    auth_number.setError("please Enter authentication number");
+                    auth_number.requestFocus();
+                    return;
+                }
+
+                if(inputNumber.equals(auth_number)) {
+
+                    Toast.makeText(getApplicationContext(), "휴대전화 인증 성공", Toast.LENGTH_SHORT).show();
+                    aa.personAllow = true;
+
+                    Intent back = new Intent(AuthPhoneNumber.this, JoinActivity.class);
+                    back.putExtra("personAllow", aa.personAllow);
+                    back.putExtra("user_phone_number", aa.phoneNumber);
+
+                    startActivity(back);
+
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "휴대전화 인증 실패", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+        });
     }
 
     //랜덤 난수 생성 메소드
