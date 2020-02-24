@@ -100,7 +100,7 @@ public class FindIdActivity extends AppCompatActivity {
 
                 JSONObject obj = new JSONObject(json);
 
-                if(!obj.getString("code").equals(404)) {
+                if(!obj.getString("code").equals("404")) {
 
                     Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                     JSONObject userJson = obj.getJSONObject("user");
@@ -140,7 +140,7 @@ public class FindIdActivity extends AppCompatActivity {
                 e.printStackTrace();
 
             }
-            return null;
+            return json;
 
         }
     }

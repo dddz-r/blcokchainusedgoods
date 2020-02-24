@@ -300,7 +300,7 @@ public class JoinActivity extends AppCompatActivity {
 
                 JSONObject obj = new JSONObject(json);
 
-                if (!obj.getString("code").equals(404)) {
+                if (!obj.getString("code").equals("404")) {
 
                     Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                     JSONObject userJson = obj.getJSONObject("user");
@@ -399,9 +399,9 @@ public class JoinActivity extends AppCompatActivity {
 
                 JSONObject obj = new JSONObject(json);
 
-                if (!obj.getString("code").equals(404)) {
+                if (!obj.getString("code").equals("404")) {
 
-                    if (obj.getString("code").equals(204)){//해당 아이디가 이미 존재 할 경우
+                    if (obj.getString("code").equals("204")){//해당 아이디가 이미 존재 할 경우
 
                         Toast.makeText(getApplicationContext(), "해당 아이디는 이미 존재하는 아이디 입니다.", Toast.LENGTH_SHORT).show();
 

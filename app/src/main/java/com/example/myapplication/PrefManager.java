@@ -69,5 +69,6 @@ public class PrefManager {
         editor.clear();
         editor.apply();
         ctx.startActivity(new Intent(ctx, LoginActivity.class));
+
     }
 }

@@ -98,9 +98,9 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
                 JSONObject obj = new JSONObject(json);
 
-                if(!obj.getString("code").equals(404)) {
+                if(!obj.getString("code").equals("404")) {
 
-                    if(obj.getString("code").equals(204)) {
+                    if(obj.getString("code").equals("204")) {
 
                         Toast.makeText(getApplicationContext(), "입력하신 정보에 해당하는 계정이 없습니다", Toast.LENGTH_SHORT).show();
 

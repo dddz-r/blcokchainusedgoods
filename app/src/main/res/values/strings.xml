@@ -53,4 +53,5 @@
 
     <string name="caution_password_security">특수문자, 영어소문자, 숫자를 포함하여 8~14자로 입력하세요.</string>
     <string name="auth_number">인증번호</string>
+    <string name="go_main">물건 구경가기</string>
 </resources>
