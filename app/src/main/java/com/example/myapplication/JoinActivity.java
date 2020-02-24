@@ -34,6 +34,8 @@ public class JoinActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join);
 
+        //휴대전화 인증에는 해당 코드가 있어야 뒤로 와도 글자 그대로일 듯
+        //DB에 휴대폰 인증 여부가 있어야 회원가입시 체크할 수 있을 듯
         //final Intent back = getIntent();
         //final String after_phone_number;
         //final boolean afterAuth;
@@ -61,6 +63,16 @@ public class JoinActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                user_phone_number = findViewById(R.id.userPhoneNumberEditText);
+                authPhoneNumber();
+
+                Intent intent = getIntent();
+
+                if(intent.getBooleanExtra("personAllow", true)) {
+
+                    afterAuth = true;
+
+                }
 
             }
         });
@@ -157,6 +169,8 @@ public class JoinActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra("inputPhoneNumber", userPhoneNumber);
+
         startActivity(intent);
 
     }
@@ -202,9 +216,9 @@ public class JoinActivity extends AppCompatActivity {
             return;
         }
 
-        if (checkPasswordSecurity(userPassword)) {
+        if (checkPasswordSecurity(userPassword)) { //패스워드 안전성 통과
 
-            if (!userPassword.equals(userPasswordConfirm)) {
+            if (!userPassword.equals(userPasswordConfirm)) { //패스워드 확인 통과
 
                 Toast.makeText(this, "비밀번호가 일치하지 않습니다. 재입력 해주시기 바랍니다.", Toast.LENGTH_SHORT).show();
 
@@ -214,16 +228,16 @@ public class JoinActivity extends AppCompatActivity {
                 //만들 것 1. 아이디 중복 체크 하는 AsyncTask
                 //만들 것 2. 문자 인증하는 AsyncTask
 
-                if(afterAuth == true && afterCheckId == true) {
+                if(afterAuth && afterCheckId) {
 
                     JoinUser ju = new JoinUser(userId, userPassword, userName, userPhoneNumber, userAddress, userAccount);
                     ju.execute();
 
-                } else if(afterCheckId == false) {
+                } else if(!afterCheckId) {
 
                     Toast.makeText(this, "아이디 중복검사를 진행해 주세요!", Toast.LENGTH_SHORT).show();
 
-                } else if(afterAuth == false) {
+                } else if(!afterAuth) {
 
                     Toast.makeText(this, "휴대폰 본인인증을 진행해 주세요!", Toast.LENGTH_SHORT).show();
 
@@ -242,7 +256,7 @@ public class JoinActivity extends AppCompatActivity {
 
     }
 
-    //회원가입 클래스
+    //회원가입 쓰레드
     private class JoinUser extends AsyncTask<Void, Void, String> {
 
         private String user_id, user_password, user_name, user_phone_number, user_address, user_account;
@@ -286,7 +300,7 @@ public class JoinActivity extends AppCompatActivity {
 
                 JSONObject obj = new JSONObject(json);
 
-                if (!obj.getString("code").equals(404)) {
+                if (!obj.getString("code").equals("404")) {
 
                     Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                     JSONObject userJson = obj.getJSONObject("user");
@@ -311,6 +325,12 @@ public class JoinActivity extends AppCompatActivity {
                     String inputUserPhoneNumber = user.getUser_phone_number();
                     String inputUserAddress = user.getUser_address();
                     String inputUserAccount = user.getUser_account();
+
+                    intent.putExtra("inputUserId", inputUserId);
+                    intent.putExtra("inputUserName", inputUserName);
+                    intent.putExtra("inputUserPhoneNumber", inputUserPhoneNumber);
+                    intent.putExtra("inputUserAddress", inputUserAddress);
+                    intent.putExtra("inputUserAccount", inputUserAccount);
 
                     startActivity(intent);
 
@@ -354,7 +374,7 @@ public class JoinActivity extends AppCompatActivity {
         }*/
     }
 
-    //아이디 중복 검사
+    //아이디 중복 검사 쓰레드
     private class  CheckIdDuplication extends AsyncTask<Void, Void, String> {
 
         private String user_id;
@@ -379,9 +399,9 @@ public class JoinActivity extends AppCompatActivity {
 
                 JSONObject obj = new JSONObject(json);
 
-                if (!obj.getString("code").equals(404)) {
+                if (!obj.getString("code").equals("404")) {
 
-                    if (obj.getString("code").equals(204)){//해당 아이디가 이미 존재 할 경우
+                    if (obj.getString("code").equals("204")){//해당 아이디가 이미 존재 할 경우
 
                         Toast.makeText(getApplicationContext(), "해당 아이디는 이미 존재하는 아이디 입니다.", Toast.LENGTH_SHORT).show();
 
