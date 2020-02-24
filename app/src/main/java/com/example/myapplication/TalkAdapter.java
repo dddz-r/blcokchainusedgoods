@@ -19,16 +19,7 @@ public class TalkAdapter extends BaseAdapter {
     private Context context;
     private int layout;
     ArrayList<TalkItem> talkItems = new ArrayList<>();
-    private LayoutInflater inflater;
-
-
- /*   public ChatAdapter() {
-        this.context = applicationContext;
-        this.layout = talklist;
-        this.chatData = list;
-        this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.id= id;
-    }*/
+    private int id;
 
     @Override
     public int getCount() {
@@ -52,49 +43,52 @@ public class TalkAdapter extends BaseAdapter {
 
         if(convertView == null){
             LayoutInflater li = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = li.inflate(R.layout.received_talk,parent,false);
-        }
+            TalkItem t = talkItems.get(position);
 
-        TextView tci_opposit_id = (TextView) convertView.findViewById(R.id.received_talk_opposit);
-        TextView tci_contents = (TextView) convertView.findViewById(R.id.received_talk_contents);
-        TextView tci_time = (TextView) convertView.findViewById(R.id.received_talk_time);
+            //message.getSender().getUserId().equals(SendBird.getCurrentUser().getUserId())
+            //if(t.getOwner_id().equals(id)){
+                if(id==0){
+                convertView = li.inflate(R.layout.sent_talk,parent,false);
+                TextView contents = (TextView) convertView.findViewById(R.id.sent_talk_contents);
+                TextView time = (TextView) convertView.findViewById(R.id.sent_talk_time);
 
-        TalkItem t = talkItems.get(position);
+                contents.setText(t.getContents());
+                time.setText(t.getTime());
 
-        tci_opposit_id.setText(t.getOpposit_id());
-        tci_contents.setText(t.getContents());
-        tci_time.setText(t.getTime());
 
+            }else {
+                convertView = li.inflate(R.layout.received_talk,parent,false);
+                TextView opposit_id = (TextView) convertView.findViewById(R.id.received_talk_opposit);
+                TextView contents = (TextView) convertView.findViewById(R.id.received_talk_contents);
+                TextView time = (TextView) convertView.findViewById(R.id.received_talk_time);
+
+                opposit_id.setText(t.getOpposit_id());
+                contents.setText(t.getContents());
+                time.setText(t.getTime());
+            }
+
+
+    }
         return convertView;
 
 
     }
 
-/*    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
 
-        Context c = parent.getContext();
+    public void addMyTalkItem(String owner_id, String opposit_id, String contents, String time){
+        TalkItem t = new TalkItem(owner_id,opposit_id,contents,time);
 
-        if(convertView == null){
-            LayoutInflater li = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = li.inflate(R.layout.received_talk,parent,false);
-        }
-
-        TextView tci_contents = (TextView) convertView.findViewById(R.id.sent_talk_contents);
-        TextView tci_time = (TextView) convertView.findViewById(R.id.sent_talk_time);
-
-        TalkItem t = talkItems.get(position);
-
-        tci_contents.setText(t.getContents());
-        tci_time.setText(t.getTime());
-
-        return convertView;
+        id=0;
+        t.setOwner_id(owner_id);
+        t.setOpposit_id(opposit_id);
+        t.setContents(contents);
+        t.setTime(time);
 
 
-    }*/
+        talkItems.add(t);
+    }
 
-
-    public void addTalkItem(String owner_id, String opposit_id, String contents, String time){
+    public void addOppositTalkItem(String owner_id, String opposit_id, String contents, String time){
         TalkItem t = new TalkItem(owner_id,opposit_id,contents,time);
 
         t.setOwner_id(owner_id);

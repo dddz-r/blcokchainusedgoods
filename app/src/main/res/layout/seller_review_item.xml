@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <!--판매/구매 같이 쓰자-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp"
+        android:background="@drawable/buttonborder_maintextcolor">
+
+
+        <TextView
+            android:id="@+id/sri_commenter_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="작성자 이름"
+            android:textSize="15dp"
+            android:layout_margin="10dp"
+            android:textColor="@color/mainTextColor"
+            android:textStyle="bold"
+            android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/sri_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:text="★★★★☆"
+                android:textSize="15dp"
+                android:textColor="@color/yellow"
+                android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/sri_comment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:selectAllOnFocus="false"
+                android:singleLine="false"
+                android:inputType="textMultiLine"
+                android:layout_weight="1"
+                android:textSize="15dp"
+                android:scrollbars="vertical"
+                android:textColor="@color/darkGray"
+                android:textStyle="bold"
+                android:text="상품과 판매자에 대한 후기!" />
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

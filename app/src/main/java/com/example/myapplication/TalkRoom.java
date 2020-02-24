@@ -21,10 +21,14 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 
@@ -46,30 +50,40 @@ public class TalkRoom extends AppCompatActivity {
     private Button talk_send_btn;
     private TextView tr_opposit_id;
     private Socket socket;
+    TalkAdapter talkAdapter = new TalkAdapter();
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.talk_room);
 
+//https://choidev-1.tistory.com/71 이거보고 connect이벤트를 따로만들어야하면 쓰기
 
         try {
-            //socket = IO.socket(URLS.URL_TALK);//
-            socket = IO.socket("ec2-13-125-213-203.ap-northeast-2.compute.amazonaws.com:3000");
+            socket = IO.socket(URLS.URL_TALK);
+            //socket = IO.socket("ec2-13-125-213-203.ap-northeast-2.compute.amazonaws.com:3000");
             socket.connect();
             //socket.on(Socket.EVENT_CONNECT, onConnect);
             //socket.on("serverMessage", onMessageReceived);
             socket.emit("connection",socket);
+
+            //데이터를 받아온다
             socket.on("send", new Emitter.Listener() {//on은 서버에서 받아오는거
                 @Override
-                public void call(final Object... args) {//send라는 이름의 함수
+                public void call(final Object... args) {//send라는 이름의 함수 받아오는거
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             try {
                                 JSONObject data = (JSONObject) args[0];
-                                tr_opposit_id.setText(data.getString("message"));
-                                talk_edit.setText("");
+                                String opposit_id = data.getString("opposit_id");
+                                String owner_id = data.getString("owner_id");
+                                String contents = data.getString("contents");
+                                String time = data.getString("time");
+
+                                //오너 아이디랑 오퍼짓아이디 비교해서 어댑터에 넣어야하남, 어댑터2개필요한가
+
                                 //TalkAdapter.addTalkItem("나","너",data.getString("message"),"시간");
                             } catch(Exception e) {
                                 Toast.makeText(getApplicationContext(), e.getMessage(),
@@ -92,15 +106,21 @@ public class TalkRoom extends AppCompatActivity {
         tr_opposit_id = (TextView)findViewById(R.id.tr_opposit_id);
 
         talk_contents = (ListView)findViewById(R.id.talk_contents);//리사이클써야하나?
-        TalkAdapter talkAdapter = new TalkAdapter();
+        //TalkAdapter talkAdapter = new TalkAdapter();
 
         talk_contents.setAdapter(talkAdapter);
 
-        //talkAdapter.addTalkItem("나","상대방","내용","시간");
+        talkAdapter.addOppositTalkItem("나","상대방","안녕하신가~","12:01");
+        talkAdapter.addMyTalkItem("나","상대방","반갑군~","12:53");
 
         //array.add(talk_edit.getText().toString()); //버튼을 클릭하면 array에 추가
         //talkAdapter.notifyDataSetChanged(); //어댑터 새로고침
         //talk_edit.setText("");
+
+        /* 이거 이용해서 내가 쓴거랑 남이쓴거 분류해서 어댑터에 넣기*/
+        //socket.on('say', function(msg){ ... })누군가 채팅을 했을 때
+        //socket.broadcast.emit('chat message', nickName+'  :  '+msg); - 누군가 채팅을 했을 때 그것을 화자 외에게 전달
+        //socket.emit('mySaying', 'ME  :  '+msg);	 - 화자에게 내용 다시 보냄
 
         //챗 보내기 눌리면 내용세팅하는거 stText
         talk_edit = (EditText)findViewById(R.id.talk_edit);
@@ -114,30 +134,30 @@ public class TalkRoom extends AppCompatActivity {
                     JSONObject data = new JSONObject();
                     //TalkAdapter.addTalkItem("me","you","11:00:00", talk_edit.getText().toString());
 
-                    socket.on("send", new Emitter.Listener() {//on은 서버에서 받아오는거
-                        @Override
-                        public void call(final Object... args) {//send라는 이름의 함수
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        JSONObject data = (JSONObject) args[0];
-                                        tr_opposit_id.setText(data.getString("message"));
-                                        talk_edit.setText("");
-                                        //TalkAdapter.addTalkItem("나","너",data.getString("message"),"시간");
-                                    } catch (Exception e) {
-                                        Toast.makeText(getApplicationContext(), e.getMessage(),
-                                                Toast.LENGTH_LONG).show();
-                                        e.printStackTrace();
-                                    }
-                                }
-                            });
-                        }
-                    });
-
                     try {
-                        data.put("message", talk_edit.getText().toString());
+
+                        long now = System.currentTimeMillis();
+                        Date date = new Date(now);
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
+                        String formatDate = dateFormat.format(date);
+
+                        data.put("owner_id", "owner_id");
+                        data.put("opposit_id",tr_opposit_id.getText().toString());
+                        data.put("contents", talk_edit.getText().toString());
+                        data.put("time", formatDate);
+
+                        TalkContents tc = new TalkContents("owner_id", tr_opposit_id.getText().toString(),talk_edit.getText().toString(),formatDate);
+                        tc.execute();
+
+
+                        //talkAdapter.addMyTalkItem("나","상대방",talk_edit.getText().toString(),"12:53");
+
+                        talk_edit.setText("");
+
+                        //json오브젝트 형태확인 (나중에 지워야함)
+                        String datastrr = data.toString();
+                        tr_opposit_id.setText(datastrr);
+
 
                         socket.emit("send", data);//이게 서버에 데이터 보낸거
                         //talk_edit.setText("");//칸 비우기
@@ -214,68 +234,6 @@ public class TalkRoom extends AppCompatActivity {
         }
     }
 
-public void getJSON(){
-    Thread thread = new Thread(new Runnable() {
-
-        public void run() {
-
-            String result;
-
-            try {
-
-                Log.d(TAG, URL);
-                java.net.URL url = new URL(URL);
-                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-
-
-                httpURLConnection.setReadTimeout(3000);
-                httpURLConnection.setConnectTimeout(5000);//3000
-                httpURLConnection.setDoOutput(true);
-                httpURLConnection.setDoInput(true);
-                httpURLConnection.setRequestMethod("GET");
-                httpURLConnection.setUseCaches(false);
-                httpURLConnection.connect();
-
-
-                int responseStatusCode = httpURLConnection.getResponseCode();
-
-                InputStream inputStream;
-                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
-
-                    inputStream = httpURLConnection.getInputStream();
-                } else {
-                    inputStream = httpURLConnection.getErrorStream();
-
-                }
-
-
-                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
-                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-
-                StringBuilder sb = new StringBuilder();
-                String line;
-
-
-                while ((line = bufferedReader.readLine()) != null) {
-                    sb.append(line);
-                }
-
-                bufferedReader.close();
-                httpURLConnection.disconnect();
-
-                result = sb.toString().trim();
-
-
-            } catch (Exception e) {
-                result = e.toString();
-            }
-            Message message = mHandler.obtainMessage(LOAD_SUCCESS, result);
-            mHandler.sendMessage(message);
-        }
-
-    });
-    thread.start();
-}
 
 //
     private class TalkContents extends AsyncTask<Void, Void, String> {

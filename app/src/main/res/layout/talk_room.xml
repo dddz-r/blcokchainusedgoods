@@ -22,6 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="500dp"
         android:dividerHeight="0dp"
+        android:divider="@color/white"
         android:transcriptMode="alwaysScroll"
         android:background="@color/brightGray">
 
