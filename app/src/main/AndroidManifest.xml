@@ -18,6 +18,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -38,10 +41,9 @@
         <activity android:name=".LoginActivity"/>
         <activity android:name=".TalkRoom"/>
         <activity android:name=".TalkList"/>
-        <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".SellerInform"/>
+        <activity android:name="SellerReview"/>
+        <activity android:name=".WriteReview"/>
         <activity
             android:name=".ui.login.LoginActivity"
             android:label="@string/title_activity_login" />

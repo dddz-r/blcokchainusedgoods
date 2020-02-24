@@ -29,7 +29,7 @@ public class TalkItem {
         this.contents = contents;
     }
 
-    public String getOwner_id() {
+    public String getOwner_id(){
         return owner_id;
     }
 
