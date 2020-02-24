@@ -144,4 +144,18 @@
         app:layout_constraintTop_toBottomOf="@+id/find_id">
 
     </TextView>
+
+    <TextView
+        android:id="@+id/go_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/go_main"
+        android:textColor="@color/darkGray"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/change_password">
+
+    </TextView>
 </androidx.constraintlayout.widget.ConstraintLayout>
