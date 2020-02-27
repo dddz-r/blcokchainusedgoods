@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,16 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 
-public class LoginActivity extends AppCompatActivity {
+public class Login2Activity extends AppCompatActivity {
 
     TextView join, find_id, change_password, go_main;
     EditText user_id, user_password;
@@ -38,32 +36,33 @@ public class LoginActivity extends AppCompatActivity {
         go_main = (TextView)findViewById(R.id.go_main);
 
         login = findViewById(R.id.login);
+        login.setEnabled(true);
 
         join.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, JoinActivity.class));
+                startActivity(new Intent(Login2Activity.this, JoinActivity.class));
             }
         });
 
         find_id.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, FindIdActivity.class));
+                startActivity(new Intent(Login2Activity.this, FindIdActivity.class));
             }
         });
 
         change_password.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, ChangePasswordActivity.class));
+                startActivity(new Intent(Login2Activity.this, ChangePasswordActivity.class));
             }
         });
 
         go_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                startActivity(new Intent(Login2Activity.this, MainActivity.class));
             }
         });
 
@@ -99,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         //여기서 쓰레드 실행
-        Login login = new Login(userId, userPassword);
+        Login2Activity.Login login = new Login2Activity.Login(userId, userPassword);
         login.execute();
 
     }
@@ -117,7 +116,9 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        protected void onPreExecute() { super.onPreExecute(); }
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
 
         @Override
         protected String doInBackground(Void... voids) {
@@ -128,23 +129,27 @@ public class LoginActivity extends AppCompatActivity {
             params.put("user_id", user_id);
             params.put("user_password", user_password);
 
-            String json = requestHandler.sendPostRequest(URLS.URL_LOGIN, params);
+            return requestHandler.sendPostRequest(URLS.URL_LOGIN, params);
+        }
 
-            Log.i("login", "info" + json);
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
 
             try {
 
-                JSONObject obj = new JSONObject(json);
+                JSONObject obj = new JSONObject(s);
 
-                if(!obj.getString("code").equals("404")) {
+                if (!obj.getString("code").equals("404")) {
 
-                    if(obj.getString("code").equals("204")) { //정보 불일치
+                    if (obj.getString("code").equals("204")) { //정보 불일치
 
-                        Toast.makeText(getApplicationContext(),  obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 
                     } else { //정보 일치
 
-                        Toast.makeText(getApplicationContext(),  obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 
                         JSONObject userJson = obj.getJSONObject("user");
 
@@ -166,7 +171,7 @@ public class LoginActivity extends AppCompatActivity {
                         String inputAddress = user.getUser_address();
                         String inputAccount = user.getUser_account();
 
-                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        Intent intent = new Intent(Login2Activity.this, MainActivity.class);
                         intent.putExtra("inputId", inputId);
                         intent.putExtra("inputName", inputName);
                         intent.putExtra("inputPhoneNumber", inputPhoneNumber);
@@ -190,9 +195,7 @@ public class LoginActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return json;
         }
     }
-
-
 }
+

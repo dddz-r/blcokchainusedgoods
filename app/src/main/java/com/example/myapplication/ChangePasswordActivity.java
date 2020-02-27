@@ -90,13 +90,18 @@ public class ChangePasswordActivity extends AppCompatActivity {
             params.put("user_id", user_id);
             params.put("user_phone_number", user_phone_number);
 
-            String json = requestHandler.sendPostRequest(URLS.URL_CHANGE_PASSWORD_FIRST, params);
+            return requestHandler.sendPostRequest(URLS.URL_CHANGE_PASSWORD_FIRST, params);
 
-            Log.i("change_password_first", "info" + json);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
 
             try {
 
-                JSONObject obj = new JSONObject(json);
+                JSONObject obj = new JSONObject(s);
 
                 if(!obj.getString("code").equals("404")) {
 
@@ -104,7 +109,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
 
                         Toast.makeText(getApplicationContext(), "입력하신 정보에 해당하는 계정이 없습니다", Toast.LENGTH_SHORT).show();
 
-                    } else { //입력한 정보에 해당하는 계정 존재
+                    } else { //입력한 정보에 해당하는 계정 존재 code 200
 
                         Toast.makeText(getApplicationContext(), "다음 페이지로 이동합니다.", Toast.LENGTH_SHORT).show();
                         //match = true;
@@ -120,8 +125,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 e.printStackTrace();
 
             }
-
-            return json;
+            //return json;
         }
     }
 }

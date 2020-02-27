@@ -92,46 +92,54 @@ public class FindIdActivity extends AppCompatActivity {
             params.put("user_name", user_name);
             params.put("user_phone_number", user_phone_number);
 
-            String json = requestHandler.sendPostRequest(URLS.URL_FIND_ID, params);
+            return requestHandler.sendPostRequest(URLS.URL_FIND_ID, params);
 
-            Log.i("find_id", "info" + json);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
 
             try {
 
-                JSONObject obj = new JSONObject(json);
+                JSONObject obj = new JSONObject(s);
 
                 if(!obj.getString("code").equals("404")) {
 
-                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                    JSONObject userJson = obj.getJSONObject("user");
+                    if(obj.getString("code").equals("200")) { //유저존재
 
-                    String user_id = userJson.getString("user_id");
+                        //Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        JSONObject userJson = obj.getJSONObject("user");
 
-                    AlertDialog.Builder alt = new AlertDialog.Builder(FindIdActivity.this);
+                        String user_id = userJson.getString("user_id");
 
-                    alt.setMessage("입력하신 성명과 휴대전화 번호에 해당하는 아이디는 \n" + user_id + "입니다.")
-                            .setCancelable(false)
-                            .setPositiveButton("OK",
+                        AlertDialog.Builder alt = new AlertDialog.Builder(FindIdActivity.this);
 
-                                    new DialogInterface.OnClickListener() {
+                        alt.setMessage("입력하신 성명과 휴대전화 번호에 해당하는 아이디는 \n" + user_id + "입니다.")
+                                .setCancelable(false)
+                                .setPositiveButton("OK",
 
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                                        new DialogInterface.OnClickListener() {
 
-                                            Intent intent = new Intent(FindIdActivity.this, LoginActivity.class);
-                                            startActivity(intent);
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
 
-                                        }
-                                    });
+                                                Intent intent = new Intent(FindIdActivity.this, LoginActivity.class);
+                                                startActivity(intent);
 
-                    AlertDialog alert = alt.create();
-                    alert.setTitle("아이디 찾기");
+                                            }
+                                        });
 
-                    alert.show();
+                        AlertDialog alert = alt.create();
+                        alert.setTitle("아이디 찾기");
 
-                } else {
+                        alert.show();
+                    }
 
-                    Log.e("error here", json);
+                } else { //code 204
+
+                    //Log.e("error here", json);
                     Toast.makeText(getApplicationContext(), "입력하신 이름과 휴대폰 번호에 해당하는 아이디가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
 
                 }
@@ -140,8 +148,7 @@ public class FindIdActivity extends AppCompatActivity {
                 e.printStackTrace();
 
             }
-            return json;
-
+            //return json;
         }
     }
 }
