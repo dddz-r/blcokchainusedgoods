@@ -43,14 +43,7 @@
         <activity android:name=".SellerInform"/>
         <activity android:name="SellerReview"/>
         <activity android:name=".WriteReview"/>
-
-        <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".ui.login.LoginActivity"
-            android:label="@string/title_activity_login" />
+        
         <activity android:name=".LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
