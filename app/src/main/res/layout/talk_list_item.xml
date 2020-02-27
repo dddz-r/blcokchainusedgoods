@@ -9,15 +9,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="90dp"
         android:orientation="horizontal"
         android:layout_margin="5dp">
 
-        <ImageView
-            android:id="@+id/bli_device_image"
-            android:layout_width="110dp"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/onlydog" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,7 +21,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/bli_device_name"
+                android:id="@+id/tli_opposit_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -36,7 +32,7 @@
                 android:textStyle="bold" />
 
             <TextView
-            android:id="@+id/bli_device_condition"
+            android:id="@+id/tli_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="대화날짜"

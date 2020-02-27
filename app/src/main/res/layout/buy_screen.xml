@@ -20,7 +20,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="300dp">
+        android:layout_height="250dp">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/bs_viewpager"
@@ -40,6 +40,7 @@
         android:text="상품명"
         android:textStyle="bold"
         android:singleLine="true"
+        android:layout_marginLeft="3dp"
         android:textColor="@color/darkGray"
         android:textSize="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -56,6 +57,7 @@
         android:textStyle="bold"
         android:singleLine="true"
         android:textColor="@color/darkGray"
+        android:layout_marginLeft="3dp"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -64,22 +66,34 @@
 
     <Button
         android:id="@+id/bs_device_inform_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="300dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_gravity="right"
+        android:layout_marginRight="5dp"
         android:text="상품정보" />
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ScrollView android:layout_width="match_parent" android:layout_height="190dp" >
     <TextView
         android:id="@+id/bs_device_description"
         android:layout_width="match_parent"
-        android:layout_height="210dp"
+        android:layout_height="190dp"
         android:text="상품설명"
         android:singleLine="false"
+        android:layout_marginLeft="3dp"
+        android:layout_marginRight="3dp"
         android:textColor="@color/darkGray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:selectAllOnFocus="false"
+        android:inputType="textMultiLine"
+        android:layout_weight="1"
+        android:textSize="15dp"
+        android:scrollbars="vertical" />
+        </ScrollView>
+    </LinearLayout>
 
 
     <LinearLayout
@@ -87,9 +101,10 @@
         android:layout_height="50dp"
         android:layout_gravity="bottom"
         android:layout_marginTop="10dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
 
-        <Button
+        <!--<Button
             android:id="@+id/button3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -97,28 +112,30 @@
             android:background="@drawable/button_fill_border"
             android:text="관심상품"
             android:textColor="@color/darkGray"
-            android:textStyle="bold" />
+            android:textStyle="bold" />-->
 
 
         <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:id="@+id/bs_buyOK"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
             android:background="@drawable/button_fill_border"
             android:text="구매하기"
             android:textColor="@color/darkGray"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginRight="30dp"
+            android:layout_gravity="center"/>
 
         <Button
-            android:id="@+id/seller_inform_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:id="@+id/bs_seller_inform_btn"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
             android:background="@drawable/button_fill_border"
             android:text="판매자확인"
             android:textColor="@color/darkGray"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginLeft="30dp"
+            android:layout_gravity="center"/>
     </LinearLayout>
 
 

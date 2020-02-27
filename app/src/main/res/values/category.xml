@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="category">
+        <item>스마트폰 / 태블릿</item>
+        <item>PC / 노트북</item>
+        <item>카메라</item>
+        <item>게임기</item>
+        <item>생활/주방/미용 가전</item>
+        <item>자동차 기기</item>
+        <item>기타 전자 기기</item>
+    </string-array>
+
+</resources>

@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     Button add_item;
     Button talk;
 
-    Button interested_product;
     Button bought_product;
     Button sold_product;
 
@@ -39,33 +38,32 @@ public class MainActivity extends AppCompatActivity {
         //View *그리드뷰 아직테스트안해봄
         main_gridView = (GridView)findViewById(R.id.main_gridView);
         //Data
-        List<String> gredView_data = new ArrayList<>();
-        ArrayAdapter<String> gerdViewAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,gredView_data);
 
-        main_gridView.setAdapter(gerdViewAdapter);
+        MainGridAdapter gridViewAdapter = new MainGridAdapter();
 
+        main_gridView.setAdapter(gridViewAdapter);
         //테스트
-        for(int i =0;i<15;i++) {
-            gredView_data.add("data"+i);
+        for(int i =0;i<16;i++) {
+            gridViewAdapter.addGridItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억");
         }
 
         main_gridView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        String buy_data = String.valueOf(parent.getItemAtPosition(position));
-                        Toast.makeText(MainActivity.this, buy_data, Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(MainActivity.this, BuyScreen.class));
+
                     }
                 }
         );
 
-        //
+        //이거 나중에 톡방리스트로 넘어가게 바꿔야함
         talk = (Button)findViewById(R.id.talk);
 
         talk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, TalkRoom.class));
+                startActivity(new Intent(MainActivity.this, TalkList.class));
             }
         });
 
@@ -78,16 +76,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        interested_product = (Button)findViewById(R.id.interested_product);
         bought_product = (Button)findViewById(R.id.bought_product);
         sold_product = (Button)findViewById(R.id.sold_product);
 
-        interested_product.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //startActivity(new Intent(Main2Activity.this, BuyList.class));
-            }
-        });
 
         bought_product.setOnClickListener(new View.OnClickListener() {
             @Override
