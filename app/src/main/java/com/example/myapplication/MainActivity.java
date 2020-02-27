@@ -1,22 +1,18 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +25,28 @@ public class MainActivity extends AppCompatActivity {
 
     Button bought_product;
     Button sold_product;
+
+    //버튼을 누른 시간
+    private long backBtnTime = 0;
+
+    @Override
+    public void onBackPressed() {
+
+        long curTime = System.currentTimeMillis();
+        long getTime = curTime - backBtnTime ;
+
+        if( 0 <= getTime && 1000 >= getTime) {
+
+            android.os.Process.killProcess(android.os.Process.myPid());
+            super.onBackPressed();
+
+        } else {
+
+            backBtnTime = curTime;
+            Toast.makeText(this, "\'뒤로\' 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                startActivity(new Intent(MainActivity.this, Login2Activity.class));
             }
         });
 
@@ -123,7 +141,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
 
     DrawerLayout.DrawerListener listner = new DrawerLayout.DrawerListener() {
         @Override

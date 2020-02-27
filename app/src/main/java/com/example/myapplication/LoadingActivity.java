@@ -19,7 +19,7 @@ public class LoadingActivity extends AppCompatActivity {
 
             @Override
             public void run() {
-                Intent intent = new Intent(getApplicationContext(), Login2Activity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
             }

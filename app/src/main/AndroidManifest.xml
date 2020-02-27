@@ -43,7 +43,7 @@
         <activity android:name=".SellerInform"/>
         <activity android:name="SellerReview"/>
         <activity android:name=".WriteReview"/>
-        
+
         <activity android:name=".LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
