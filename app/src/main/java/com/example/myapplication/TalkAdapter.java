@@ -19,7 +19,7 @@ public class TalkAdapter extends BaseAdapter {
     private Context context;
     private int layout;
     ArrayList<TalkItem> talkItems = new ArrayList<>();
-    private int id;
+    private int id=2;
 
     @Override
     public int getCount() {
@@ -91,6 +91,7 @@ public class TalkAdapter extends BaseAdapter {
     public void addOppositTalkItem(String owner_id, String opposit_id, String contents, String time){
         TalkItem t = new TalkItem(owner_id,opposit_id,contents,time);
 
+        id=1;
         t.setOwner_id(owner_id);
         t.setOpposit_id(opposit_id);
         t.setContents(contents);
