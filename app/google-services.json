@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "971655705028",
+    "firebase_url": "https://blcokchainproject.firebaseio.com",
+    "project_id": "blcokchainproject",
+    "storage_bucket": "blcokchainproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:971655705028:android:0e28519372925076813491",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "971655705028-dhgsm8bn76vqoqho70le2asvr07tnauj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPshcz5elyHJJCl2xb1R5mnahbBm9dlyw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "971655705028-dhgsm8bn76vqoqho70le2asvr07tnauj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

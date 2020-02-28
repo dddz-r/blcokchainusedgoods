@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+
+
+    <TextView
+        android:id="@+id/tr_opposit_id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="대화상대이름"
+        android:layout_margin="10dp"
+        android:textSize="20dp"
+        android:textColor="@color/mainTextColor">
+
+    </TextView>
+
+    <ListView
+        android:id="@+id/talk_contents"
+        android:layout_width="match_parent"
+        android:layout_height="500dp"
+        android:dividerHeight="0dp"
+        android:divider="@color/white"
+        android:transcriptMode="alwaysScroll"
+        android:background="@color/brightGray">
+
+    </ListView>
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:layout_margin="5dp"
+    android:orientation="horizontal"
+    android:background="@drawable/buttonborder_maintextcolor">
+
+    <EditText
+        android:id="@+id/talk_edit"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_weight="5"
+        android:singleLine="true"
+        android:textColor="@color/darkGray">
+
+    </EditText>
+
+    <Button
+        android:id="@+id/talk_send_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="3dp"
+        android:background="@drawable/button_fill_border"
+        android:textColor="@color/darkGray"
+        android:text="전송">
+    </Button>
+
+</LinearLayout>
+</LinearLayout>
