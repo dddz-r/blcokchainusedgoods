@@ -256,7 +256,8 @@
             android:layout_marginRight="15dp"
             tools:layout_editor_absoluteX="80dp"
             android:background="@drawable/buttonborder_maintextcolor"
-            android:textColor="@color/darkGray">
+            android:textColor="@color/darkGray"
+            android:inputType="textPassword">
 
         </EditText>
 
@@ -320,7 +321,8 @@
             android:layout_marginRight="15dp"
             android:background="@drawable/buttonborder_maintextcolor"
             tools:layout_editor_absoluteX="80dp"
-            android:textColor="@color/darkGray">
+            android:textColor="@color/darkGray"
+            android:inputType="textPassword">
 
         </EditText>
     </LinearLayout>
