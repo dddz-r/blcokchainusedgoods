@@ -2,7 +2,7 @@ package com.example.myapplication;
 
 public class URLS {
 
-    private static final String URL_ROOT = "http://ec2-13-209-72-7.ap-northeast-2.compute.amazonaws.com:5000";
+    private static final String URL_ROOT = "http://ec2-52-78-134-112.ap-northeast-2.compute.amazonaws.com:5000";
     public static final String URL_JOIN = URL_ROOT + "/join";
     public static  final String URL_TALK = URL_ROOT+"/talk";
     public static final String URL_REVIEW_WRITE = URL_ROOT+"/review_write";
