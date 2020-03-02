@@ -1,10 +1,12 @@
 package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Person;
 import android.content.Context;
 import android.content.Intent;
@@ -53,9 +55,10 @@ public class AuthPhoneNumber extends AppCompatActivity {
         //인증번호 생성
         final String authNumber = executeGenerate();
 
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        //채널 생성
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             NotificationChannel notificationChannel = new NotificationChannel(user_id, user_id, NotificationManager.IMPORTANCE_DEFAULT);
             notificationChannel.setDescription(user_id);
             notificationChannel.enableLights(true);
@@ -71,11 +74,27 @@ public class AuthPhoneNumber extends AppCompatActivity {
         //인증 버튼을 클릭하면 authNumber와 비교
         //PhoneNumberAuth pa = new PhoneNumberAuth(phone_Number, authNumber);
         //pa.execute();
-        Notification.Builder builder = new Notification.Builder(this, "song")
+        /*Notification.Builder builder = new Notification.Builder(this, "song")
                 .setContentTitle(user_id)
                 .setContentText(phone_Number + "auth number :" + authNumber)
                 .setSmallIcon(R.drawable.notification);
+         */
 
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "song");
+        Intent notification = new Intent(getApplicationContext(), MainActivity.class);
+
+        notification.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        int requestID = (int) System.currentTimeMillis();
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), requestID, notification, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        builder.setContentTitle(user_id)
+                .setContentText(phone_Number + " auth number : " + authNumber)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setSmallIcon(R.drawable.remove_dog);
+
+        notificationManager.notify(0, builder.build());
 
         //버튼 클릭 이벤트
         auth_button.setOnClickListener(new View.OnClickListener() {
@@ -93,14 +112,17 @@ public class AuthPhoneNumber extends AppCompatActivity {
 
                 if(inputNumber.equals(authNumber)) {
 
-                    Toast.makeText(getApplicationContext(), "휴대전화 인증 성공", Toast.LENGTH_SHORT).show();
                     aa.personAllow = true;
 
                     Intent back = new Intent(AuthPhoneNumber.this, JoinActivity.class);
                     back.putExtra("personAllow", aa.personAllow);
                     back.putExtra("user_phone_number", aa.phoneNumber);
+                    back.putExtra("user_id", user_id);
 
-                    startActivity(back);
+                    setResult(RESULT_OK, back);
+                    Toast.makeText(getApplicationContext(), "휴대전화 인증 성공", Toast.LENGTH_SHORT).show();
+
+                    finish();
 
                 } else {
 

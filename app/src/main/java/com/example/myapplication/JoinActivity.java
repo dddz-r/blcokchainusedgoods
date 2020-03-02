@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -29,6 +30,8 @@ public class JoinActivity extends AppCompatActivity {
     private boolean afterCheckId = false;
     private boolean afterAuth = false;
     private boolean existPhone = false;
+
+    private int REQUREST_TEST = 1; //intent 구분, auth_phone_number 후에 result를 받아옴
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,17 +67,9 @@ public class JoinActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                user_id = findViewById(R.id.userIdEditText);
                 user_phone_number = findViewById(R.id.phoneNumber);
                 authPhoneNumber();
-
-                Intent intent = getIntent();
-
-                if(intent.getBooleanExtra("personAllow", true)) {
-
-                    afterAuth = true;
-                    user_phone_number.setText(intent.getStringExtra("user_phone_number"));
-
-                }
 
             }
         });
@@ -135,8 +130,31 @@ public class JoinActivity extends AppCompatActivity {
 
             }
 
-
         });
+
+    }
+
+    //auth 액티비티에서 이전에 있던 아이디, 폰 넘버를 유지하기
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1) {
+            if(resultCode == RESULT_OK) {
+
+                if(data.getBooleanExtra("personAllow", true)) {
+
+                    afterAuth = true;
+                    user_id.setText(data.getStringExtra("user_id"));
+                    user_phone_number.setText(data.getStringExtra("user_phone_number"));
+
+                } else {
+
+                    Toast.makeText(this, "some error occur", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
     }
 
     //아이디 중복검사 버튼 클릭 시 실행하는 메소드
@@ -160,6 +178,7 @@ public class JoinActivity extends AppCompatActivity {
     //휴대폰 번호에 대한 중복 검사도 필요
     //휴대폰 번호 중복 검사 js 추가하고
     //쓰레드 만들어서 phone_number받아서 넘기게 하기
+    //id 중복 검사를 반드시 먼저 하기(3/2 - 상태: 미구현)
     private void authPhoneNumber() {
 
         final String userId = user_id.getText().toString().trim();
@@ -178,25 +197,21 @@ public class JoinActivity extends AppCompatActivity {
         }
 
         //여기서 휴대폰 번호 중복검사 쓰레드 실행
-        PhoneNumberDuplication pn = new PhoneNumberDuplication(userPhoneNumber);
+        PhoneNumberDuplication pn = new PhoneNumberDuplication(userId, userPhoneNumber);
         pn.execute();
-
-        if (existPhone) {
-
-            Intent intent = new Intent(this, AuthPhoneNumber.class);
-            intent.putExtra("inputUserId", userId);
-            intent.putExtra("inputPhoneNumber", userPhoneNumber);
-
-            startActivity(intent);
-
-        }
 
     }
 
     private class PhoneNumberDuplication extends AsyncTask<Void, Void, String> {
 
+        private String user_id;
         private String user_phone_number;
-        PhoneNumberDuplication(String user_phone_number) { this.user_phone_number = user_phone_number; };
+
+        PhoneNumberDuplication(String user_id, String user_phone_number) {
+
+            this.user_id = user_id;
+            this.user_phone_number = user_phone_number;
+        }
 
         @Override
         protected void onPreExecute() { super.onPreExecute(); }
@@ -223,16 +238,30 @@ public class JoinActivity extends AppCompatActivity {
 
                 JSONObject obj = new JSONObject(s);
 
-                if(obj.getString("code").equals("404")) {
+                if(!obj.getString("code").equals("404")) {
 
                     if(obj.getString("code").equals("204")) {
 
                         Toast.makeText(getApplicationContext(), "해당 휴대폰 번호는 이미 사용 중인 휴대폰 번호입니다.", Toast.LENGTH_SHORT).show();
 
-                    } else { //code 200
+                    } else if(obj.getString("code").equals("200")){ //code 200
 
-                        Toast.makeText(getApplicationContext(), "사용가능한 휴대폰 번호입니다.", Toast.LENGTH_SHORT).show();
                         existPhone = true;
+                        Toast.makeText(getApplicationContext(), "사용가능한 휴대폰 번호입니다.", Toast.LENGTH_SHORT).show();
+
+                        if (existPhone) {
+
+                            Intent intent = new Intent(JoinActivity.this , AuthPhoneNumber.class);
+                            intent.putExtra("inputUserId", user_id);
+                            intent.putExtra("inputPhoneNumber", user_phone_number);
+
+                            startActivityForResult(intent, REQUREST_TEST);
+
+                        } else {
+
+                            Toast.makeText(JoinActivity.this, "이거아닌데...",Toast.LENGTH_SHORT).show();
+
+                        }
 
                     }
                 }
@@ -378,22 +407,23 @@ public class JoinActivity extends AppCompatActivity {
                 if (!obj.getString("code").equals("404")) {
 
                     Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                    JSONObject userJson = obj.getJSONObject("user");
+
+                    //JSONObject userJson = obj.getJSONObject("user");
 
                     User user = new User(
 
-                            userJson.getString("user_id"),
-                            userJson.getString("user_name"),
-                            userJson.getString("user_phone_number"),
-                            userJson.getString("user_address"),
-                            userJson.getString("user_account")
+                            user_id,
+                            user_name,
+                            user_phone_number,
+                            user_address,
+                            user_account
                     );
 
                     PrefManager.getInstance(getApplicationContext()).setUserLogin(user);
                     finish();
 
 
-                    Intent intent = new Intent(JoinActivity.this, MainActivity.class);
+                    Intent next = new Intent(JoinActivity.this, MainActivity.class);
 
                     String inputUserId = user.getUser_id();
                     String inputUserName = user.getUser_name();
@@ -401,13 +431,13 @@ public class JoinActivity extends AppCompatActivity {
                     String inputUserAddress = user.getUser_address();
                     String inputUserAccount = user.getUser_account();
 
-                    intent.putExtra("inputUserId", inputUserId);
-                    intent.putExtra("inputUserName", inputUserName);
-                    intent.putExtra("inputUserPhoneNumber", inputUserPhoneNumber);
-                    intent.putExtra("inputUserAddress", inputUserAddress);
-                    intent.putExtra("inputUserAccount", inputUserAccount);
+                    next.putExtra("inputUserId", inputUserId);
+                    next.putExtra("inputUserName", inputUserName);
+                    next.putExtra("inputUserPhoneNumber", inputUserPhoneNumber);
+                    next.putExtra("inputUserAddress", inputUserAddress);
+                    next.putExtra("inputUserAccount", inputUserAccount);
 
-                    startActivity(intent);
+                    startActivity(next);
 
                 } else {
 
@@ -498,7 +528,7 @@ public class JoinActivity extends AppCompatActivity {
 
                 } else { //code:404 에러 발생
 
-                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "여기서 뜨면 안되는데", Toast.LENGTH_SHORT).show();
 
                 }
 
