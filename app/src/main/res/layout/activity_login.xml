@@ -14,11 +14,10 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="350dp"
+        android:layout_width="147dp"
+        android:layout_height="260dp"
         android:layout_marginStart="100dp"
-        android:layout_marginLeft="98dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginLeft="100dp"
         android:layout_marginEnd="100dp"
         android:layout_marginRight="100dp"
         android:src="@drawable/bold"
@@ -35,7 +34,7 @@
         android:layout_width="0dp"
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
-        android:layout_marginTop="330dp"
+        android:layout_marginTop="300dp"
         android:layout_marginEnd="24dp"
 
 
@@ -43,10 +42,10 @@
         android:hint="@string/prompt_email"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
+        android:textColor="@color/darkGray"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/darkGray"
         android:layout_marginLeft="10dp"/>
 
     <EditText
@@ -58,6 +57,7 @@
         android:layout_marginEnd="24dp"
 
         android:background="@drawable/buttonborder_maintextcolor"
+        android:textColor="@color/darkGray"
         android:hint="@string/prompt_password"
         android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionDone"
@@ -66,7 +66,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userId"
-        android:textColor="@color/darkGray"
         android:layout_marginLeft="10dp"/>
 
     <Button

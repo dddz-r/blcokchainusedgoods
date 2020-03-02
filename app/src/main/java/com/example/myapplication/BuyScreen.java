@@ -25,6 +25,7 @@ public class BuyScreen extends AppCompatActivity {
     TextView bs_device_description;
     String firstDate = "20.02.22";
     String numTransaction = "222";
+    String seller_id = "주인님";
 
     private ArrayList<Integer> imageList;
 
@@ -41,7 +42,7 @@ public class BuyScreen extends AppCompatActivity {
             public void onClick(View v) {
                 AlertDialog.Builder ad = new AlertDialog.Builder(BuyScreen.this);
                 ad.setTitle("상품 정보");
-                ad.setMessage("최초 등록일 : "+firstDate+"\n거래 횟수 : "+numTransaction);
+                ad.setMessage("최초 등록일 : "+firstDate+"\n거래 횟수 : "+numTransaction+"\n판매자 : "+seller_id);
 
                 ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
@@ -54,6 +55,7 @@ public class BuyScreen extends AppCompatActivity {
             }
         });
 
+
         /*구매버튼*/
 
         /*판매자 정보*/
@@ -61,7 +63,9 @@ public class BuyScreen extends AppCompatActivity {
         bs_seller_inform_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BuyScreen.this,SellerInform.class));
+                Intent intent = new Intent(BuyScreen.this, SellerInform.class);
+                intent.putExtra("seller_id", seller_id);
+                startActivity(intent);
             }
         });
 

@@ -45,10 +45,20 @@
             android:background="@drawable/personal_icon" />
 
         <TextView
+            android:id="@+id/main2_user_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:text="이름"
+            android:textColor="@color/mainTextColor"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+        <TextView
+            android:id="@+id/main2_user_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:text="id"
             android:textColor="@color/mainTextColor"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
@@ -124,6 +134,7 @@
         </TextView>
 
         <Button
+            android:id="@+id/category1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="스마트폰 / 태블릿"
@@ -135,6 +146,7 @@
             android:layout_marginRight="5dp">
         </Button>
         <Button
+            android:id="@+id/category2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="PC / 노트북"
@@ -147,6 +159,7 @@
         </Button>
 
         <Button
+            android:id="@+id/category3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="카메라"
@@ -159,6 +172,7 @@
         </Button>
 
         <Button
+            android:id="@+id/category4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="게임기"
@@ -171,6 +185,7 @@
         </Button>
 
         <Button
+            android:id="@+id/category5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="생활/주방/미용 가전"
@@ -183,6 +198,7 @@
         </Button>
 
         <Button
+            android:id="@+id/category6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="자동차 기기"
@@ -195,6 +211,7 @@
         </Button>
 
         <Button
+            android:id="@+id/category7"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="기타 전자 기기"

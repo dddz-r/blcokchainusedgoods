@@ -40,9 +40,18 @@
         <activity android:name=".LoginActivity"/>
         <activity android:name=".TalkRoom"/>
         <activity android:name=".TalkList"/>
+        <activity android:name=".SellList"/>
         <activity android:name=".SellerInform"/>
         <activity android:name="SellerReview"/>
         <activity android:name=".WriteReview"/>
+        <activity android:name=".Category1"/>
+        <activity android:name=".Category2"/>
+        <activity android:name=".Category3"/>
+        <activity android:name=".Category4"/>
+        <activity android:name=".Category5"/>
+        <activity android:name=".Category6"/>
+        <activity android:name=".Category7"/>
+
 
         <activity android:name=".LoadingActivity">
             <intent-filter>
