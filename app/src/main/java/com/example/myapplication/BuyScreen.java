@@ -25,7 +25,7 @@ public class BuyScreen extends AppCompatActivity {
     TextView bs_device_description;
     String firstDate = "20.02.22";
     String numTransaction = "222";
-    String seller_id = "주인님";
+    String seller_id = "수민";
 
     private ArrayList<Integer> imageList;
 
