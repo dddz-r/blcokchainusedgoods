@@ -126,20 +126,23 @@ public class WriteReview extends AppCompatActivity {
         @Override
         protected String doInBackground(Void... voids) {
 
-            RequestHandler requestHandler = new RequestHandler();
 
-            HashMap<String, String> params = new HashMap<>();
-            params.put("seller_id", seller_id);
-            params.put("commenter_id", commenter_id);
-            params.put("comment", comment);
-            params.put("score", score);
+            try {
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("seller_id", seller_id);
+                params.put("commenter_id", commenter_id);
+                params.put("comment", comment);
+                params.put("score", score);
 
 
-            String json = requestHandler.sendPostRequest(URLS.URL_REVIEW_WRITE, params);
-
-
-            return json;
-
+                return requestHandler.sendPostRequest(URLS.URL_REVIEW_WRITE, params);//이거 에러
+            }catch (Exception e) {
+            e.printStackTrace();
+            Log.d("error", "doInBackground Exception");
+        }
+            return null;
         }
 
         public void onProgressUpdate(Void... values){
@@ -162,7 +165,10 @@ public class WriteReview extends AppCompatActivity {
                     //JSONObject userJson = obj.getJSONObject("user");
 
 
-                } else {
+                }else if(!obj.getString("code").equals(200)){
+                    Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                }else
+                 {
 
                     Toast.makeText(getApplicationContext(), "Some error occur", Toast.LENGTH_SHORT).show();
 

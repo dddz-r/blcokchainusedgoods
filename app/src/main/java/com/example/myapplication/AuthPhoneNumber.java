@@ -156,9 +156,9 @@ public class AuthPhoneNumber extends AppCompatActivity {
 
                 JSONObject obj = new JSONObject(json);
 
-                if (!obj.getString("code").equals(404)) {
+                if (!obj.getString("code").equals("404")) {
 
-                    if (obj.getString("code").equals(200)) { //문자가 발송된 경우
+                    if (obj.getString("code").equals("200")) { //문자가 발송된 경우
 
                         Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
                     }

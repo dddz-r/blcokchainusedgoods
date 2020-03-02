@@ -15,10 +15,26 @@ import androidx.core.content.ContextCompat;
 public class TalkList extends AppCompatActivity {
 
     public ListView tl_listView;
+    User user;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.talk_list);
+
+
+        /*유저 아이디 들고오기*/
+        final PrefManager prefManager = PrefManager.getInstance(TalkList.this);
+        user = prefManager.getUser();
+
+        String owner_id = String.valueOf(user.getUser_id()) ;
+
+        if(prefManager.isLoggedIn()){
+
+
+        }else{ //로그인 안 되어있을 경우
+            Toast.makeText(TalkList.this, "로그인 하세요", Toast.LENGTH_SHORT).show();
+        }
+
 
         tl_listView = (ListView)findViewById(R.id.tl_listView);
         TalkListAdapter ItemAdapter = new TalkListAdapter();

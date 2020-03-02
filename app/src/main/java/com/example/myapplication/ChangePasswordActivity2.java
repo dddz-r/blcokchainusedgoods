@@ -95,6 +95,7 @@ public class ChangePasswordActivity2 extends AppCompatActivity {
         @Override
         protected void onPreExecute() { super.onPreExecute(); }
 
+        //doInBackground 와 onPostExecute는 나누어주어야함. 하나의 쓰레드로 처리 하는 듯
         @Override
         protected String doInBackground(Void... voids) {
 
@@ -104,13 +105,19 @@ public class ChangePasswordActivity2 extends AppCompatActivity {
             params.put("user_id", user_id);
             params.put("user_password", user_password);
 
-            String json = requestHandler.sendPostRequest(URLS.URL_CHANGE_PASSWORD_SECOND, params);
+            return requestHandler.sendPostRequest(URLS.URL_CHANGE_PASSWORD_SECOND, params);
 
-            Log.i("change_password_second", "info" + json);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            //Log.i("change_password_second", "info" + json);
+            super.onPostExecute(s);
 
             try {
 
-                JSONObject obj = new JSONObject(json);
+                JSONObject obj = new JSONObject(s);
 
                 if(!obj.getString("code").equals("404")) {
 
@@ -137,15 +144,14 @@ public class ChangePasswordActivity2 extends AppCompatActivity {
 
                 } else {
 
-                    Log.e("error here", json);
+                    //Log.e("error here", json);
                     Toast.makeText(getApplicationContext(), "에러발생", Toast.LENGTH_SHORT).show();
 
                 }
             } catch(JSONException e) {
                 e.printStackTrace();
             }
-
-            return json;
+            //return json;
         }
     }
 }

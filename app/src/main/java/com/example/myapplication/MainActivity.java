@@ -1,22 +1,19 @@
 package com.example.myapplication;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,17 +24,135 @@ public class MainActivity extends AppCompatActivity {
     Button add_item;
     Button talk;
 
+    User user;
+    //메인2
+    Button login_btn;
+    TextView main2_user_name;
+    TextView main2_user_id;
     Button bought_product;
     Button sold_product;
+    Button category1;
+    Button category2;
+    Button category3;
+    Button category4;
+    Button category5;
+    Button category6;
+    Button category7;
+
+    //String user_name = getIntent().getStringExtra("inputName");
+    //버튼을 누른 시간
+    private long backBtnTime = 0;
+
+    @Override
+    public void onBackPressed() {
+
+        long curTime = System.currentTimeMillis();
+        long getTime = curTime - backBtnTime ;
+
+        if( 0 <= getTime && 1000 >= getTime) {
+
+            android.os.Process.killProcess(android.os.Process.myPid());
+            super.onBackPressed();
+
+        } else {
+
+            backBtnTime = curTime;
+            Toast.makeText(this, "\'뒤로\' 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show();
+
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //View *그리드뷰 아직테스트안해봄
+        main2_user_name = (TextView)findViewById(R.id.main2_user_name);
+        main2_user_id = (TextView)findViewById(R.id.main2_user_id);
+        login_btn = (Button)findViewById(R.id.login_btn);
+
+        //main2_user_name.setText(user_name);
+        /*작성자 아이디 들고오기*/
+        final PrefManager prefManager = PrefManager.getInstance(MainActivity.this);
+        user = prefManager.getUser();
+
+        if(prefManager.isLoggedIn()){
+            main2_user_name.setText(String.valueOf(user.getUser_name()));
+            main2_user_id.setText(String.valueOf(user.getUser_id()));
+            login_btn.setText("로그아웃");
+            login_btn.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    finish();
+                    prefManager.logout();
+                }
+            });
+
+        }else{ //로그인 안 되어있을 경우
+            login_btn.setText("로그인");
+            login_btn.setOnClickListener(new View.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                }
+            });
+        }
+
+        /*카테고리*/
+        category1=(Button)findViewById(R.id.category1);
+        category1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,Category1.class));
+            }
+        });
+        category2=(Button)findViewById(R.id.category2);
+        category2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,Category2.class));
+            }
+        });
+        category3=(Button)findViewById(R.id.category3);
+        category3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,Category3.class));
+            }
+        });
+        category4=(Button)findViewById(R.id.category4);
+        category4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,Category4.class));
+            }
+        });
+        category5=(Button)findViewById(R.id.category5);
+        category5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,Category5.class));
+            }
+        });
+        category6=(Button)findViewById(R.id.category6);
+        category6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,Category6.class));
+            }
+        });
+        category7=(Button)findViewById(R.id.category7);
+        category7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this,Category7.class));
+            }
+        });
+
+
         main_gridView = (GridView)findViewById(R.id.main_gridView);
-        //Data
 
         MainGridAdapter gridViewAdapter = new MainGridAdapter();
 
@@ -57,9 +172,7 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        //이거 나중에 톡방리스트로 넘어가게 바꿔야함
         talk = (Button)findViewById(R.id.talk);
-
         talk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
         add_item = (Button)findViewById(R.id.add_item);
-
         add_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,14 +195,18 @@ public class MainActivity extends AppCompatActivity {
         bought_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, BuyList.class));
+                Intent intent = new Intent(MainActivity.this, BuyList.class) ;
+                intent.putExtra("user_id", main2_user_id.getText().toString()) ;
+                startActivity(intent) ;
             }
         });
 
         sold_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(Main2Activity.this, BuyList.class));
+                Intent intent = new Intent(MainActivity.this, SellList.class) ;
+                intent.putExtra("user_id", main2_user_id.getText().toString()) ;
+                startActivity(intent) ;
             }
         });
 
@@ -110,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                startActivity(new Intent(MainActivity.this, Login2Activity.class));
             }
         });
 
@@ -123,7 +239,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
-
 
     DrawerLayout.DrawerListener listner = new DrawerLayout.DrawerListener() {
         @Override

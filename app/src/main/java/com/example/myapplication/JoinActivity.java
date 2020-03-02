@@ -28,6 +28,7 @@ public class JoinActivity extends AppCompatActivity {
     Button check_id, auth_phone_number, join, back;
     private boolean afterCheckId = false;
     private boolean afterAuth = false;
+    private boolean existPhone = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,11 +169,69 @@ public class JoinActivity extends AppCompatActivity {
             return;
         }
 
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.putExtra("inputPhoneNumber", userPhoneNumber);
+        //여기서 휴대폰 번호 중복검사 쓰레드 실행
+        PhoneNumberDuplication pn = new PhoneNumberDuplication(userPhoneNumber);
+        pn.execute();
 
-        startActivity(intent);
+        if (existPhone) {
 
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.putExtra("inputPhoneNumber", userPhoneNumber);
+
+            startActivity(intent);
+
+        }
+
+    }
+
+    private class PhoneNumberDuplication extends AsyncTask<Void, Void, String> {
+
+        private String user_phone_number;
+        PhoneNumberDuplication(String user_phone_number) { this.user_phone_number = user_phone_number; };
+
+        @Override
+        protected void onPreExecute() { super.onPreExecute(); }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+
+            RequestHandler requestHandler = new RequestHandler();
+
+            HashMap<String, String> params = new HashMap<>();
+            params.put("user_phone_number", user_phone_number);
+
+            return requestHandler.sendPostRequest(URLS.URL_CHECK_PHONENUMBER_DUPLICATION, params);
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            //Log.i("phoneNumber_duplication", "info" + json);
+            super.onPostExecute(s);
+
+            try {
+
+                JSONObject obj = new JSONObject(s);
+
+                if(obj.getString("code").equals("404")) {
+
+                    if(obj.getString("code").equals("204")) {
+
+                        Toast.makeText(getApplicationContext(), "해당 휴대폰 번호는 이미 사용 중인 휴대폰 번호입니다.", Toast.LENGTH_SHORT).show();
+
+                    } else { //code 200
+
+                        existPhone = true;
+
+                    }
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            //return null;
+        }
     }
 
     //회원가입 버튼 클릭 시 실행하는 메소드
@@ -292,13 +351,19 @@ public class JoinActivity extends AppCompatActivity {
             params.put("user_address", user_address);
             params.put("user_account", user_account);
 
-            String json =  requestHandler.sendPostRequest(URLS.URL_JOIN, params);
+            return requestHandler.sendPostRequest(URLS.URL_JOIN, params);
 
-            Log.i("Join", "Info" + json);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            //Log.i("Join", "Info" + json);
+            super.onPostExecute(s);
 
             try {
 
-                JSONObject obj = new JSONObject(json);
+                JSONObject obj = new JSONObject(s);
 
                 if (!obj.getString("code").equals("404")) {
 
@@ -343,7 +408,7 @@ public class JoinActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            return json;
+            //return json;
         }
 
         /*@Override
@@ -378,30 +443,40 @@ public class JoinActivity extends AppCompatActivity {
     private class  CheckIdDuplication extends AsyncTask<Void, Void, String> {
 
         private String user_id;
-        CheckIdDuplication(String user_id) { this.user_id = user_id; }
+
+        CheckIdDuplication(String user_id) {
+            this.user_id = user_id;
+        }
 
         @Override
-        protected void onPreExecute() { super.onPreExecute(); }
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
 
         @Override
         protected String doInBackground(Void... voids) {
 
             RequestHandler requestHandler = new RequestHandler();
 
-            HashMap<String, String > params = new HashMap<>();
+            HashMap<String, String> params = new HashMap<>();
             params.put("user_id", user_id);
 
-            String json = requestHandler.sendPostRequest(URLS.URL_CHECK_ID_DUPLICATION, params);
+            return requestHandler.sendPostRequest(URLS.URL_CHECK_ID_DUPLICATION, params);
 
-            Log.i("check_id_duplication", "Info" + json);
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
 
             try {
 
-                JSONObject obj = new JSONObject(json);
+                JSONObject obj = new JSONObject(s);
 
                 if (!obj.getString("code").equals("404")) {
 
-                    if (obj.getString("code").equals("204")){//해당 아이디가 이미 존재 할 경우
+                    if (obj.getString("code").equals("204")) {//해당 아이디가 이미 존재 할 경우
 
                         Toast.makeText(getApplicationContext(), "해당 아이디는 이미 존재하는 아이디 입니다.", Toast.LENGTH_SHORT).show();
 
@@ -420,11 +495,9 @@ public class JoinActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            return json;
         }
-
     }
+
 
     //비밀번호 안전성 검사
     public boolean checkPasswordSecurity(String user_password){
