@@ -59,12 +59,12 @@ public class JoinActivity extends AppCompatActivity {
         });
 
         //휴대폰 번호 인증
-        join.setOnClickListener(new View.OnClickListener() {
+        auth_phone_number.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
 
-                user_phone_number = findViewById(R.id.userPhoneNumberEditText);
+                user_phone_number = findViewById(R.id.phoneNumber);
                 authPhoneNumber();
 
                 Intent intent = getIntent();
@@ -72,6 +72,7 @@ public class JoinActivity extends AppCompatActivity {
                 if(intent.getBooleanExtra("personAllow", true)) {
 
                     afterAuth = true;
+                    user_phone_number.setText(intent.getStringExtra("user_phone_number"));
 
                 }
 
@@ -84,13 +85,13 @@ public class JoinActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                user_id = findViewById(R.id.userIdEditText);
-                user_password = findViewById(R.id.userPasswordEditText);
-                user_name = findViewById(R.id.userNameEditText);
-                user_phone_number = findViewById(R.id.phoneNumber);
-                user_address = findViewById(R.id.userAddressEditText);
-                user_account = findViewById(R.id.userAccountEditText);
-                user_password_confirm = findViewById(R.id.userPasswordConfirmEditText);
+                user_id = (EditText) findViewById(R.id.userIdEditText);
+                user_password = (EditText) findViewById(R.id.userPasswordEditText);
+                user_name = (EditText) findViewById(R.id.userNameEditText);
+                user_phone_number = (EditText) findViewById(R.id.phoneNumber);
+                user_address = (EditText) findViewById(R.id.userAddressEditText);
+                user_account = (EditText) findViewById(R.id.userAccountEditText);
+                user_password_confirm = (EditText) findViewById(R.id.userPasswordConfirmEditText);
 
                 /*
                 user_id = findViewById(R.id.userIdEditText);
@@ -161,7 +162,14 @@ public class JoinActivity extends AppCompatActivity {
     //쓰레드 만들어서 phone_number받아서 넘기게 하기
     private void authPhoneNumber() {
 
+        final String userId = user_id.getText().toString().trim();
         final String userPhoneNumber = user_phone_number.getText().toString().trim();
+
+        if(TextUtils.isEmpty(userId)) {
+            user_id.setError("please Enter your ID before checking phone number");
+            user_id.requestFocus();
+            return;
+        }
 
         if(TextUtils.isEmpty(userPhoneNumber)) {
             user_phone_number.setError("please Enter your PhoneNumber");
@@ -175,7 +183,8 @@ public class JoinActivity extends AppCompatActivity {
 
         if (existPhone) {
 
-            Intent intent = new Intent(this, LoginActivity.class);
+            Intent intent = new Intent(this, AuthPhoneNumber.class);
+            intent.putExtra("inputUserId", userId);
             intent.putExtra("inputPhoneNumber", userPhoneNumber);
 
             startActivity(intent);
@@ -222,6 +231,7 @@ public class JoinActivity extends AppCompatActivity {
 
                     } else { //code 200
 
+                        Toast.makeText(getApplicationContext(), "사용가능한 휴대폰 번호입니다.", Toast.LENGTH_SHORT).show();
                         existPhone = true;
 
                     }

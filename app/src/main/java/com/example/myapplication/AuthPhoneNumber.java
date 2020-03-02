@@ -2,9 +2,16 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.Person;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +31,7 @@ public class AuthPhoneNumber extends AppCompatActivity {
     private int certNumLength = 6;
     public static boolean personAllow = false;
     public static String phone_Number;
+    public static String user_id;
 
     EditText auth_number;
     Button auth_button;
@@ -38,15 +46,36 @@ public class AuthPhoneNumber extends AppCompatActivity {
 
         Intent intent = getIntent();
         phone_Number = intent.getStringExtra("inputPhoneNumber");
+        user_id = intent.getStringExtra("inputUserId");
 
+        //전화번호, 인증여부 짝
         final AuthAttribute aa = new AuthAttribute(phone_Number, personAllow);
+        //인증번호 생성
+        final String authNumber = executeGenerate();
 
-        String authNumber = executeGenerate();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            NotificationChannel notificationChannel = new NotificationChannel(user_id, user_id, NotificationManager.IMPORTANCE_DEFAULT);
+            notificationChannel.setDescription(user_id);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.GREEN);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setVibrationPattern(new long[]{100,200,100,200});
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PRIVATE);
+            notificationManager.createNotificationChannel(notificationChannel);
+
+        }
 
         //액티비티가 시작하자 마자 번호를 전송
         //인증 버튼을 클릭하면 authNumber와 비교
-        PhoneNumberAuth pa = new PhoneNumberAuth(phone_Number, authNumber);
-        pa.execute();
+        //PhoneNumberAuth pa = new PhoneNumberAuth(phone_Number, authNumber);
+        //pa.execute();
+        Notification.Builder builder = new Notification.Builder(this, "song")
+                .setContentTitle(user_id)
+                .setContentText(phone_Number + "auth number :" + authNumber)
+                .setSmallIcon(R.drawable.notification);
+
 
         //버튼 클릭 이벤트
         auth_button.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +91,7 @@ public class AuthPhoneNumber extends AppCompatActivity {
                     return;
                 }
 
-                if(inputNumber.equals(auth_number)) {
+                if(inputNumber.equals(authNumber)) {
 
                     Toast.makeText(getApplicationContext(), "휴대전화 인증 성공", Toast.LENGTH_SHORT).show();
                     aa.personAllow = true;
@@ -124,7 +153,7 @@ public class AuthPhoneNumber extends AppCompatActivity {
     //결과는 발송 되었는지 말았는지
     //EditText의 값이 랜덤 난수와 같은지는 해당 클래스에서 비교(인증 버튼 클릭 시)
     //같다면 personAllow를 true로 바꿔 Intent로 join에 전해줄 것
-    class PhoneNumberAuth extends AsyncTask<Void, Void, String> {
+    /*class PhoneNumberAuth extends AsyncTask<Void, Void, String> {
 
         private String user_phone_number;
         private String randomAuthNumber;
@@ -175,4 +204,7 @@ public class AuthPhoneNumber extends AppCompatActivity {
             return json;
         }
     }
+
+
+    */
 }
