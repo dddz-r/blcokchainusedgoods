@@ -45,7 +45,7 @@ public class WriteReview extends AppCompatActivity {
         wr_reviewOk = (Button)findViewById(R.id.wr_reviewOk);
 
         /*판매자 아이디 들고오기*/
-        seller_id = "웨에에엑";
+        seller_id = getIntent().getStringExtra("seller_id");
 
         /*작성자 아이디 들고오기*/
         final PrefManager prefManager = PrefManager.getInstance(WriteReview.this);
@@ -53,6 +53,7 @@ public class WriteReview extends AppCompatActivity {
 
         if(prefManager.isLoggedIn()){
             wr_commenter_id.setText(String.valueOf(user.getUser_id()));
+            commenter_id = String.valueOf(user.getUser_id());
 
         }else{ //로그인 안 되어있을 경우
 
@@ -64,17 +65,17 @@ public class WriteReview extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 score = (String) parent.getItemAtPosition(position);
                 ((TextView)parent.getChildAt(0)).setTextColor(Color.YELLOW);
-                if(score=="☆☆☆☆☆"){
+                if(score.equals("☆☆☆☆☆")){
                     scoreInt = 0;
-                }else if (score=="★☆☆☆☆"){
+                }else if (score.equals("★☆☆☆☆")){
                     scoreInt = 1;
-                }else if (score=="★★☆☆☆"){
+                }else if (score.equals("★★☆☆☆")){
                     scoreInt = 2;
-                }else if (score=="★★★☆☆"){
+                }else if (score.equals("★★★☆☆")){
                     scoreInt = 3;
-                }else if (score=="★★★★☆"){
+                }else if (score.equals("★★★★☆")){
                     scoreInt = 4;
-                }else if (score=="★★★★★"){
+                }else if (score.equals("★★★★★")){
                     scoreInt = 5;
                 }
             }
@@ -85,7 +86,6 @@ public class WriteReview extends AppCompatActivity {
             }
         });
 
-        /*작성자 아이디들고오기*/
 
         /*리뷰 작성 버튼*/
         wr_reviewOk.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +95,7 @@ public class WriteReview extends AppCompatActivity {
                 reviewWrite rw = new reviewWrite(seller_id, commenter_id ,comment, score);
                 rw.execute();
 
-                startActivity(new Intent(WriteReview.this, SellerReview.class));
+                startActivity(new Intent(WriteReview.this, BuyScreen.class));
 
             }
         });
@@ -140,7 +140,7 @@ public class WriteReview extends AppCompatActivity {
                 return requestHandler.sendPostRequest(URLS.URL_REVIEW_WRITE, params);//이거 에러
             }catch (Exception e) {
             e.printStackTrace();
-            Log.d("error", "doInBackground Exception");
+            Log.d("라이트리뷰error", "doInBackground Exception");
         }
             return null;
         }
@@ -153,7 +153,7 @@ public class WriteReview extends AppCompatActivity {
         protected void onPostExecute(String s) {
 
             super.onPostExecute(s);
-            Log.i("talk", "Info" + s);
+            Log.d("WRITE리뷰 온포스트", "실행");
 
             try {
 
@@ -162,8 +162,6 @@ public class WriteReview extends AppCompatActivity {
                 if (!obj.getString("code").equals(404)) {
 
                     Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                    //JSONObject userJson = obj.getJSONObject("user");
-
 
                 }else if(!obj.getString("code").equals(200)){
                     Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();

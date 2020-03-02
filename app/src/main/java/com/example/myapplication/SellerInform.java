@@ -10,7 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SellerInform extends AppCompatActivity {
 
-    TextView si_seller_name;
+    TextView si_seller_name;//<-아이디임
+    //TextView si_seller_id;
     Button si_buy_list;
     Button si_sell_list;
     Button si_review;
@@ -55,7 +56,9 @@ public class SellerInform extends AppCompatActivity {
         si_review.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SellerInform.this, SellerReview.class));
+                Intent intent = new Intent(SellerInform.this, SellerReview.class) ;
+                intent.putExtra("seller_id", si_seller_name.getText().toString()) ;
+                startActivity(intent) ;
             }
         });
 
