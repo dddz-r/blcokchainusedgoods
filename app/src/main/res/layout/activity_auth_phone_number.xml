@@ -4,62 +4,71 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FindIdActivity"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".FindIdActivity">
+
 
     <LinearLayout
         android:id="@+id/authNumber"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
         android:gravity="left"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.391">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/authNumberTextView"
             android:layout_width="55dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="1"
             android:text="@string/auth_number"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
 
         </TextView>
 
-        <EditText
-            android:id="@+id/authNumberEditText"
-            android:layout_width="250dp"
+        <LinearLayout
+            android:layout_width="150dp"
             android:layout_height="49dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="15dp"
+            android:layout_weight="6"
             android:background="@drawable/buttonborder_maintextcolor"
-            tools:layout_editor_absoluteX="80dp">
+            android:orientation="horizontal">
 
-        </EditText>
+            <EditText
+                android:id="@+id/authNumberEditText"
+                android:layout_width="150dp"
+                android:layout_height="49dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="5"
+                android:textColor="@color/darkGray"
+                tools:layout_editor_absoluteX="80dp"></EditText>
+
+        </LinearLayout>
 
     </LinearLayout>
-
-
 
     <Button
         android:id="@+id/AuthButton"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="104dp"
-        android:layout_marginLeft="104dp"
         android:layout_marginTop="436dp"
         android:background="@drawable/button_fill_border"
+        android:stateListAnimator="@null"
         android:text="@string/phone_number_auth"
         android:textColor="@color/darkGray"
         android:textSize="20dp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:stateListAnimator="@null">
+        app:layout_constraintTop_toTopOf="parent">
 
     </Button>
 
@@ -68,7 +77,6 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/backarrow"
         android:stateListAnimator="@null"
