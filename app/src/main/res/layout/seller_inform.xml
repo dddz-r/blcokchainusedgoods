@@ -16,6 +16,14 @@
     android:textStyle="bold"
     android:textSize="25dp"/>
 
+    <TextView
+        android:id="@+id/si_seller_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="판매자 아이디"
+        android:textColor="@color/darkGray"
+        android:visibility="invisible"
+        android:layout_gravity="center"/>
 
         <TextView
             android:id="@+id/si_seller_name"
@@ -26,6 +34,8 @@
             android:textSize="20dp"
             android:layout_gravity="center"
             android:layout_margin="50dp"/>
+
+
 
     <LinearLayout
         android:layout_width="match_parent"

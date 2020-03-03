@@ -15,8 +15,8 @@ public class SellerReviewAdapter extends BaseAdapter {
     ArrayList<SellerReviewItem> reviewItem = new ArrayList<>();
 
 
-   /* public BuyListAdapter(List<BuyListItem> BuyItem) {
-        this.BuyItem = BuyItem;
+   /*public SellerReviewAdapter(ArrayList<SellerReviewItem> reviewItem) {
+        this.reviewItem = reviewItem;
     }*/
 
     @Override

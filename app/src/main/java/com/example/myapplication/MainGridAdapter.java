@@ -68,6 +68,7 @@ public class MainGridAdapter extends BaseAdapter {
         g.setGrid_item_img(grid_item_img);
         g.setGrid_item_name(grid_item_name);
         g.setGrid_item_price(grid_item_price);
+        //g.setGrid_item_category(grid_item_category);
 
         GridItem.add(g);
     }

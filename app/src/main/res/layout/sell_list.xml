@@ -17,7 +17,7 @@
         android:singleLine="true"/>
 
     <ListView
-        android:id="@+id/bl_listView"
+        android:id="@+id/sl_listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@color/mainTextColor"
