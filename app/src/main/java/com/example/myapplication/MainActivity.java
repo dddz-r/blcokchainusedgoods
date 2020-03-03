@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
     Button bought_product;
     Button sold_product;
 
+    User user;
+
+
     //버튼을 누른 시간
     private long backBtnTime = 0;
 
@@ -52,6 +55,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //로그인 된 현재 유저 정보를 저장
+        final PrefManager prefManager = PrefManager.getInstance(MainActivity.this);
+        user = prefManager.getUser();
+
 
         //View *그리드뷰 아직테스트안해봄
         main_gridView = (GridView)findViewById(R.id.main_gridView);
