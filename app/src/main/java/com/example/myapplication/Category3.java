@@ -19,24 +19,24 @@ public class Category3  extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
     private View drawerView;
-    private GridView category1_grid;
+    private GridView category3_grid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.category_grid3);
 
-        category1_grid = (GridView)findViewById(R.id.category1_grid);
+        category3_grid = (GridView)findViewById(R.id.category3_grid);
 
         MainGridAdapter gridViewAdapter = new MainGridAdapter();
 
-        category1_grid.setAdapter(gridViewAdapter);
+        category3_grid.setAdapter(gridViewAdapter);
         //테스트
         for(int i =0;i<16;i++) {
             gridViewAdapter.addGridItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억");
         }
 
-        category1_grid.setOnItemClickListener(
+        category3_grid.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

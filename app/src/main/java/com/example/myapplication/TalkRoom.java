@@ -8,7 +8,9 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.StrictMode;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +22,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,6 +38,7 @@ import java.net.HttpURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -50,15 +54,18 @@ import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 //톡방 안에 내용
 public class TalkRoom extends AppCompatActivity {
 
-    private static final String TAG = "jsonExample";
     public static final int LOAD_SUCCESS = 101;
 
     private ListView talk_contents;
     private EditText talk_edit;
     private Button talk_send_btn;
     private TextView tr_opposit_id;
+
     private Socket socket;
 
+    String owner_id;
+    String opposit_id;
+    //ArrayList<TalkItem> arrayList;
     User user;
     TalkAdapter talkAdapter = new TalkAdapter();
 
@@ -67,138 +74,70 @@ public class TalkRoom extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.talk_room);
 
+        /*유저 아이디*/
+        final PrefManager prefManager = PrefManager.getInstance(TalkRoom.this);
+        user = prefManager.getUser();
+        owner_id = String.valueOf(user.getUser_name());
 
-        //int SDK_INT = android.os.Build.VERSION.SDK_INT;
+        /*상대 아이디*/
+        opposit_id = getIntent().getStringExtra("opposit_id");
+        tr_opposit_id = findViewById(R.id.tr_opposit_id);
+        tr_opposit_id.setText(opposit_id);
 
-        /*if (SDK_INT > 8) {
+        /*소켓에러 해결 뭔지모름*/
+        int SDK_INT = android.os.Build.VERSION.SDK_INT;
+
+        if (SDK_INT > 8) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                     .permitAll().build();
             StrictMode.setThreadPolicy(policy);
-        }*/
-
-        Handler mHandler = new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(Message inputMessage) {
-                switch(inputMessage.what){
-
-                }
-            }
-        };
-
-        SocketThread socketThread = new SocketThread();
-        socketThread.start();
-
-        checkUpdate.start();
+        }
 
         /*socket connect*/
-        /*try {
-            socket = IO.socket(URLS.URL_TALK);
+        SocketThread socketThread = new SocketThread();
+        //socketThread.start();
 
-
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }*/
-        /*socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
-
-            @Override
-            public void call(Object... args) {
-                Looper.prepare();
-                Toast.makeText(getApplicationContext(), "connect", Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
-        }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                Looper.prepare();
-                Toast.makeText(getApplicationContext(), "disconnect", Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
-        }).on(Socket.EVENT_CONNECT_TIMEOUT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                Looper.prepare();
-                Toast.makeText(getApplicationContext(), "connect timeout", Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
-        }).on(Socket.EVENT_CONNECT_ERROR, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                Looper.prepare();
-                Toast.makeText(getApplicationContext(), "connect error", Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
-        });*/
-
-        //socket.connect();
-
-        //데이터를 받아온다
-
-        /* 이거 이용해서 내가 쓴거랑 남이쓴거 분류해서 어댑터에 넣기 (서버코드)*/
-        //socket.on('say', function(msg){ ... })누군가 채팅을 했을 때
-        //socket.broadcast.emit('chat message', nickName+'  :  '+msg); - 누군가 채팅을 했을 때 그것을 화자 외에게 전달
-        //socket.emit('mySaying', 'ME  :  '+msg);	 - 화자에게 내용 다시 보냄
-
-        //socket.open();
-        /*socket.connect();
-        socket.on("otherSaying", new Emitter.Listener() {//on은 서버에서 받아오는거 //send라는 이름의 이벤트 받아오는거
-            @Override
-            public void call(final Object... args) {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            JSONObject data = (JSONObject) args[0];
-                            String opposit_id = data.getString("opposit_id");
-                            String owner_id = data.getString("owner_id");
-                            String contents = data.getString("contents");
-                            String time = data.getString("time");
-                            talkAdapter.addOppositTalkItem(owner_id, opposit_id, contents, time);
-                            talkAdapter.notifyDataSetChanged();//
-
-                        } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-            }
-        });
-
-        socket.on("mySaying", new Emitter.Listener() {//on은 서버에서 받아오는거 //send라는 이름의 이벤트 받아오는거
-            @Override
-            public void call(final Object... args) {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            JSONObject data = (JSONObject) args[0];
-                            String opposit_id = data.getString("opposit_id");
-                            String owner_id = data.getString("owner_id");
-                            String contents = data.getString("contents");
-                            String time = data.getString("time");
-                            talkAdapter.addMyTalkItem(owner_id, opposit_id, contents, time);
-                            talkAdapter.notifyDataSetChanged();//
-
-                        } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-            }
-        });*/
+        /*리스트뷰에 어댑터 연결*/
+        //arrayList = new ArrayList<>();
+        talkAdapter = new TalkAdapter();
         tr_opposit_id = (TextView) findViewById(R.id.tr_opposit_id);
         talk_contents = (ListView) findViewById(R.id.talk_contents);
         talk_contents.setAdapter(talkAdapter);
 
-        talkAdapter.addOppositTalkItem("나", "상대방", "안녕하신가~", "12:01");
-        talkAdapter.addMyTalkItem("나", "상대방", "반갑군~", "12:53");
+        /*테스트*/
+        //talkAdapter.addOppositTalkItem("나", "상대방", "안녕하신가~", "12:01");
+        //talkAdapter.addMyTalkItem("나", "상대방", "반갑군~", "12:53");
+         //어댑터 새로고침--------------->위치 옮겨야할듯
+        talkAdapter.notifyDataSetChanged();
+        /*톡 불러오기*/
+        talkReceiveExecute();
 
-        talkAdapter.notifyDataSetChanged(); //어댑터 새로고침--------------->위치 옮겨야할듯
+        talk_contents.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                int action = event.getAction();
+
+                switch(action) {
+
+                    case MotionEvent.ACTION_DOWN :    //화면을 터치했을때
+                        talkAdapter = new TalkAdapter();
+                        talk_contents.setAdapter(talkAdapter);
+                        talkReceiveExecute();
+                        break;
+
+                    case MotionEvent.ACTION_UP :    //화면을 터치했다 땠을때
+
+                        break;
+
+                    case MotionEvent.ACTION_MOVE :    //화면을 터치하고 이동할때
+
+                        break;
+
+                }
+                return true;
+            }
+        });
 
         /* 보내기 버튼 눌렸을때*/
         talk_edit = (EditText) findViewById(R.id.talk_edit);
@@ -207,45 +146,17 @@ public class TalkRoom extends AppCompatActivity {
         talk_send_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (socket != null) {
-                    JSONObject data = new JSONObject();
-
-                    try {
-
-                        long now = System.currentTimeMillis();
-                        Date date = new Date(now);
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
-                        String formatDate = dateFormat.format(date);
-
-                        data.put("owner_id", "owner_id");
-                        data.put("opposit_id", tr_opposit_id.getText().toString());
-                        data.put("contents", talk_edit.getText().toString());
-                        data.put("time", formatDate);
-                        socket.emit("say", data);//이게 서버에 데이터 보낸거
-
-                        //위에꺼랑 둘중하나만해도 되는지 보기(DB에도 위에껄로 넣어지는지)
-                        //TalkContents tc = new TalkContents("owner_id", tr_opposit_id.getText().toString(),talk_edit.getText().toString(),formatDate);
-                        //tc.execute();
-
-
-                        talkAdapter.addMyTalkItem("나", "상대방", talk_edit.getText().toString(), formatDate);
-                        //talkAdapter.notifyDataSetChanged();-->여긴아냐ㅠ
-
-                        talk_edit.setText("");
-
-
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast
-                                .LENGTH_LONG).show();
-                        e.printStackTrace();
-                    }
-                } else {
-
+                if (TextUtils.isEmpty(talk_edit.getText())) {
                     Toast.makeText(TalkRoom.this, "내용을 입력해 주세요", Toast.LENGTH_SHORT).show();
+                } else {
+                    talkSendExecute();
+                    //sendtalk();
                 }
+
             }
         });
 
+        /* 리스트뷰 아이템 추가 시 자동 스크롤*/
         talkAdapter.registerDataSetObserver(new DataSetObserver() {
 
             @Override
@@ -254,193 +165,198 @@ public class TalkRoom extends AppCompatActivity {
 
                 super.onChanged();
 
-                //talk_contents.setSelection(TalkAdapter.getCount()-1);
                 talk_contents.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-
             }
 
         });
 
 
-
-
     }
 
-    private static class mHandler extends Handler {
-        private final WeakReference<TalkRoom> weakReference;
 
-        public mHandler(TalkRoom talkRoom) {
-            weakReference = new WeakReference<TalkRoom>(talkRoom);}
+    private void sendtalk() {
+        if (socket != null) {
 
-        @Override
-        public void handleMessage(Message msg) {
+            Log.d("sendtalk", "소켓 널 아냐");
+            try {
+                JSONObject data = new JSONObject();
+                //지금 날짜,시간
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+                String formatDate = dateFormat.format(date);
 
-            TalkRoom talkRoom = weakReference.get();
 
-            if (talkRoom != null) {
-                switch (msg.what) {
+                data.put("owner_id", "주인");
+                data.put("opposit_id", "반대사람");
+                data.put("contents", talk_edit.getText().toString());
+                data.put("time", formatDate);
 
-                    case LOAD_SUCCESS:
-                        //talkRoom.progressDialog.dismiss();
+                socket.emit("say", data);//이게 서버에 데이터 보낸거
 
-                        String jsonString = (String) msg.obj;
+                Toast.makeText(getApplicationContext(), data.toString(), Toast.LENGTH_LONG).show();
 
-                        talkRoom.tr_opposit_id.setText(jsonString);//되나볼라고 텍스트뷰암꺼나해봄
-                        break;
-                }
+                talk_edit.setText("");
+
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
             }
+
+        } else {
+            Log.d("sendtalk", "소켓 널 이야");
         }
     }
-
-
-    private Thread checkUpdate = new Thread() {
-        public void run(){
-            /*try {
-                String line;
-                Log.w("ChattingStart", "Start Thread");
-                while (true) {
-                    Log.w("Chatting is running", "chatting is running");
-                    line = networkReader.readLine();
-                    mHandler.post(showUpdate);
-                }
-            } catch (Exception e){
-
-            }*/
-        }
-    };
-
-    private Runnable showUpdate = new Runnable(){
-        public void run(){
-            Toast.makeText(TalkRoom.this, "Coming word:" , Toast.LENGTH_SHORT).show();
-        }
-    };
 
     public void setSocket(String uri) throws IOException {
 
-        try{
-            socket = IO.socket(URLS.URL_TALK);
-            //networkWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-            //networkReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        } catch(URISyntaxException e) {
+        try {
+            socket = IO.socket(uri);
+            socket.connect();
+            Log.d("셋소켓", "실행댐");
+            socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+
+
+                @Override
+                public void call(Object... args) {
+                    Looper.prepare();
+                    Toast.makeText(getApplicationContext(), "connect", Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                }
+            }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Looper.prepare();
+                    Toast.makeText(getApplicationContext(), "disconnect", Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                }
+            }).on(Socket.EVENT_CONNECT_TIMEOUT, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Looper.prepare();
+                    Toast.makeText(getApplicationContext(), "connect timeout", Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                }
+            }).on(Socket.EVENT_CONNECT_ERROR, new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Looper.prepare();
+                    Toast.makeText(getApplicationContext(), "connect error", Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                }
+            }).on("hi", new Emitter.Listener() {
+                @Override
+                public void call(Object... args) {
+                    Toast.makeText(getApplicationContext(), "하이!", Toast.LENGTH_SHORT).show();
+                }
+            }).on("otherSaying", new Emitter.Listener() {//on은 서버에서 받아오는거 //send라는 이름의 이벤트 받아오는거
+                @Override
+                public void call(final Object... args) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                JSONObject data = (JSONObject) args[0];
+                                String opposit_id = data.getString("opposit_id");
+                                String owner_id = data.getString("owner_id");
+                                String contents = data.getString("contents");
+                                String time = data.getString("time");
+                                talkAdapter.addOppositTalkItem(owner_id, opposit_id, contents, time);
+                                talkAdapter.notifyDataSetChanged();//
+
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                }
+            }).on("mySaying", new Emitter.Listener() {//on은 서버에서 받아오는거 //send라는 이름의 이벤트 받아오는거
+                @Override
+                public void call(final Object... args) {
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                JSONObject data = (JSONObject) args[0];
+                                String opposit_id = data.getString("opposit_id");
+                                String owner_id = data.getString("owner_id");
+                                String contents = data.getString("contents");
+                                String time = data.getString("time");
+                                talkAdapter.addMyTalkItem(owner_id, opposit_id, contents, time);
+                                talkAdapter.notifyDataSetChanged();//
+
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+
+                }
+            });
+
+            socket.connect();
+
+
+        } catch (URISyntaxException e) {
             e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "set소켓 예외", Toast.LENGTH_SHORT).show();
+            Log.d("set소켓 예외", "URISyntaxException");
+
         }
-        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
 
-            @Override
-            public void call(Object... args) {
-                Looper.prepare();
-                Toast.makeText(getApplicationContext(), "connect", Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
-        }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                Looper.prepare();
-                Toast.makeText(getApplicationContext(), "disconnect", Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
-        }).on(Socket.EVENT_CONNECT_TIMEOUT, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                Looper.prepare();
-                Toast.makeText(getApplicationContext(), "connect timeout", Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
-        }).on(Socket.EVENT_CONNECT_ERROR, new Emitter.Listener() {
-            @Override
-            public void call(Object... args) {
-                Looper.prepare();
-                Toast.makeText(getApplicationContext(), "connect error", Toast.LENGTH_SHORT).show();
-                Looper.loop();
-            }
-        });
-
-        //socket.connect();
-
-        //데이터를 받아온다
-
-        /* 이거 이용해서 내가 쓴거랑 남이쓴거 분류해서 어댑터에 넣기 (서버코드)*/
-        //socket.on('say', function(msg){ ... })누군가 채팅을 했을 때
-        //socket.broadcast.emit('chat message', nickName+'  :  '+msg); - 누군가 채팅을 했을 때 그것을 화자 외에게 전달
-        //socket.emit('mySaying', 'ME  :  '+msg);	 - 화자에게 내용 다시 보냄
-
-        //socket.open();
-        socket.connect();
-        socket.on("otherSaying", new Emitter.Listener() {//on은 서버에서 받아오는거 //send라는 이름의 이벤트 받아오는거
-            @Override
-            public void call(final Object... args) {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            JSONObject data = (JSONObject) args[0];
-                            String opposit_id = data.getString("opposit_id");
-                            String owner_id = data.getString("owner_id");
-                            String contents = data.getString("contents");
-                            String time = data.getString("time");
-                            talkAdapter.addOppositTalkItem(owner_id, opposit_id, contents, time);
-                            talkAdapter.notifyDataSetChanged();//
-
-                        } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-            }
-        });
-
-        socket.on("mySaying", new Emitter.Listener() {//on은 서버에서 받아오는거 //send라는 이름의 이벤트 받아오는거
-            @Override
-            public void call(final Object... args) {
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            JSONObject data = (JSONObject) args[0];
-                            String opposit_id = data.getString("opposit_id");
-                            String owner_id = data.getString("owner_id");
-                            String contents = data.getString("contents");
-                            String time = data.getString("time");
-                            talkAdapter.addMyTalkItem(owner_id, opposit_id, contents, time);
-                            talkAdapter.notifyDataSetChanged();//
-
-                        } catch (Exception e) {
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-            }
-        });
     }
 
-    class SocketThread extends Thread{
-        public void run(){
-            try{
-                setSocket(URLS.URL_TALK);
-            }catch (IOException e){
+
+    class SocketThread extends Thread {
+        public void run() {
+            try {
+                setSocket("http://ec2-13-125-217-33.ap-northeast-2.compute.amazonaws.com:5000/api");
+                Log.d("소켓스레드실행", "try");
+            } catch (IOException e) {
                 e.printStackTrace();
+                Log.d("소켓스레드에러", "IO익셉션");
             }
         }
     }
 
-//
-    private class TalkContents extends AsyncTask<Void, Void, String> {
 
-        private String owner_id, opposit_id, contents, time;
+    private void talkReceiveExecute() {
 
-        TalkContents(String owner_id, String opposit_id, String contents, String time) {
+        TalkRoom.talkReceive tr = new TalkRoom.talkReceive(owner_id, opposit_id);
+        tr.execute();
+    }
 
+    private void talkSendExecute() {
+
+        /*mysql 에서 자동으로 현재시간 저장해줌*/
+        /*long now = System.currentTimeMillis();
+        Date date = new Date(now);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        String time = dateFormat.format(date);*/
+
+        TalkRoom.talkSend ts = new TalkRoom.talkSend(owner_id, opposit_id, talk_edit.getText().toString());
+        ts.execute();
+        talk_edit.setText("");
+    }
+
+
+    private class talkSend extends AsyncTask<Void, Void, String> {
+        private String owner_id;
+        private String opposit_id;
+        //String time;
+        String contents;
+
+        talkSend(String owner_id, String opposit_id, String contents) {
             this.owner_id = owner_id;
             this.opposit_id = opposit_id;
+            //this.time = time;
             this.contents = contents;
-            this.time = time;
-
         }
 
         @Override
@@ -452,32 +368,34 @@ public class TalkRoom extends AppCompatActivity {
 
         @Override
         protected String doInBackground(Void... voids) {
+            try {
 
-            RequestHandler requestHandler = new RequestHandler();
+                RequestHandler requestHandler = new RequestHandler();
 
-            HashMap<String, String> params = new HashMap<>();
-            params.put("owner_id", owner_id);
-            params.put("opposit_id", opposit_id);
-            params.put("contents", contents);
-            params.put("time", time);
+                HashMap<String, String> params = new HashMap<>();
+                params.put("owner_id", owner_id);
+                params.put("opposit_id", opposit_id);
+                params.put("contents", contents);
 
-            socket.emit(String.valueOf(params));
-            String json = requestHandler.sendPostRequest(URLS.URL_TALK, params);
+                return requestHandler.sendPostRequest(URLS.URL_TALK_SEND, params);
 
 
-            return json;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
 
         }
 
-        public void onProgressUpdate(Void... values){
-        super.onProgressUpdate();
+        public void onProgressUpdate(Void... values) {
+            super.onProgressUpdate();
         }
 
         @Override
         protected void onPostExecute(String s) {
 
             super.onPostExecute(s);
-            Log.i("talk", "Info" + s);
+            Log.d("talkSend 온포스트", "실행");
 
             try {
 
@@ -485,24 +403,102 @@ public class TalkRoom extends AppCompatActivity {
 
                 if (!obj.getString("code").equals(404)) {
 
-                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-                    //JSONObject userJson = obj.getJSONObject("user");
+                    //Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 
-
+                } else if (!obj.getString("code").equals(200)) {
+                    //Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
                 } else {
 
-                    Toast.makeText(getApplicationContext(), "Some error occur", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Some error occur", Toast.LENGTH_SHORT).show();
 
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
+            talkReceiveExecute();
         }
     }
 
+    private class talkReceive extends AsyncTask<Void, Void, String> {
+        private String owner_id;
+        private String opposit_id;
+
+        talkReceive(String owner_id, String opposit_id) {
+            this.owner_id = owner_id;
+            this.opposit_id = opposit_id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("owner_id", owner_id);
+                params.put("opposit_id", opposit_id);
+
+                return requestHandler.sendPostRequest(URLS.URL_TALK_RECEIVE, params);
 
 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
 
+        }
+
+        public void onProgressUpdate(Void... values) {
+            super.onProgressUpdate();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+            Log.d("onPost실행", "onPost실행");
+
+            try {
+
+                JSONObject object = new JSONObject(s);
+
+                JSONArray jsonArray = object.getJSONArray("talks");
+
+                int count = 0;
+
+                while (count < jsonArray.length()) {
+
+                    JSONObject json = jsonArray.getJSONObject(count);
+                    String owner_id = json.getString("owner_id");
+                    String opposit_id = json.getString("opposit_id");
+                    String time = json.getString("time");
+                    String contents = json.getString("contents");
+
+                    if (owner_id.equals(this.owner_id)) {
+                        talkAdapter.addMyTalkItem(owner_id,opposit_id,contents,time);
+
+                    } else{
+                        talkAdapter.addOppositTalkItem(opposit_id,owner_id,contents,time);
+                    }
+                    talkAdapter.notifyDataSetChanged();
+                    count++;
+                }
+
+
+                //finish();
+            } catch (JSONException e) {
+                e.printStackTrace();
+
+            }
+        }
+
+    }
 }
 
