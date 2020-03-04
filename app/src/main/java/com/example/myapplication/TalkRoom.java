@@ -72,7 +72,7 @@ public class TalkRoom extends AppCompatActivity {
         /*유저 아이디*/
         final PrefManager prefManager = PrefManager.getInstance(TalkRoom.this);
         user = prefManager.getUser();
-        owner_id = String.valueOf(user.getUser_name());
+        owner_id = String.valueOf(user.getUser_id());
 
         /*상대 아이디*/
         opposit_id = getIntent().getStringExtra("opposit_id");
@@ -90,9 +90,9 @@ public class TalkRoom extends AppCompatActivity {
         //talkAdapter.addOppositTalkItem("나", "상대방", "안녕하신가~", "12:01");
         //talkAdapter.addMyTalkItem("나", "상대방", "반갑군~", "12:53");
          //어댑터 새로고침--------------->위치 옮겨야할듯
-        talkAdapter.notifyDataSetChanged();
+        //talkAdapter.notifyDataSetChanged();
         /*톡 불러오기*/
-        talkReceiveExecute();
+        //talkReceiveExecute();
 
         talk_contents.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -103,7 +103,7 @@ public class TalkRoom extends AppCompatActivity {
                 switch(action) {
 
                     case MotionEvent.ACTION_DOWN :    //화면을 터치했을때
-                        talkAdapter = new TalkAdapter();
+                        talkAdapter = new TalkAdapter(); //이거 새로해서 리스트뷰 초기화
                         talk_contents.setAdapter(talkAdapter);
                         talkReceiveExecute();
                         break;
@@ -120,6 +120,14 @@ public class TalkRoom extends AppCompatActivity {
                 return true;
             }
         });
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                talkAdapter = new TalkAdapter(); //이거 새로해서 리스트뷰 초기화
+                talk_contents.setAdapter(talkAdapter);
+                talkReceiveExecute();
+            }
+        });
 
         /* 보내기 버튼 눌렸을때*/
         talk_edit = (EditText) findViewById(R.id.talk_edit);
@@ -131,6 +139,8 @@ public class TalkRoom extends AppCompatActivity {
                 if (TextUtils.isEmpty(talk_edit.getText())) {
                     Toast.makeText(TalkRoom.this, "내용을 입력해 주세요", Toast.LENGTH_SHORT).show();
                 } else {
+                    talkAdapter = new TalkAdapter(); //이거 새로해서 리스트뷰 초기화
+                    talk_contents.setAdapter(talkAdapter);
                     talkSendExecute();
                     //sendtalk();
                 }
@@ -318,7 +328,6 @@ public class TalkRoom extends AppCompatActivity {
                     } else{
                         talkAdapter.addOppositTalkItem(opposit_id,owner_id,contents,time);
                     }
-                    talkAdapter.notifyDataSetChanged();
                     count++;
                 }
 
