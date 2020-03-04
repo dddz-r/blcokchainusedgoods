@@ -63,7 +63,7 @@ public class TalkList extends AppCompatActivity {
 
 
         /*테스트*/
-        ItemAdapter.addTalkListItem("상대방","02:41");
+        //ItemAdapter.addTalkListItem("상대방","02:41");
 
 
         tl_listView.setOnItemClickListener(
