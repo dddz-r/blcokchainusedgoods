@@ -12,7 +12,11 @@ import java.util.ArrayList;
 
 public class TalkListAdapter extends BaseAdapter {
 
-    ArrayList<TalkListItem> TalkListItem = new ArrayList<>();
+    ArrayList<TalkListItem> TalkListItem;//= new ArrayList<>();
+
+    public TalkListAdapter(ArrayList<TalkListItem> TalkListItem){
+        this.TalkListItem = TalkListItem;
+    }
     @Override
     public int getCount() {
         return TalkListItem.size();

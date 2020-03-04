@@ -3,7 +3,9 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -11,11 +13,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 
@@ -25,7 +29,10 @@ public class TalkList extends AppCompatActivity {
     public ListView tl_listView;
     User user;
     String owner_id;
-    TalkListAdapter ItemAdapter = new TalkListAdapter(); //어댑터 선언 꼭 위에서 해야함
+    String opposit_id;
+    ArrayList<TalkListItem> arrayList;
+    TalkListAdapter ItemAdapter;// = new TalkListAdapter(arrayList); //어댑터 선언 꼭 위에서 해야함
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,25 +54,32 @@ public class TalkList extends AppCompatActivity {
 
 
         /*리스트뷰에 어댑터 연결*/
+        arrayList = new ArrayList<>();
+        ItemAdapter = new TalkListAdapter(arrayList);
         tl_listView = (ListView)findViewById(R.id.tl_listView);
         tl_listView.setAdapter(ItemAdapter);
-
+        arrayList.clear();
         talklistExecute();
 
+
         /*테스트*/
-        //ItemAdapter.addTalkListItem("상대방","02:41");
+        ItemAdapter.addTalkListItem("상대방","02:41");
 
 
         tl_listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                            startActivity(new Intent(TalkList.this, TalkRoom.class));
+                        Intent intent = new Intent(TalkList.this, TalkRoom.class);
+                        intent.putExtra("opposit_id",arrayList.get(position).getOpposit_id());
+                        startActivity(intent);
                     }
                 }
         );
 
     }
+
+
 
     private void talklistExecute() {
         TalkList.talklist tl = new TalkList.talklist(owner_id);
@@ -133,18 +147,22 @@ public class TalkList extends AppCompatActivity {
 
                     JSONObject json = jsonArray.getJSONObject(count);
 
-                    String opposit_id = json.getString("opposit_id");
+                    //반대사람 인텐트로 넘겨야해서 위에서 선언함
+                    opposit_id = json.getString("opposit_id");
                     String time = json.getString("time");
 
-                    ItemAdapter.addTalkListItem(opposit_id, time);
-                    ItemAdapter.notifyDataSetChanged();
+                    //ItemAdapter.addTalkListItem(opposit_id, time);
+                    TalkListItem inform = new TalkListItem(opposit_id, time);
+                    arrayList.add(inform);
+
 
                     count++;
                 }
                 //finish();
+                ItemAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "서버가 꺼져있어요^^", Toast.LENGTH_SHORT).show();
 
             }
 

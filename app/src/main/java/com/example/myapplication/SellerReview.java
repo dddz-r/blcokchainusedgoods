@@ -97,7 +97,7 @@ public class SellerReview extends AppCompatActivity {
                 e.printStackTrace();
                 Log.e("doInBackground 에러", "doInBackground Exception");
             }
-                return null;//이거댐*/
+                return null;
 
         }
 
@@ -113,7 +113,7 @@ public class SellerReview extends AppCompatActivity {
 
             try {
 
-                JSONObject object = new JSONObject(s);// 이거 에러남End of input at character 0 of
+                JSONObject object = new JSONObject(s);
 
                 JSONArray jsonArray = object.getJSONArray("reviews");
                 //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
