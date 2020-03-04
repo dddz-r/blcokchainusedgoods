@@ -153,7 +153,8 @@ public class LoginActivity extends AppCompatActivity {
                                 userJson.getString("user_name"),
                                 userJson.getString("user_phone_number"),
                                 userJson.getString("user_address"),
-                                userJson.getString("user_account")
+                                userJson.getString("user_account"),
+                                userJson.getString("user_token")
                         );
 
                         PrefManager.getInstance(getApplicationContext()).setUserLogin(user);
@@ -165,6 +166,7 @@ public class LoginActivity extends AppCompatActivity {
                         String inputPhoneNumber = user.getUser_phone_number();
                         String inputAddress = user.getUser_address();
                         String inputAccount = user.getUser_account();
+                        String inputToken = user.getUser_token();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("inputId", inputId);
@@ -172,6 +174,7 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("inputPhoneNumber", inputPhoneNumber);
                         intent.putExtra("inputAddress", inputAddress);
                         intent.putExtra("inputAccount", inputAccount);
+                        intent.putExtra("inputToken", inputToken);
 
                         startActivity(intent);
                         /*
