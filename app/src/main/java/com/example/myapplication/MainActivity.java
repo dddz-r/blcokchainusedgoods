@@ -31,9 +31,6 @@ public class MainActivity extends AppCompatActivity {
     TextView main2_user_id;
     Button bought_product;
     Button sold_product;
-  
-
-    User user;
 
     Button category1;
     Button category2;
@@ -71,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //main2_user_name.setText(user_name);
+        /*작성자 아이디 들고오기*/
         //로그인 된 현재 유저 정보를 저장
         final PrefManager prefManager = PrefManager.getInstance(MainActivity.this);
         user = prefManager.getUser();
@@ -80,11 +79,6 @@ public class MainActivity extends AppCompatActivity {
         main2_user_name = (TextView)findViewById(R.id.main2_user_name);
         main2_user_id = (TextView)findViewById(R.id.main2_user_id);
         login_btn = (Button)findViewById(R.id.login_btn);
-
-        //main2_user_name.setText(user_name);
-        /*작성자 아이디 들고오기*/
-        final PrefManager prefManager = PrefManager.getInstance(MainActivity.this);
-        user = prefManager.getUser();
 
         if(prefManager.isLoggedIn()){
             main2_user_name.setText(String.valueOf(user.getUser_name()));

@@ -30,6 +30,7 @@ public class JoinActivity extends AppCompatActivity {
     private boolean afterCheckId = false;
     private boolean afterAuth = false;
     private boolean existPhone = false;
+    private String user_token;
 
     private int REQUREST_TEST = 1; //intent 구분, auth_phone_number 후에 result를 받아옴
 
@@ -148,6 +149,7 @@ public class JoinActivity extends AppCompatActivity {
                     afterAuth = true;
                     user_id.setText(data.getStringExtra("user_id"));
                     user_phone_number.setText(data.getStringExtra("user_phone_number"));
+                    user_token = data.getStringExtra("user_token");
 
                 } else {
 
@@ -283,6 +285,7 @@ public class JoinActivity extends AppCompatActivity {
         final String userAddress = user_address.getText().toString().trim();
         final String userAccount = user_account.getText().toString().trim();
         final String userPasswordConfirm = user_password_confirm.getText().toString().trim();
+        final String userToken = user_token;
 
         if(TextUtils.isEmpty(userId)) {
             user_id.setError("please Enter this component");
@@ -328,7 +331,7 @@ public class JoinActivity extends AppCompatActivity {
 
                 if(afterAuth && afterCheckId) {
 
-                    JoinUser ju = new JoinUser(userId, userPassword, userName, userPhoneNumber, userAddress, userAccount);
+                    JoinUser ju = new JoinUser(userId, userPassword, userName, userPhoneNumber, userAddress, userAccount, userToken);
                     ju.execute();
 
                 } else if(!afterCheckId) {
@@ -357,9 +360,9 @@ public class JoinActivity extends AppCompatActivity {
     //회원가입 쓰레드
     private class JoinUser extends AsyncTask<Void, Void, String> {
 
-        private String user_id, user_password, user_name, user_phone_number, user_address, user_account;
+        private String user_id, user_password, user_name, user_phone_number, user_address, user_account, user_token;
 
-        JoinUser(String user_id, String user_password, String user_name, String user_phone_number, String user_address, String user_account) {
+        JoinUser(String user_id, String user_password, String user_name, String user_phone_number, String user_address, String user_account, String user_token) {
 
             this.user_id = user_id;
             this.user_password = user_password;
@@ -367,6 +370,7 @@ public class JoinActivity extends AppCompatActivity {
             this.user_phone_number = user_phone_number;
             this.user_address = user_address;
             this.user_account = user_account;
+            this.user_token = user_token;
 
         }
 
@@ -389,6 +393,7 @@ public class JoinActivity extends AppCompatActivity {
             params.put("user_phone_number", user_phone_number);
             params.put("user_address", user_address);
             params.put("user_account", user_account);
+            params.put("user_token", user_token);
 
             return requestHandler.sendPostRequest(URLS.URL_JOIN, params);
 
@@ -416,7 +421,8 @@ public class JoinActivity extends AppCompatActivity {
                             user_name,
                             user_phone_number,
                             user_address,
-                            user_account
+                            user_account,
+                            user_token
                     );
 
                     PrefManager.getInstance(getApplicationContext()).setUserLogin(user);
@@ -430,12 +436,14 @@ public class JoinActivity extends AppCompatActivity {
                     String inputUserPhoneNumber = user.getUser_phone_number();
                     String inputUserAddress = user.getUser_address();
                     String inputUserAccount = user.getUser_account();
+                    String inputUserToken = user.getUser_token();
 
                     next.putExtra("inputUserId", inputUserId);
                     next.putExtra("inputUserName", inputUserName);
                     next.putExtra("inputUserPhoneNumber", inputUserPhoneNumber);
                     next.putExtra("inputUserAddress", inputUserAddress);
                     next.putExtra("inputUserAccount", inputUserAccount);
+                    next.putExtra("inputUserToken", inputUserToken);
 
                     startActivity(next);
 

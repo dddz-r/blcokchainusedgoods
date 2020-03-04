@@ -12,6 +12,7 @@ public class PrefManager {
     private static final String KEY_PHONE_NUMBER = "user_phone_number";
     private static final String KEY_ADDRESS = "user_address";
     private static final String KEY_ACCOUNT = "user_account";
+    private static final String KEY_TOKEN = "user_token";
     private static final String KEY_IS_LOGGED_IN = "is_logged-in";
     private static PrefManager instance;
     private static Context ctx;
@@ -40,6 +41,7 @@ public class PrefManager {
         editor.putString(KEY_PHONE_NUMBER, user.getUser_phone_number());
         editor.putString(KEY_ADDRESS, user.getUser_address());
         editor.putString(KEY_ACCOUNT, user.getUser_account());
+        editor.putString(KEY_TOKEN, user.getUser_token());
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
         editor.apply();
     }
@@ -58,7 +60,8 @@ public class PrefManager {
                 sharedPreferences.getString(KEY_NAME, null),
                 sharedPreferences.getString(KEY_PHONE_NUMBER, null),
                 sharedPreferences.getString(KEY_ADDRESS, null),
-                sharedPreferences.getString(KEY_ACCOUNT, null)
+                sharedPreferences.getString(KEY_ACCOUNT, null),
+                sharedPreferences.getString(KEY_TOKEN, null)
         );
     }
 
