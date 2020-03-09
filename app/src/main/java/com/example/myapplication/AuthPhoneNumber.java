@@ -23,10 +23,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessagingService;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,12 +44,17 @@ import static java.security.AccessController.getContext;
 
 public class AuthPhoneNumber extends AppCompatActivity {
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+    private static final String TAG = "AuthPhoneNumber";
     private int certNumLength = 6;
     public static boolean personAllow = false;
     public static String phone_Number;
     public static String user_id;
     public static String tokenIntent;
     public static String authNumber;
+
+    MyFirebaseMessangingService myFirebaseMessangingService = new MyFirebaseMessangingService();
 
     EditText auth_number;
     Button auth_button;
@@ -120,10 +130,11 @@ public class AuthPhoneNumber extends AppCompatActivity {
         //5. 해당토큰을 메신저객체를 선언하여 노티피케이션 한다.
         //6. 내가 문자를 보낸다(노티피케이션이 도착했다는 전제 하에)
         //7. 인증되면 토큰 , 아이디, 폰번호를 전부 인텐트로 넘겨주고 회원가입시 토큰도 put한다
-        MakeToken mt = new MakeToken(user_id, phone_Number, authNumber);
-        mt.execute();
+        //MakeToken mt = new MakeToken(user_id, phone_Number, authNumber);
+        //mt.execute();
 
         //토큰 가져오기
+
         /*
 
         FirebaseInstanceId.getInstance().getInstanceId()
@@ -145,6 +156,35 @@ public class AuthPhoneNumber extends AppCompatActivity {
                 });
 
         */
+
+        /*
+        FirebaseApp.initializeApp(this);
+
+        //이게 실행이안돼애애애애애ㅐ애애애애애애애애ㅐ애애애애애ㅐ
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+
+                        if(!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        Log.w(TAG, "getInstanceId success");
+
+                        String token = task.getResult().getToken();
+                        tokenIntent = token;
+
+                        Toast.makeText(AuthPhoneNumber.this, "여기되나", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+         */
+
+        AuthMassenger authMassenger = new AuthMassenger(phone_Number, authNumber);
+        authMassenger.execute();
 
         //버튼 클릭 이벤트
         auth_button.setOnClickListener(new View.OnClickListener() {
@@ -184,6 +224,7 @@ public class AuthPhoneNumber extends AppCompatActivity {
         });
     }
 
+    /*
     //토큰 만드는 쓰레드
     private class MakeToken extends AsyncTask<Void, Void, String> {
 
@@ -249,18 +290,19 @@ public class AuthPhoneNumber extends AppCompatActivity {
 
     }
 
+     */
     //서버에 메시지 요청하는 쓰레드
     private class AuthMassenger extends AsyncTask<Void, Void, String> {
 
         private String user_phone_number;
         private String user_auth_number;
-        private String user_token;
+    //    private String user_token;
 
-        AuthMassenger(String user_phone_number, String user_auth_number, String user_token) {
+        AuthMassenger(String user_phone_number, String user_auth_number) {
 
             this.user_phone_number = user_phone_number;
             this.user_auth_number = user_auth_number;
-            this.user_token = user_token;
+     //       this.user_token = user_token;
 
         }
 
@@ -275,7 +317,7 @@ public class AuthPhoneNumber extends AppCompatActivity {
             HashMap<String, String> params = new HashMap<>();
             params.put("user_phone_number", user_phone_number);
             params.put("user_auth_number", user_auth_number);
-            params.put("user_token", user_token);
+     //       params.put("user_token", user_token);
 
             return requestHandler.sendPostRequest(URLS.URL_SENDING_AUTH_MASSEGE, params);
 
