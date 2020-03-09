@@ -34,6 +34,10 @@ public class BuyScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.buy_screen);
 
+        bs_device_name = findViewById(R.id.bs_device_name);
+        bs_device_price = findViewById(R.id.bs_device_price);
+        bs_device_description = findViewById(R.id.bs_device_description);
+
         /*물품 정보 팝업창 띄우기*/
         bs_device_inform_btn = (Button)findViewById(R.id.bs_device_inform_btn);
 
@@ -51,12 +55,19 @@ public class BuyScreen extends AppCompatActivity {
                     }
                 });
                 ad.show();
-                //ad.setNegativeButton();
+                //ad.setNegativeButton();//취소버튼 사용x
             }
         });
 
 
         /*구매버튼*/
+        bs_buyOk = findViewById(R.id.bs_buyOK);
+        bs_buyOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         /*판매자 정보*/
         bs_seller_inform_btn = findViewById(R.id.bs_seller_inform_btn);

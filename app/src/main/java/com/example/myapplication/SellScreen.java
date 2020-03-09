@@ -22,6 +22,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -49,7 +51,9 @@ public class SellScreen extends AppCompatActivity {
 
     Button addItems;
     Button sell_Ok;
+    CheckBox checkBox;
     EditText device_name;
+    EditText device_price;
     Spinner device_category;
     EditText device_inform;
     ImageView imageView1;
@@ -57,16 +61,18 @@ public class SellScreen extends AppCompatActivity {
     ImageView imageView3;
     ImageView imageView4;
     ImageView imageView5;
-    int conuti =0;
-    String category;
 
-    //constant
-    final int PICTURE_REQUEST_CODE = 100;
+    int conuti =0;
+
+    String user_id;
+    String category;
+    User user;
+
 
     //private  ArrayList<Bitmap> imageList;
     private ArrayList<Integer> imageList;
     //private ArrayList<String> imageList;
-    ViewPager ss_viewpager;
+    //ViewPager ss_viewpager;
 
     private Boolean isPermission = true;
     private static final int PICK_FROM_ALBUM = 1;
@@ -81,12 +87,14 @@ public class SellScreen extends AppCompatActivity {
         imageView3 = findViewById(R.id.imageView3);
         imageView4 = findViewById(R.id.imageView4);
         imageView5 = findViewById(R.id.imageView5);
-        addItems = (Button)findViewById(R.id.addItems);
 
+        /*에딧텍스트들 인풋필터는 그냥 글자 수 제한이다*/
         device_name = (EditText)findViewById(R.id.device_name);
         InputFilter[] device_nameFilter = new InputFilter[1];
         device_nameFilter[0]=new InputFilter.LengthFilter(20);
         device_name.setFilters(device_nameFilter);
+
+        device_price = (EditText)findViewById(R.id.device_price);
 
         device_category = (Spinner) findViewById(R.id.device_category);
 
@@ -95,10 +103,10 @@ public class SellScreen extends AppCompatActivity {
         device_informFilter[0]=new InputFilter.LengthFilter(1000);
         device_inform.setFilters(device_informFilter);
 
-        sell_Ok = (Button)findViewById(R.id.sell_Ok);
         //ss_viewpager = (ViewPager)findViewById(R.id.ss_viewpager);
 
-        /*뷰페이저 구간*/
+        /*
+        /*뷰페이저 구간 (사용x)
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         //ss_viewpager.setAdapter(viewPagerAdapter);
         this.initializeData();//<-----이거가 사진을 추가하는 함수임! 갤러리에서 불러온이미지를 여기서 add하기
@@ -121,11 +129,13 @@ public class SellScreen extends AppCompatActivity {
             viewPagerAdapter.addItem(imageFragment);
         }
         viewPagerAdapter.notifyDataSetChanged();
-
+      */
 
         /*갤러리 사용자권한? 안드버전따라서 필요할수도있는데 일단쓰면 꺼짐*/
         //tedPermission();
 
+        /*사진 추가 버튼*/
+        addItems = (Button)findViewById(R.id.addItems);
         addItems.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,6 +147,8 @@ public class SellScreen extends AppCompatActivity {
 
         });
 
+        /*판매하기 버튼*/
+        sell_Ok = (Button)findViewById(R.id.sell_Ok);
         sell_Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,6 +156,18 @@ public class SellScreen extends AppCompatActivity {
             }
         });
 
+        /*체크박스 */
+        checkBox = (CheckBox)findViewById(R.id.checkBox);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(checkBox.isChecked()){
+
+                }else{
+
+                }
+            }
+        });
 
         /*카테고리 스피너*/
         device_category.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -159,15 +183,16 @@ public class SellScreen extends AppCompatActivity {
             }
         });
 
-        /*유저 이름 들고오는 코드*/
-        /*final PrefManager prefManager = PrefManager.getInstance(SellScreen.this);
-        User user = prefManager.getUser();
+        /*유저 아이디 들고오는 코드*/
+        final PrefManager prefManager = PrefManager.getInstance(SellScreen.this);
+        user = prefManager.getUser();
 
         if (prefManager.isLoggedIn()) {
-            cg_writer.setText(String.valueOf(user.getEmail()));
-        }*/
+            user_id = String.valueOf(user.getUser_id());
+        }
     }
 
+    /*
     //뷰페이저 세팅함수
     public void initializeData()
     {
@@ -180,7 +205,7 @@ public class SellScreen extends AppCompatActivity {
         Drawable drawablee = new BitmapDrawable(bitmap);
         //imageList.add(drawablee);
         imageList.add(R.drawable.onlydog);
-    }
+    }*/
 
     /*go앨범 하고나서 실행된다*/
     @Override
