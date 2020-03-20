@@ -31,8 +31,7 @@ public class TalkList extends AppCompatActivity {
     String owner_id;
     String opposit_id;
     ArrayList<TalkListItem> arrayList;
-    TalkListAdapter ItemAdapter;// = new TalkListAdapter(arrayList); //어댑터 선언 꼭 위에서 해야함
-
+    TalkListAdapter ItemAdapter;// = new TalkListAdapter(arrayList);
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

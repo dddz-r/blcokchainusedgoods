@@ -13,16 +13,16 @@ import java.util.ArrayList;
 
 public class MainGridAdapter extends BaseAdapter {
 
-    ArrayList<MainGridItem> GridItem= new ArrayList<>();
+    ArrayList<MainGridItem> GridItem;//= new ArrayList<>();
 
     /*private  int icons[];
     private  String name[];
     private Context context;
     private LayoutInflater inflater;*/
 
-    /*public MainGridAdapter(Drawable d, String name, String price){
-
-    }*/
+    public MainGridAdapter(ArrayList<MainGridItem> GridItem){
+        this.GridItem = GridItem;
+    }
 
     @Override
     public int getCount() {
@@ -62,9 +62,10 @@ public class MainGridAdapter extends BaseAdapter {
     }
 
     //순서 : 그림 이름 가격
-    public void addGridItem( Drawable grid_item_img,String grid_item_name, String grid_item_price){
-        MainGridItem g = new MainGridItem(grid_item_img,grid_item_name,grid_item_price);
+    public void addGridItem(String register_number, Drawable grid_item_img,String grid_item_name, String grid_item_price){
+        MainGridItem g = new MainGridItem(register_number, grid_item_img,grid_item_name,grid_item_price);
 
+        g.setRegister_number(register_number);
         g.setGrid_item_img(grid_item_img);
         g.setGrid_item_name(grid_item_name);
         g.setGrid_item_price(grid_item_price);

@@ -2,8 +2,10 @@ package com.example.myapplication;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -12,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -39,6 +42,14 @@ import androidx.viewpager.widget.ViewPager;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.web3j.crypto.WalletUtils;
+import org.web3j.protocol.Web3j;
+import org.web3j.protocol.core.methods.response.Web3ClientVersion;
+import org.web3j.protocol.http.HttpService;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -46,6 +57,8 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 public class SellScreen extends AppCompatActivity {
 
@@ -64,6 +77,10 @@ public class SellScreen extends AppCompatActivity {
 
     int conuti =0;
 
+    /* oItems랑 ob에 같은 인덱스에 같은 레지스터번호 있음 oItems는 ob 축소ver */
+    ArrayList<ObjectBlock> ob = new ArrayList<>();
+    ArrayList <String> oItems = new ArrayList<>();
+    String objectNumber = null;
     String user_id;
     String category;
     User user;
@@ -80,6 +97,8 @@ public class SellScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.sell_screen);
 
         imageView1 = findViewById(R.id.imageView1);
@@ -152,6 +171,13 @@ public class SellScreen extends AppCompatActivity {
         sell_Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long now = System.currentTimeMillis();
+                Date date = new Date(now);
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                String formatedDate = dateFormat.format(date);
+                //물건넘버, 이름, 설명, 가격, 카테고리, 판매자, 등록시간
+                SellScreen.insertObject io = new SellScreen.insertObject(objectNumber, device_name.toString(), device_inform.toString(), device_price.toString(),category, user_id, formatedDate);
+                io.execute();
                 startActivity(new Intent(SellScreen.this, BuyScreen.class));
             }
         });
@@ -162,6 +188,38 @@ public class SellScreen extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(checkBox.isChecked()){
+
+                    SellScreen.selectObject so = new SellScreen.selectObject(user_id);
+                    so.execute(); //여기서 oItems가 세팅된다.
+
+                    oItems.add("ffff");
+                    /* oItems 랑 ob 에 같은 인덱스에 같은 레지스터번호 있음 */
+                    //final CharSequence[] oItems = {"예", "를", "들", "어", "서"};
+                    CharSequence [] ooItems = oItems.toArray (new String[oItems.size()]);
+                    AlertDialog.Builder oDialog = new AlertDialog.Builder(SellScreen.this,
+                            android.R.style.Theme_DeviceDefault_Light_Dialog_Alert);
+
+                    oDialog.setTitle("판매할 물품을 선택하세요")
+                            .setItems(ooItems, new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialog, int i)
+                                {
+                                    /*String pickedObject = ooItems[i].toString(); //고른아이템을 스트링으로
+                                    String data[] = pickedObject.split(":"); //data[0]은 레지스터 넘버, data[1]은 오브젝트네임
+                                    String registerNumber = data[0];*/
+
+                                    /* 오브젝트넘버설정, 상품이름, 설명만 자동으로 채워줌*/
+                                    objectNumber = ob.get(i).getObject_number();
+                                    String object_name = ob.get(i).getObject_name();
+                                    String object_info = ob.get(i).getObject_information();
+
+                                    device_name.setText(object_name);
+                                    device_inform.setText(object_info);
+                                }
+                            })
+                            .setCancelable(true)
+                            .show();
 
                 }else{
 
@@ -191,6 +249,7 @@ public class SellScreen extends AppCompatActivity {
             user_id = String.valueOf(user.getUser_id());
         }
     }
+
 
     /*
     //뷰페이저 세팅함수
@@ -310,6 +369,172 @@ public class SellScreen extends AppCompatActivity {
                 .setDeniedMessage(getResources().getString(R.string.permission_1))
                 .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
                 .check();
+
+    }
+    private class selectObject extends AsyncTask<Void, Void, String> {
+        private String user_id;
+
+        selectObject(String user_id) {
+            this.user_id = user_id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+
+                Log.d("tag", "doInBackground실행");
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("user_id", user_id);
+
+                return requestHandler.sendPostRequest(URLS.URL_REVIEW_READ, params);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("doInBackground 에러", "doInBackground Exception");
+            }
+            return null;
+
+        }
+
+        public void onProgressUpdate(Void... values){
+            super.onProgressUpdate();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+            Log.d("onPost실행", "onPost실행");
+
+            try {
+
+                JSONObject object = new JSONObject(s);
+
+                JSONArray jsonArray = object.getJSONArray("boughtItems");
+                //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
+
+                int count = 0;
+
+                while(count < jsonArray.length()){
+
+                    JSONObject json = jsonArray.getJSONObject(count);
+                    String registerNumber = json.getString("registerNumber");
+                    String object_number = json.getString("object_number");
+                    String object_name = json.getString("object_name");
+                    String object_cost = json.getString("object_cost");
+                    String object_owner = json.getString("object_owner");
+                    String register_time = json.getString("register_time");
+                    String object_information = json.getString("object_information");
+                    String object_state = json.getString("object_state");
+                    String object_category = json.getString("objedt_category");
+
+                    ObjectBlock inform = new ObjectBlock(registerNumber,object_number,object_name,object_information,object_cost,object_owner,register_time,object_state,object_category);
+                    ob.add(inform);
+                    oItems.add(registerNumber+" : "+object_number);
+                    count++;
+                }
+                //finish();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+    }
+
+
+    private class insertObject extends AsyncTask<Void, Void, String> {
+
+        private String objectNumber, objectCategory, objectName, objectInformation, objectCost, objectOwner, registerTime;
+        //registerNumber는 자동으로 서버에서 매겨짐
+        //오브젝트 넘버도기본적으로 자동으로 증가하게 하지만, 만약 체크박스에 체크가 됐을 경우에는 기존의 오브젝트 넘버로 등록.
+
+        insertObject(String objectNumber, String objectName, String objectInformation, String objectCost, String objectCategory, String objectOwner, String registerTime) {
+
+            this.objectName = objectName;
+            this.objectCost = objectCost;
+            this.objectOwner = objectOwner;
+            this.registerTime = registerTime;
+            this.objectNumber = objectNumber;
+            this.objectCategory = objectCategory;
+            this.objectInformation = objectInformation;
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+
+
+            try {
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("objectNumber",objectNumber);
+                params.put("objectName", objectName);
+                params.put("objectCost", objectCost);
+                params.put("objectOwner", objectOwner);
+                params.put("registerTime", registerTime);
+                params.put("objectCategory",objectCategory);
+                params.put("objectInformation",objectInformation);
+
+
+                return requestHandler.sendPostRequest(URLS.URL_INSERT_OBJECT, params);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d("인저트오브젝트오류", "doInBackground Exception");
+            }
+            return null;
+        }
+
+        public void onProgressUpdate(Void... values) {
+            super.onProgressUpdate();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+            Log.d("인저트오브젝트오류 온포스트", "실행");
+
+            try {
+
+                JSONObject obj = new JSONObject(s);
+
+                if (!obj.getString("code").equals(404)) {
+
+                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                } else if (!obj.getString("code").equals(200)) {
+                    Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "Some error occur", Toast.LENGTH_SHORT).show();
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
 
     }
 }

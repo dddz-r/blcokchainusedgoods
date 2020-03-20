@@ -17,4 +17,5 @@ public class URLS {
     public static final String URL_CHANGE_PASSWORD_SECOND = URL_ROOT + "/change_password_second";
     public static final String URL_LOGIN = URL_ROOT + "/login";
     public static final String URL_SENDING_AUTH_MASSEGE = URL_ROOT + "/send";
+    public static final String URL_INSERT_OBJECT = URL_ROOT + "/insert_object";
 }
