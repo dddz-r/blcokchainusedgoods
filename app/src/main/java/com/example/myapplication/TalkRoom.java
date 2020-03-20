@@ -25,32 +25,13 @@ import androidx.core.content.ContextCompat;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.lang.ref.WeakReference;
-import java.net.HttpURLConnection;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 
-
-import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
 
 //톡방 안에 내용
 public class TalkRoom extends AppCompatActivity {
 
-    public static final int LOAD_SUCCESS = 101;
 
     private ListView talk_contents;
     private EditText talk_edit;

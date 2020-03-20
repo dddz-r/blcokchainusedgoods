@@ -1,7 +1,10 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +18,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
@@ -23,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     Button add_item;
     Button talk;
+
+    Drawable testImage = ContextCompat.getDrawable(this,R.drawable.onlydog);
 
     User user;
     //메인2
@@ -39,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
     Button category5;
     Button category6;
     Button category7;
+
+    ArrayList<MainGridItem> gridItems;
+    MainGridAdapter gridViewAdapter;// = new MainGridAdapter();
 
     //String user_name = getIntent().getStringExtra("inputName");
     //버튼을 누른 시간
@@ -68,14 +83,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //main2_user_name.setText(user_name);
+        /*그리드 뷰 파싱해오기*/
+        gridItems = new ArrayList<>();
+        gridViewAdapter = new MainGridAdapter(gridItems);
+        //이거 되면 카테고리 별로 다 복붙하고 여기 *대신 카테고리만 넣으면 됨
+        //디비에서 카테고리에 해당하는 등록번호 다 들고오기(상태가 onSale인거)->서버에서 이미지/블록체인에서 이름,가격들고옴
+        MainActivity.objectGrid og = new MainActivity.objectGrid("*"); //카테고리 전체라서 일단 *넣어둠
+        og.execute();
+
         /*작성자 아이디 들고오기*/
         //로그인 된 현재 유저 정보를 저장
         final PrefManager prefManager = PrefManager.getInstance(MainActivity.this);
         user = prefManager.getUser();
 
 
-        //View *그리드뷰 아직테스트안해봄
         main2_user_name = (TextView)findViewById(R.id.main2_user_name);
         main2_user_id = (TextView)findViewById(R.id.main2_user_id);
         login_btn = (Button)findViewById(R.id.login_btn);
@@ -156,20 +177,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+        /* 그리드 뷰 (상품목록) */
         main_gridView = (GridView)findViewById(R.id.main_gridView);
-
-        MainGridAdapter gridViewAdapter = new MainGridAdapter();
-
         main_gridView.setAdapter(gridViewAdapter);
         //테스트
         for(int i =0;i<16;i++) {
-            gridViewAdapter.addGridItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억");
+            gridViewAdapter.addGridItem("1",ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억");
         }
 
         main_gridView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent groupScreenIntent = new Intent(getApplicationContext(), BuyScreen.class);
+                        groupScreenIntent.putExtra("register_number",gridItems.get(position).getRegister_number());
+                        startActivity(groupScreenIntent);
                         startActivity(new Intent(MainActivity.this, BuyScreen.class));
 
                     }
@@ -265,5 +287,84 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
+
+    private class objectGrid extends AsyncTask<Void, Void, String> {
+        private String object_category;
+
+        objectGrid(String object_category) {
+            this.object_category = object_category;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+
+                Log.d("tag", "doInBackground실행");
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("object_category", object_category);
+
+                return requestHandler.sendPostRequest(URLS.URL_TALK_LIST, params);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("doInBackground 에러", "doInBackground Exception");
+            }
+            return null;
+
+        }
+
+        public void onProgressUpdate(Void... values){
+            super.onProgressUpdate();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+            Log.d("onPost실행", "onPost실행");
+
+            try {
+
+                JSONObject object = new JSONObject(s);
+
+                JSONArray jsonArray = object.getJSONArray("objectGrid");
+                //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
+
+                int count = 0;
+
+                while(count < jsonArray.length()){
+
+                    JSONObject json = jsonArray.getJSONObject(count);
+
+                    String register_number = json.getString("register_number");
+                    String object_name = json.getString("object_name");
+                    String object_price = json.getString("object_cost"); /// 여기 이름 잘보기!
+
+                    MainGridItem inform = new MainGridItem(register_number, testImage,object_name, object_price);
+                    gridItems.add(inform);
+
+
+                    count++;
+                }
+                gridViewAdapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "서버가 꺼져있어요^^", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+    }
 
 }

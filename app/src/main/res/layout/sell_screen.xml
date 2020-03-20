@@ -97,7 +97,7 @@
             android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="판매되거나 구매된 적이 있는 상품인가요?"
+            android:text="거래한 적 있는 상품인가요?"
             android:layout_gravity="center"
             android:buttonTint="@color/mainTextColor"
             android:textColor="@color/darkGray"/>
