@@ -267,7 +267,7 @@ public class BuyScreen extends AppCompatActivity {
         imageList.add(R.drawable.onlydog);
     }
 
-    private class getObjectPopup extends AsyncTask<Void, Void, String> {
+    private class getObjectPopup extends AsyncTask<Void, Void, String> { //블록체인
         private String registerNumber;
 
         getObjectPopup(String registerNumber) {
@@ -326,9 +326,9 @@ public class BuyScreen extends AppCompatActivity {
 
                     JSONObject json = jsonArray.getJSONObject(count);
                     //소유자, 거래횟수, 처음거래일자 //다가져와서 안스에서 세야할수도 잇음
-                    String objectOwner = json.getString("objectOwner");
-                    String firstRegister = json.getString("firstRegister");
-                    String transferCount = json.getString("transferCount");
+                    String objectOwner = json.getString("objectOwner"); //마지막블럭꺼
+                    String firstRegister = json.getString("firstRegister"); //처음 블럭꺼
+                    String transferCount = json.getString("transferCount"); //개수
 
 
                     count++;
@@ -343,7 +343,7 @@ public class BuyScreen extends AppCompatActivity {
         }
     }
 
-    private class getObject extends AsyncTask<Void, Void, String> {
+    private class getObject extends AsyncTask<Void, Void, String> { //블록체인
         private String registerNumber;
 
         getObject(String registerNumber) {
@@ -393,7 +393,7 @@ public class BuyScreen extends AppCompatActivity {
 
                 JSONObject object = new JSONObject(s);
 
-                JSONArray jsonArray = object.getJSONArray("popup");
+                JSONArray jsonArray = object.getJSONArray("obj");
                 //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
 
                 int count = 0;
@@ -404,13 +404,13 @@ public class BuyScreen extends AppCompatActivity {
 
                     //+이미지도 들고와야함
                     //String registerNumber = json.getString("registerNumber");
-                    object_number = json.getString("object_number");
-                    object_name = json.getString("object_name");
-                    object_cost = json.getString("object_cost");
-                    object_owner = json.getString("object_owner");
-                    register_time = json.getString("register_time");
-                    object_information = json.getString("object_information");
-                    object_state = json.getString("object_state");
+                    object_number = json.getString("originObjectNumber");
+                    object_name = json.getString("objectName");
+                    object_cost = json.getString("objectInformation");
+                    object_owner = json.getString("objectCost");
+                    register_time = json.getString("objectOwner");
+                    object_information = json.getString("objectInformation");
+                    //object_state = json.getString("object_state");//<-블록체인이 아님! 따로 만들것
 
 
                     count++;
@@ -425,7 +425,7 @@ public class BuyScreen extends AppCompatActivity {
         }
     }
 
-    private class setObjectState extends AsyncTask<Void, Void, String> {
+    private class setObjectState extends AsyncTask<Void, Void, String> { //데이터베이스
 
         private String register_number, object_state;
 
@@ -497,7 +497,7 @@ public class BuyScreen extends AppCompatActivity {
     private class insertTransaction extends AsyncTask<Void, Void, String> {
 
         private String register_number, seller_id, buyer_id, completeTime;
-
+//타임지우기
         insertTransaction(String register_number, String seller_id, String buyer_id, String completeTime) {
 
             this.register_number = register_number;

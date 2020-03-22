@@ -28,12 +28,12 @@ public class Category4  extends AppCompatActivity {
 
         category4_grid = (GridView)findViewById(R.id.category4_grid);
 
-        MainGridAdapter gridViewAdapter = new MainGridAdapter();
+        //MainGridAdapter gridViewAdapter = new MainGridAdapter();
 
-        category4_grid.setAdapter(gridViewAdapter);
+        //category4_grid.setAdapter(gridViewAdapter);
         //테스트
         for(int i =0;i<16;i++) {
-            gridViewAdapter.addGridItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억");
+            //gridViewAdapter.addGridItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억");
         }
 
         category4_grid.setOnItemClickListener(

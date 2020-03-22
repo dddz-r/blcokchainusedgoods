@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
     Button add_item;
     Button talk;
 
-    Drawable testImage = ContextCompat.getDrawable(this,R.drawable.onlydog);
+    //Drawable testImage = ContextCompat.getDrawable(this,R.drawable.onlydog);
 
     User user;
     //메인2
@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
         //이거 되면 카테고리 별로 다 복붙하고 여기 *대신 카테고리만 넣으면 됨
         //디비에서 카테고리에 해당하는 등록번호 다 들고오기(상태가 onSale인거)->서버에서 이미지/블록체인에서 이름,가격들고옴
         MainActivity.objectGrid og = new MainActivity.objectGrid("*"); //카테고리 전체라서 일단 *넣어둠
-        og.execute();
+        //og.execute();
 
         /*작성자 아이디 들고오기*/
         //로그인 된 현재 유저 정보를 저장
@@ -351,8 +351,8 @@ public class MainActivity extends AppCompatActivity {
                     String object_name = json.getString("object_name");
                     String object_price = json.getString("object_cost"); /// 여기 이름 잘보기!
 
-                    MainGridItem inform = new MainGridItem(register_number, testImage,object_name, object_price);
-                    gridItems.add(inform);
+                    //MainGridItem inform = new MainGridItem(register_number, testImage,object_name, object_price);
+                    //gridItems.add(inform);
 
 
                     count++;
