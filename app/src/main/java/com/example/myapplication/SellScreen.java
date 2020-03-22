@@ -171,14 +171,14 @@ public class SellScreen extends AppCompatActivity {
         sell_Ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long now = System.currentTimeMillis();
+                /*long now = System.currentTimeMillis();
                 Date date = new Date(now);
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
-                String formatedDate = dateFormat.format(date);
+                String formatedDate = dateFormat.format(date);*/
                 //물건넘버, 이름, 설명, 가격, 카테고리, 판매자, 등록시간
-                SellScreen.insertObject io = new SellScreen.insertObject(objectNumber, device_name.toString(), device_inform.toString(), device_price.toString(),category, user_id, formatedDate);
+                SellScreen.insertObject io = new SellScreen.insertObject("1", device_name.toString(), device_inform.toString(), device_price.toString(),category, user_id);
                 io.execute();
-                startActivity(new Intent(SellScreen.this, BuyScreen.class));
+                startActivity(new Intent(SellScreen.this, MainActivity.class));
             }
         });
 
@@ -457,16 +457,15 @@ public class SellScreen extends AppCompatActivity {
 
     private class insertObject extends AsyncTask<Void, Void, String> {
 
-        private String objectNumber, objectCategory, objectName, objectInformation, objectCost, objectOwner, registerTime;
+        private String objectNumber, objectCategory, objectName, objectInformation, objectCost, objectOwner;
         //registerNumber는 자동으로 서버에서 매겨짐
         //오브젝트 넘버도기본적으로 자동으로 증가하게 하지만, 만약 체크박스에 체크가 됐을 경우에는 기존의 오브젝트 넘버로 등록.
 
-        insertObject(String objectNumber, String objectName, String objectInformation, String objectCost, String objectCategory, String objectOwner, String registerTime) {
+        insertObject(String objectNumber, String objectName, String objectInformation, String objectCost, String objectCategory, String objectOwner) {
 
             this.objectName = objectName;
             this.objectCost = objectCost;
             this.objectOwner = objectOwner;
-            this.registerTime = registerTime;
             this.objectNumber = objectNumber;
             this.objectCategory = objectCategory;
             this.objectInformation = objectInformation;
@@ -492,10 +491,9 @@ public class SellScreen extends AppCompatActivity {
                 params.put("objectName", objectName);
                 params.put("objectCost", objectCost);
                 params.put("objectOwner", objectOwner);
-                params.put("registerTime", registerTime);
-                params.put("objectCategory",objectCategory);
+                params.put("category",objectCategory);
                 params.put("objectInformation",objectInformation);
-
+                Log.d("실행댐", "ㅇㅇㅇㅇ");
 
                 return requestHandler.sendPostRequest(URLS.URL_INSERT_OBJECT, params);
             } catch (Exception e) {
