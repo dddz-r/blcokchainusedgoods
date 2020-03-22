@@ -176,7 +176,7 @@ public class SellScreen extends AppCompatActivity {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
                 String formatedDate = dateFormat.format(date);*/
                 //물건넘버, 이름, 설명, 가격, 카테고리, 판매자, 등록시간
-                SellScreen.insertObject io = new SellScreen.insertObject("1", device_name.toString(), device_inform.toString(), device_price.toString(),category, user_id);
+                SellScreen.insertObject io = new SellScreen.insertObject("1", device_name.getText().toString(), device_inform.getText().toString(), device_price.getText().toString(),category, user_id);
                 io.execute();
                 startActivity(new Intent(SellScreen.this, MainActivity.class));
             }
