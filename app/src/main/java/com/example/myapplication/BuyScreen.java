@@ -41,7 +41,7 @@ public class BuyScreen extends AppCompatActivity {
     String object_owner = "수민";
     String firstDate = "20.02.22";
     String numTransaction = "222"; // 총 거래된 횟수
-    String register_number = getIntent().getStringExtra("register_number"); //혹시나 에러뜨면 온크리에이트안에넣어!
+    String register_number;// = getIntent().getStringExtra("register_number"); //혹시나 에러뜨면 온크리에이트안에넣어!(메인에서 받아온거다)
 
     //물건정보 들고 올 거
     String object_name;
@@ -65,6 +65,7 @@ public class BuyScreen extends AppCompatActivity {
         setContentView(R.layout.buy_screen);
 
         /*물건정보 들고오기*/
+        register_number = getIntent().getStringExtra("register_number");
         BuyScreen.getObject go = new BuyScreen.getObject(register_number);
         go.execute();
 
@@ -109,9 +110,13 @@ public class BuyScreen extends AppCompatActivity {
             }
         });
 
-
         /*본인이 올린 글에서는 구매하기 버튼 안보인다*/
         //대신 배송확인 눌리는 버튼이 있어야한다.
+
+        bs_sendOk = findViewById(R.id.bs_send_Ok);
+        bs_buyOk = findViewById(R.id.bs_buyOK);
+        bs_seller_inform_btn = findViewById(R.id.bs_seller_inform_btn);
+
         if(buyer_id.equals(object_owner)){
             if(object_state.equals("onSale")){//구매요청전에는 택배보내면 안되지
                 bs_sendOk.setVisibility(View.GONE);
@@ -122,15 +127,14 @@ public class BuyScreen extends AppCompatActivity {
             bs_sendOk.setVisibility(View.GONE);
         }
 
-        if(object_state.equals("onBuy")){
+        /*if(object_state.equals("onBuy")){
             bs_buyOk.setText("구매중");
         }else if(object_state.equals("onTransportation")){
             bs_sendOk.setText("배송중");//클릭할수없도록 내일 설정하자
             bs_buyOk.setText("수취 확인");
-        }
+        }*/
 
         /* 배송확인버튼 - 판매자가 택배를 보낸 후 클릭해야하는 버튼 */
-        bs_sendOk = findViewById(R.id.bs_send_Ok);
         bs_sendOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -161,7 +165,6 @@ public class BuyScreen extends AppCompatActivity {
 
         /*구매버튼*/
         //onSale-onBuy-onTransportation-endSale 물건상태에따라 변해야함
-        bs_buyOk = findViewById(R.id.bs_buyOK);
         bs_buyOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -217,7 +220,6 @@ public class BuyScreen extends AppCompatActivity {
         });
 
         /*판매자 정보*/
-        bs_seller_inform_btn = findViewById(R.id.bs_seller_inform_btn);
         bs_seller_inform_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -290,9 +292,9 @@ public class BuyScreen extends AppCompatActivity {
                 RequestHandler requestHandler = new RequestHandler();
 
                 HashMap<String, String> params = new HashMap<>();
-                params.put("registerNumber", registerNumber);
+                params.put("registerNumber", registerNumber); //디비에 오브젝트 넘버 추가
 
-                return requestHandler.sendPostRequest(URLS.URL_REVIEW_READ, params);
+                return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_BLOCK, params);
 
 
             } catch (Exception e) {
@@ -326,7 +328,10 @@ public class BuyScreen extends AppCompatActivity {
 
                     JSONObject json = jsonArray.getJSONObject(count);
                     //소유자, 거래횟수, 처음거래일자 //다가져와서 안스에서 세야할수도 잇음
-                    String objectOwner = json.getString("objectOwner"); //마지막블럭꺼
+                    String originNumber = json.getString("originObjectNumber");
+
+                    //이 밑에꺼 딴데로 옮기기 오브젝트넘버가 같은거 디비에서 레지스터 넘버 다가져와야함.->이걸 블록체인에서 또 다가져와야함
+                    String objectOwner = json.getString("objectOwner");//마지막블럭꺼
                     String firstRegister = json.getString("firstRegister"); //처음 블럭꺼
                     String transferCount = json.getString("transferCount"); //개수
 
@@ -368,7 +373,7 @@ public class BuyScreen extends AppCompatActivity {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("registerNumber", registerNumber);
 
-                return requestHandler.sendPostRequest(URLS.URL_REVIEW_READ, params);
+                return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_BLOCK, params);
 
 
             } catch (Exception e) {
@@ -455,7 +460,7 @@ public class BuyScreen extends AppCompatActivity {
                 params.put("object_state", object_state);
 
 
-                return requestHandler.sendPostRequest(URLS.URL_REVIEW_WRITE, params);//주소 설정
+                return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_DB, params);//주소 설정
             }catch (Exception e) {
                 e.printStackTrace();
             }
@@ -527,7 +532,7 @@ public class BuyScreen extends AppCompatActivity {
                 params.put("completeTime", completeTime);
 
 
-                return requestHandler.sendPostRequest(URLS.URL_REVIEW_WRITE, params);//
+                return requestHandler.sendPostRequest(URLS.URL_INSERT_TRANSACTION, params);//
             }catch (Exception e) {
                 e.printStackTrace();
             }

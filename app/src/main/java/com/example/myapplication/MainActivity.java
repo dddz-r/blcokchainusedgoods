@@ -83,14 +83,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*그리드 뷰 파싱해오기*/
-        gridItems = new ArrayList<>();
-        gridViewAdapter = new MainGridAdapter(gridItems);
-        //이거 되면 카테고리 별로 다 복붙하고 여기 *대신 카테고리만 넣으면 됨
-        //디비에서 카테고리에 해당하는 등록번호 다 들고오기(상태가 onSale인거)->서버에서 이미지/블록체인에서 이름,가격들고옴
-        MainActivity.objectGrid og = new MainActivity.objectGrid("*"); //카테고리 전체라서 일단 *넣어둠
-        //og.execute();
-
         /*작성자 아이디 들고오기*/
         //로그인 된 현재 유저 정보를 저장
         final PrefManager prefManager = PrefManager.getInstance(MainActivity.this);
@@ -178,8 +170,18 @@ public class MainActivity extends AppCompatActivity {
 
 
         /* 그리드 뷰 (상품목록) */
+        /*그리드 뷰 파싱해오기*/
+        gridItems = new ArrayList<>();
+        gridViewAdapter = new MainGridAdapter(gridItems);
+        //이거 되면 카테고리 별로 다 복붙하고 여기 *대신 카테고리만 넣으면 됨
+        //디비에서 카테고리에 해당하는 등록번호 다 들고오기(상태가 onSale인거)->서버에서 이미지/블록체인에서 이름,가격들고옴
+        MainActivity.objectGrid og = new MainActivity.objectGrid("*"); //카테고리 전체라서 일단 *넣어둠
+        //og.execute();
+
         main_gridView = (GridView)findViewById(R.id.main_gridView);
         main_gridView.setAdapter(gridViewAdapter);
+
+
         //테스트
         for(int i =0;i<16;i++) {
             gridViewAdapter.addGridItem("1",ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억");
@@ -190,7 +192,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent groupScreenIntent = new Intent(getApplicationContext(), BuyScreen.class);
-                        groupScreenIntent.putExtra("register_number",gridItems.get(position).getRegister_number());
+                        //groupScreenIntent.putExtra("register_number",gridItems.get(position).getRegister_number());
+                        groupScreenIntent.putExtra("register_number","1");
                         startActivity(groupScreenIntent);
                         startActivity(new Intent(MainActivity.this, BuyScreen.class));
 
@@ -311,9 +314,9 @@ public class MainActivity extends AppCompatActivity {
                 RequestHandler requestHandler = new RequestHandler();
 
                 HashMap<String, String> params = new HashMap<>();
-                params.put("object_category", object_category);
+                params.put("category", object_category);
 
-                return requestHandler.sendPostRequest(URLS.URL_TALK_LIST, params);
+                return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_DB, params);
 
 
             } catch (Exception e) {
@@ -348,8 +351,88 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject json = jsonArray.getJSONObject(count);
 
                     String register_number = json.getString("register_number");
-                    String object_name = json.getString("object_name");
-                    String object_price = json.getString("object_cost"); /// 여기 이름 잘보기!
+                    //String object_name = json.getString("object_name");
+                    //String object_price = json.getString("object_cost"); /// 여기 이름 잘보기!
+
+                    //MainGridItem inform = new MainGridItem(register_number, testImage,object_name, object_price);
+                    //gridItems.add(inform);
+                    MainActivity.objectGridBlock ogb = new MainActivity.objectGridBlock("register_number"); //카테고리 전체라서 일단 *넣어둠
+                    //ogb.execute();
+
+                    count++;
+                }
+                gridViewAdapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "서버가 꺼져있어요^^", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+    }
+
+    private class objectGridBlock extends AsyncTask<Void, Void, String> {
+        private String registerNumber;
+
+        objectGridBlock(String registerNumber) {
+            this.registerNumber = registerNumber;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+
+                Log.d("tag", "doInBackground실행");
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("registerNumber", registerNumber);
+
+                return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_BLOCK, params);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("doInBackground 에러", "doInBackground Exception");
+            }
+            return null;
+
+        }
+
+        public void onProgressUpdate(Void... values){
+            super.onProgressUpdate();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+            Log.d("onPost실행", "onPost실행");
+
+            try {
+
+                JSONObject object = new JSONObject(s);
+
+                JSONArray jsonArray = object.getJSONArray("obj");
+                //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
+
+                int count = 0;
+
+                while(count < jsonArray.length()){
+
+                    JSONObject json = jsonArray.getJSONObject(count);
+
+                    String register_number = json.getString("registerNumber");
+                    String object_name = json.getString("objectName");
+                    String object_price = json.getString("objectCost"); /// 여기 이름 잘보기!
 
                     //MainGridItem inform = new MainGridItem(register_number, testImage,object_name, object_price);
                     //gridItems.add(inform);

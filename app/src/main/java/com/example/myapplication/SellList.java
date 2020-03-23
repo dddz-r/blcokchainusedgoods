@@ -17,6 +17,8 @@ import java.util.List;
 public class SellList extends AppCompatActivity {
 
     private ListView sl_listView;
+    ArrayList<BuyListItem> buyItems;
+    BuyListAdapter buyListAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,12 +26,13 @@ public class SellList extends AppCompatActivity {
         setContentView(R.layout.sell_list);
 
         sl_listView = (ListView)findViewById(R.id.sl_listView);
-        BuyListAdapter ItemAdapter = new BuyListAdapter();
+        buyItems = new ArrayList<>();
+        buyListAdapter = new BuyListAdapter(buyItems);
 
-        sl_listView.setAdapter(ItemAdapter);
+        sl_listView.setAdapter(buyListAdapter);
 
         //테스트//순서 : 그림 이름 가격 상태
-        ItemAdapter.addBuyItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억","판매완료");
+        buyListAdapter.addBuyItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억","판매완료");
         //List<String> buy_data = new ArrayList<>();
 
         //ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,buy_data);
