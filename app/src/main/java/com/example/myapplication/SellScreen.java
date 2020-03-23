@@ -436,8 +436,8 @@ public class SellScreen extends AppCompatActivity {
                     String object_owner = json.getString("objectOwner");
                     String register_time = json.getString("registerTime");
                     String object_information = json.getString("objectInformation");
-                    //String object_state = json.getString("objectState");
-                    //String object_category = json.getString("object_category");
+                    String object_state = json.getString("objectState");
+                    String object_category = json.getString("category");
 
                     ObjectBlock inform = new ObjectBlock(registerNumber,object_number,object_name,object_information,object_cost,object_owner,register_time,object_state,object_category);
                     ob.add(inform);
