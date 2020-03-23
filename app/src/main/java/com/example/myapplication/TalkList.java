@@ -55,6 +55,7 @@ public class TalkList extends AppCompatActivity {
         /*리스트뷰에 어댑터 연결*/
         arrayList = new ArrayList<>();
         ItemAdapter = new TalkListAdapter(arrayList);
+
         tl_listView = (ListView)findViewById(R.id.tl_listView);
         tl_listView.setAdapter(ItemAdapter);
         arrayList.clear();

@@ -430,14 +430,14 @@ public class SellScreen extends AppCompatActivity {
 
                     JSONObject json = jsonArray.getJSONObject(count);
                     String registerNumber = json.getString("registerNumber");
-                    String object_number = json.getString("object_number");
-                    String object_name = json.getString("object_name");
-                    String object_cost = json.getString("object_cost");
-                    String object_owner = json.getString("object_owner");
-                    String register_time = json.getString("register_time");
-                    String object_information = json.getString("object_information");
-                    String object_state = json.getString("object_state");
-                    String object_category = json.getString("objedt_category");
+                    String object_number = json.getString("objectNumber");
+                    String object_name = json.getString("objectName");
+                    String object_cost = json.getString("objectCost");
+                    String object_owner = json.getString("objectOwner");
+                    String register_time = json.getString("registerTime");
+                    String object_information = json.getString("objectInformation");
+                    String object_state = json.getString("objectState");
+                    String object_category = json.getString("category");
 
                     ObjectBlock inform = new ObjectBlock(registerNumber,object_number,object_name,object_information,object_cost,object_owner,register_time,object_state,object_category);
                     ob.add(inform);
@@ -487,12 +487,12 @@ public class SellScreen extends AppCompatActivity {
                 RequestHandler requestHandler = new RequestHandler();
 
                 HashMap<String, String> params = new HashMap<>();
-                params.put("objectNumber",objectNumber);
-                params.put("objectName", objectName);
-                params.put("objectCost", objectCost);
-                params.put("objectOwner", objectOwner);
+                params.put("object_number",objectNumber);
+                params.put("object_name", objectName);
+                params.put("object_cost", objectCost);
+                params.put("object_owner", objectOwner);
                 params.put("category",objectCategory);
-                params.put("objectInformation",objectInformation);
+                params.put("object_information",objectInformation);
                 Log.d("실행댐", "ㅇㅇㅇㅇ");
 
                 return requestHandler.sendPostRequest(URLS.URL_INSERT_OBJECT, params);

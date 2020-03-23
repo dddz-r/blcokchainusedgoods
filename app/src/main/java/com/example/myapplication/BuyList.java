@@ -1,7 +1,9 @@
 package com.example.myapplication;
 
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,12 +14,19 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class BuyList extends AppCompatActivity {
 
     private ListView bl_listView;
+    ArrayList<BuyListItem> buyItems;
+    BuyListAdapter buyListAdapter;// = new BuyListAdapter(buyItems);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +42,17 @@ public class BuyList extends AppCompatActivity {
         user_id = getIntent().getStringExtra("user_id");
 
         bl_listView = (ListView)findViewById(R.id.bl_listView);
-        BuyListAdapter ItemAdapter = new BuyListAdapter();
 
-        bl_listView.setAdapter(ItemAdapter);
+        bl_listView.setAdapter(buyListAdapter);
+
+        BuyList.getBuyList gbl = new BuyList.getBuyList(user_id);
+        gbl.execute();
+
+        buyItems = new ArrayList<>();
+        buyListAdapter = new BuyListAdapter(buyItems);
         
         //테스트//순서 : 그림 이름 가격 상태
-        ItemAdapter.addBuyItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억","판매중");
+        buyListAdapter.addBuyItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억","판매중");
         //List<String> buy_data = new ArrayList<>();
 
         //ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,buy_data);
@@ -56,6 +70,239 @@ public class BuyList extends AppCompatActivity {
                      }
                  }
          );
+    }
+
+    private class getBuyList extends AsyncTask<Void, Void, String> {//트렌젝션디비
+        private String buyer_id;//서버에서 SELECT * FROM transaction_info where buyer_id = "";
+
+        getBuyList(String buyer_id) {
+            this.buyer_id = buyer_id;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+
+                Log.d("tag", "doInBackground실행");
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("buyer_id", buyer_id);
+
+                return requestHandler.sendPostRequest(URLS.URL_GET_TRANSACTION_DB, params);//----------------->바꾸기
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("doInBackground 에러", "doInBackground Exception");
+            }
+            return null;
+
+        }
+
+        public void onProgressUpdate(Void... values){
+            super.onProgressUpdate();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+            Log.d("onPost실행", "onPost실행");
+
+            try {
+
+                JSONObject object = new JSONObject(s);
+
+                JSONArray jsonArray = object.getJSONArray("reviews");//----------------->바꾸기
+                //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
+
+                int count = 0;
+
+                while(count < jsonArray.length()){
+
+                    JSONObject json = jsonArray.getJSONObject(count);
+                    String transactionNumber = json.getString("transactionNumber");
+
+                    BuyList.getTransaction gt = new BuyList.getTransaction(transactionNumber);
+                    gt.execute();
+
+
+                    count++;
+                }
+                //finish();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+    }
+
+    private class getTransaction extends AsyncTask<Void, Void, String> { //트렌젝션 블록체인
+        private String transactionNumber;
+
+        getTransaction(String transactionNumber) {
+            this.transactionNumber = transactionNumber;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+
+                Log.d("tag", "doInBackground실행");
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("transactionNumber", transactionNumber);
+
+                return requestHandler.sendPostRequest(URLS.URL_GET_TRANSACTION_BLOCK, params);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("doInBackground 에러", "doInBackground Exception");
+            }
+            return null;
+
+        }
+
+        public void onProgressUpdate(Void... values){
+            super.onProgressUpdate();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+            Log.d("onPost실행", "onPost실행");
+
+            try {
+
+                JSONObject object = new JSONObject(s);
+
+                JSONArray jsonArray = object.getJSONArray("obj");
+                //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
+
+                int count = 0;
+
+                while(count < jsonArray.length()){
+
+                    JSONObject json = jsonArray.getJSONObject(count);
+
+                    String transactionNumber = json.getString("transactionNumber");
+                    String registerNumber = json.getString("registerNumber");
+                    BuyList.getObjectBlock gob = new BuyList.getObjectBlock(registerNumber);
+                    gob.execute();
+
+
+                    count++;
+                }
+                //finish();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+    }
+
+    private class getObjectBlock extends AsyncTask<Void, Void, String> {
+        private String registerNumber;
+
+        getObjectBlock(String registerNumber) {
+            this.registerNumber = registerNumber;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+
+                Log.d("tag", "doInBackground실행");
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("registerNumber", registerNumber);
+
+                return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_BLOCK, params);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("doInBackground 에러", "doInBackground Exception");
+            }
+            return null;
+
+        }
+
+        public void onProgressUpdate(Void... values){
+            super.onProgressUpdate();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+            Log.d("onPost실행", "onPost실행");
+
+            try {
+
+                JSONObject object = new JSONObject(s);
+
+                JSONArray jsonArray = object.getJSONArray("obj");
+                //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
+
+                int count = 0;
+
+                while(count < jsonArray.length()){
+
+                    JSONObject json = jsonArray.getJSONObject(count);
+
+                    //+이미지도 들고와야함
+                    String register_number = json.getString("registerNumber");
+                    String object_name = json.getString("objectName");
+                    String object_price = json.getString("objectCost");
+
+                    //BuyListItem item = new BuyListItem(register_number, testImage,object_name, object_price);
+                    //buyItems.add(item);
+
+
+                    count++;
+                }
+                buyListAdapter.notifyDataSetChanged();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "서버가 꺼져있어요^^", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
     }
 
 }

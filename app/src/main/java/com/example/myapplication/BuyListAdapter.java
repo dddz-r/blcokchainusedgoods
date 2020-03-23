@@ -13,12 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BuyListAdapter extends BaseAdapter {
-    ArrayList<BuyListItem> BuyItem = new ArrayList<>();
+
+    ArrayList<BuyListItem> BuyItem;// = new ArrayList<>();
 
 
-   /* public BuyListAdapter(List<BuyListItem> BuyItem) {
+   public BuyListAdapter(ArrayList<BuyListItem> BuyItem) {
         this.BuyItem = BuyItem;
-    }*/
+    }
 
     @Override
     public int getCount() {
