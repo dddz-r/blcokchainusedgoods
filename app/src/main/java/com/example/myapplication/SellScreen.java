@@ -45,10 +45,6 @@ import com.gun0912.tedpermission.TedPermission;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.web3j.crypto.WalletUtils;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.core.methods.response.Web3ClientVersion;
-import org.web3j.protocol.http.HttpService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
