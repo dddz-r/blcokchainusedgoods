@@ -55,12 +55,12 @@ public class BuyListAdapter extends BaseAdapter {
         bli_device_name.setText(b.getDevice_name());
         bli_device_price.setText(b.getDevice_price());
         bli_device_condition.setText(b.getDevice_condition());
-        bli_device_image.setImageDrawable(b.getD());
+        //bli_device_image.setImageDrawable(b.getD());
 
         return convertView;
     }
-    //순서 : 그림 이름 가격 상태
-    public void addBuyItem(Drawable d,String name, String price, String condition){
+    //순서 : 이름 가격 상태 그림
+    /*public void addBuyItem(Drawable d,String name, String price, String condition){
         BuyListItem b = new BuyListItem(d,name,price,condition);
 
         b.setD(d);
@@ -69,5 +69,5 @@ public class BuyListAdapter extends BaseAdapter {
         b.setDevice_price(price);
 
         BuyItem.add(b);
-    }
+    }*/
 }
