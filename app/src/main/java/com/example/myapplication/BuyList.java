@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,16 +29,18 @@ public class BuyList extends AppCompatActivity {
     ArrayList<BuyListItem> buyItems;
     BuyListAdapter buyListAdapter;// = new BuyListAdapter(buyItems);
 
+    String user_id;
+    String device_name;
+    String device_price;
+    String device_condition;
+    Drawable image;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.buy_list);
 
-        String user_id;
-        String device_name;
-        String device_price;
-        String device_condition;
-        Drawable image;
+
 
         user_id = getIntent().getStringExtra("user_id");
 
@@ -51,8 +54,8 @@ public class BuyList extends AppCompatActivity {
         buyItems = new ArrayList<>();
         buyListAdapter = new BuyListAdapter(buyItems);
         
-        //테스트//순서 : 그림 이름 가격 상태
-        buyListAdapter.addBuyItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억","판매중");
+        //테스트//순서 : 이름 가격 상태 그림
+        //buyListAdapter.addBuyItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억","판매중");
         //List<String> buy_data = new ArrayList<>();
 
         //ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,buy_data);
@@ -95,9 +98,9 @@ public class BuyList extends AppCompatActivity {
                 RequestHandler requestHandler = new RequestHandler();
 
                 HashMap<String, String> params = new HashMap<>();
-                params.put("buyer_id", buyer_id);
+                params.put("user_id", buyer_id);
 
-                return requestHandler.sendPostRequest(URLS.URL_GET_TRANSACTION_DB, params);//----------------->바꾸기
+                return requestHandler.sendPostRequest(URLS.URL_GET_TRANSACTION_BUY_LIST, params);
 
 
             } catch (Exception e) {
@@ -122,7 +125,7 @@ public class BuyList extends AppCompatActivity {
 
                 JSONObject object = new JSONObject(s);
 
-                JSONArray jsonArray = object.getJSONArray("reviews");//----------------->바꾸기
+                JSONArray jsonArray = object.getJSONArray("buyList");
                 //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
 
                 int count = 0;
@@ -130,7 +133,7 @@ public class BuyList extends AppCompatActivity {
                 while(count < jsonArray.length()){
 
                     JSONObject json = jsonArray.getJSONObject(count);
-                    String transactionNumber = json.getString("transactionNumber");
+                    String transactionNumber = json.getString("transaction_number");
 
                     BuyList.getTransaction gt = new BuyList.getTransaction(transactionNumber);
                     gt.execute();
@@ -209,6 +212,8 @@ public class BuyList extends AppCompatActivity {
 
                     String transactionNumber = json.getString("transactionNumber");
                     String registerNumber = json.getString("registerNumber");
+                    String completeTime = json.getString("completeTime");
+
                     BuyList.getObjectBlock gob = new BuyList.getObjectBlock(registerNumber);
                     gob.execute();
 
@@ -225,7 +230,7 @@ public class BuyList extends AppCompatActivity {
         }
     }
 
-    private class getObjectBlock extends AsyncTask<Void, Void, String> {
+    private class getObjectBlock extends AsyncTask<Void, Void, String> {//물건 블록체인
         private String registerNumber;
 
         getObjectBlock(String registerNumber) {
@@ -248,7 +253,7 @@ public class BuyList extends AppCompatActivity {
                 RequestHandler requestHandler = new RequestHandler();
 
                 HashMap<String, String> params = new HashMap<>();
-                params.put("registerNumber", registerNumber);
+                params.put("register_number", registerNumber);
 
                 return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_BLOCK, params);
 
@@ -289,8 +294,8 @@ public class BuyList extends AppCompatActivity {
                     String object_name = json.getString("objectName");
                     String object_price = json.getString("objectCost");
 
-                    //BuyListItem item = new BuyListItem(register_number, testImage,object_name, object_price);
-                    //buyItems.add(item);
+                    BuyListItem item = new BuyListItem(register_number,object_name, object_price); //,img
+                    buyItems.add(item);
 
 
                     count++;

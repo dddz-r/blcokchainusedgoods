@@ -77,7 +77,7 @@ public class SellScreen extends AppCompatActivity {
 
     int conuti =0;
 
-    /* oItems랑 ob에 같은 인덱스에 같은 레지스터번호 있음 oItems는 ob 축소ver */
+    /* oItems랑 ob에 같은 인덱스에 같은 레지스터번호 있음 oItems는 ob 축소ver 표기용으로 이용 */
     ArrayList<ObjectBlock> ob = new ArrayList<>();
     ArrayList <String> oItems = new ArrayList<>();
     String objectNumber = null;
@@ -189,10 +189,10 @@ public class SellScreen extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(checkBox.isChecked()){
 
-                    SellScreen.selectObject so = new SellScreen.selectObject(user_id);
-                    so.execute(); //여기서 oItems가 세팅된다.
+                    SellScreen.selectObjectPop sop = new SellScreen.selectObjectPop(user_id);
+                    sop.execute(); //여기서 oItems가 세팅된다.
 
-                    oItems.add("ffff");
+                    //oItems.add("ffff");
                     /* oItems 랑 ob 에 같은 인덱스에 같은 레지스터번호 있음 */
                     //final CharSequence[] oItems = {"예", "를", "들", "어", "서"};
                     CharSequence [] ooItems = oItems.toArray (new String[oItems.size()]);
@@ -371,10 +371,11 @@ public class SellScreen extends AppCompatActivity {
                 .check();
 
     }
-    private class selectObject extends AsyncTask<Void, Void, String> {
+
+    private class selectObjectPop extends AsyncTask<Void, Void, String> { //DB
         private String user_id;
 
-        selectObject(String user_id) {
+        selectObjectPop(String user_id) {
             this.user_id = user_id;
         }
 
@@ -396,7 +397,7 @@ public class SellScreen extends AppCompatActivity {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("user_id", user_id);
 
-                return requestHandler.sendPostRequest(URLS.URL_REVIEW_READ, params);
+                return requestHandler.sendPostRequest(URLS.URL_GET_TRANSACTION_BUY_LIST, params);
 
 
             } catch (Exception e) {
@@ -421,7 +422,7 @@ public class SellScreen extends AppCompatActivity {
 
                 JSONObject object = new JSONObject(s);
 
-                JSONArray jsonArray = object.getJSONArray("boughtItems");
+                JSONArray jsonArray = object.getJSONArray("buyList");
                 //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
 
                 int count = 0;
@@ -429,6 +430,79 @@ public class SellScreen extends AppCompatActivity {
                 while(count < jsonArray.length()){
 
                     JSONObject json = jsonArray.getJSONObject(count);
+                    String registerNumber = json.getString("register_number");
+                    SellScreen.selectObjectBlock sob = new SellScreen.selectObjectBlock(registerNumber);
+                    sob.execute();
+
+                }
+                //finish();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+    }
+
+    private class selectObjectBlock extends AsyncTask<Void, Void, String> { //블록체인
+        private String registerNumber;
+
+        selectObjectBlock(String registerNumber) {
+            this.registerNumber = registerNumber;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+
+                Log.d("tag", "doInBackground실행");
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("register_number", registerNumber);
+
+                return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_BLOCK, params);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("doInBackground 에러", "doInBackground Exception");
+            }
+            return null;
+
+        }
+
+        public void onProgressUpdate(Void... values){
+            super.onProgressUpdate();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+            Log.d("onPost실행", "onPost실행");
+
+            try {
+
+                JSONObject object = new JSONObject(s);
+
+                //JSONArray jsonArray = object.getJSONArray("obj");
+                //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
+
+                int count = 0;
+
+                //while(count < jsonArray.length()){
+
+                    JSONObject json = object.getJSONObject("obj");
                     String registerNumber = json.getString("registerNumber");
                     String object_number = json.getString("objectNumber");
                     String object_name = json.getString("objectName");
@@ -436,14 +510,14 @@ public class SellScreen extends AppCompatActivity {
                     String object_owner = json.getString("objectOwner");
                     String register_time = json.getString("registerTime");
                     String object_information = json.getString("objectInformation");
-                    String object_state = json.getString("objectState");
-                    String object_category = json.getString("category");
+                    //String object_state = json.getString("objectState");
+                    //String object_category = json.getString("category");
 
-                    ObjectBlock inform = new ObjectBlock(registerNumber,object_number,object_name,object_information,object_cost,object_owner,register_time,object_state,object_category);
+                    ObjectBlock inform = new ObjectBlock(registerNumber,object_number,object_name,object_information,object_cost,object_owner,register_time);
                     ob.add(inform);
-                    oItems.add(registerNumber+" : "+object_number);
-                    count++;
-                }
+                    oItems.add(registerNumber+" : "+object_number+" ("+register_time+") ");
+                    //count++;
+                //}
                 //finish();
             } catch (JSONException e) {
                 e.printStackTrace();

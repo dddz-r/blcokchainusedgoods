@@ -31,8 +31,8 @@ public class SellList extends AppCompatActivity {
 
         sl_listView.setAdapter(buyListAdapter);
 
-        //테스트//순서 : 그림 이름 가격 상태
-        buyListAdapter.addBuyItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억","판매완료");
+        //테스트//순서 : 이름 가격 상태 그림
+        //buyListAdapter.addBuyItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억","판매완료");
         //List<String> buy_data = new ArrayList<>();
 
         //ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,buy_data);

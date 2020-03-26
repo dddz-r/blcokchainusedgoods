@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
 
     Button add_item;
     Button talk;
+    Button search_btn;
+    EditText search_edit;
 
     //Drawable testImage = ContextCompat.getDrawable(this,R.drawable.onlydog);
 
@@ -51,6 +54,9 @@ public class MainActivity extends AppCompatActivity {
     Button category5;
     Button category6;
     Button category7;
+
+    boolean CASE_SEARCH = false;
+    String search_text;
 
     ArrayList<MainGridItem> gridItems;
     MainGridAdapter gridViewAdapter;// = new MainGridAdapter();
@@ -117,6 +123,20 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
+        /* 검색 */
+        search_edit = (EditText)findViewById(R.id.search_edit);
+        search_btn = (Button)findViewById(R.id.search_btn) ;
+        search_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                search_text = search_edit.getText().toString();
+                CASE_SEARCH = true;
+                MainActivity.objectGrid og = new MainActivity.objectGrid("*"); //카테고리 전체라서 일단 *넣어둠
+                og.execute();
+            }
+        });
+
+
         /*카테고리*/
         category1=(Button)findViewById(R.id.category1);
         category1.setOnClickListener(new View.OnClickListener() {
@@ -176,24 +196,24 @@ public class MainActivity extends AppCompatActivity {
         //이거 되면 카테고리 별로 다 복붙하고 여기 *대신 카테고리만 넣으면 됨
         //디비에서 카테고리에 해당하는 등록번호 다 들고오기(상태가 onSale인거)->서버에서 이미지/블록체인에서 이름,가격들고옴
         MainActivity.objectGrid og = new MainActivity.objectGrid("*"); //카테고리 전체라서 일단 *넣어둠
-        //og.execute();
+        og.execute();
 
         main_gridView = (GridView)findViewById(R.id.main_gridView);
         main_gridView.setAdapter(gridViewAdapter);
 
 
         //테스트
-        for(int i =0;i<16;i++) {
+        /*for(int i =0;i<16;i++) {
             gridViewAdapter.addGridItem("1",ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억");
-        }
+        }*/
 
         main_gridView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent groupScreenIntent = new Intent(getApplicationContext(), BuyScreen.class);
-                        //groupScreenIntent.putExtra("register_number",gridItems.get(position).getRegister_number());
-                        groupScreenIntent.putExtra("register_number","1");
+                        groupScreenIntent.putExtra("register_number",gridItems.get(position).getRegister_number());
+                        //groupScreenIntent.putExtra("register_number","1");
                         startActivity(groupScreenIntent);
                         startActivity(new Intent(MainActivity.this, BuyScreen.class));
 
@@ -225,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, BuyList.class) ;
-                intent.putExtra("user_id", main2_user_id.getText().toString()) ;
+                intent.putExtra("user_id", String.valueOf(user.getUser_id())) ;
                 startActivity(intent) ;
             }
         });
@@ -234,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SellList.class) ;
-                intent.putExtra("user_id", main2_user_id.getText().toString()) ;
+                intent.putExtra("user_id", String.valueOf(user.getUser_id())) ;
                 startActivity(intent) ;
             }
         });
@@ -314,9 +334,9 @@ public class MainActivity extends AppCompatActivity {
                 RequestHandler requestHandler = new RequestHandler();
 
                 HashMap<String, String> params = new HashMap<>();
-                params.put("category", object_category);
+                params.put("object_category", object_category);
 
-                return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_DB, params);
+                return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_GRIDVIEW, params);
 
 
             } catch (Exception e) {
@@ -341,8 +361,8 @@ public class MainActivity extends AppCompatActivity {
 
                 JSONObject object = new JSONObject(s);
 
-                JSONArray jsonArray = object.getJSONArray("objectGrid");
-                //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
+                JSONArray jsonArray = object.getJSONArray("objs");
+                //
 
                 int count = 0;
 
@@ -351,13 +371,11 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject json = jsonArray.getJSONObject(count);
 
                     String register_number = json.getString("register_number");
-                    //String object_name = json.getString("object_name");
-                    //String object_price = json.getString("object_cost"); /// 여기 이름 잘보기!
 
-                    //MainGridItem inform = new MainGridItem(register_number, testImage,object_name, object_price);
-                    //gridItems.add(inform);
-                    MainActivity.objectGridBlock ogb = new MainActivity.objectGridBlock("register_number"); //카테고리 전체라서 일단 *넣어둠
-                    //ogb.execute();
+                    //Toast.makeText(getApplicationContext(), register_number, Toast.LENGTH_SHORT).show();
+
+                    MainActivity.objectGridBlock ogb = new MainActivity.objectGridBlock(register_number); //카테고리 전체라서 일단 *넣어둠
+                    ogb.execute();
 
                     count++;
                 }
@@ -394,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
                 RequestHandler requestHandler = new RequestHandler();
 
                 HashMap<String, String> params = new HashMap<>();
-                params.put("registerNumber", registerNumber);
+                params.put("register_number", registerNumber);
 
                 return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_BLOCK, params);
 
@@ -421,25 +439,33 @@ public class MainActivity extends AppCompatActivity {
 
                 JSONObject object = new JSONObject(s);
 
-                JSONArray jsonArray = object.getJSONArray("obj");
+                //JSONArray jsonArray = object.getJSONArray("obj");
                 //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
 
                 int count = 0;
 
-                while(count < jsonArray.length()){
+                //while(count < jsonArray.length()){
 
-                    JSONObject json = jsonArray.getJSONObject(count);
+                    JSONObject json = object.getJSONObject("obj");
 
                     String register_number = json.getString("registerNumber");
                     String object_name = json.getString("objectName");
                     String object_price = json.getString("objectCost"); /// 여기 이름 잘보기!
 
-                    //MainGridItem inform = new MainGridItem(register_number, testImage,object_name, object_price);
-                    //gridItems.add(inform);
 
-
-                    count++;
+                if(CASE_SEARCH){
+                    if(object_name.equals(search_text)){
+                    MainGridItem inform = new MainGridItem(register_number, object_name, object_price);
+                    gridItems.add(inform);
+                    }
                 }
+                else {
+                    MainGridItem inform = new MainGridItem(register_number, object_name, object_price);
+                    gridItems.add(inform);
+                }
+
+                    //count++;
+                //}
                 gridViewAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();

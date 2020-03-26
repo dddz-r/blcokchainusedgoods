@@ -79,7 +79,7 @@
         android:layout_gravity="center">
 
         <EditText
-            android:id="@+id/search"
+            android:id="@+id/search_edit"
             android:layout_width="235dp"
             android:layout_height="53dp"
             android:singleLine="true"
@@ -89,6 +89,7 @@
         </EditText>
 
         <Button
+            android:id="@+id/search_btn"
             android:layout_width="45dp"
             android:layout_height="48dp"
             android:background="@drawable/mirror"
