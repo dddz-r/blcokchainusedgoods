@@ -262,6 +262,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        on_deal_product = (Button)findViewById(R.id.on_deal_product);
         on_deal_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
