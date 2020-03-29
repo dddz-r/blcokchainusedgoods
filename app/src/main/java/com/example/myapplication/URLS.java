@@ -28,4 +28,6 @@ public class URLS {
     public static final String URL_GET_TRANSACTION_SELL_LIST  = URL_ROOT + "/get_transaction_sell_list";
     public static final String URL_GET_TRANSACTION_BUY_LIST  = URL_ROOT + "/get_transaction_buy_list";
     public static final String  URL_UPDATE_OBJECT_STATE = URL_ROOT + "/update_object_state";
+    public static final String  URL_GET_OBJECT_REGISTER_NUMBER = URL_ROOT + "/get_object_register_number";
+
 }

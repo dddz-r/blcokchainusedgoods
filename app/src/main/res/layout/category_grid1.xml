@@ -8,17 +8,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <Button
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_margin="5dp"
-            android:layout_weight="1"
-            android:stateListAnimator="@null"
-            android:background="@drawable/backarrow">
-
-        </Button>
 
         <TextView
+            android:id="@+id/categoryTitle"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_gravity="center"
@@ -36,7 +28,7 @@
     </LinearLayout>
 
     <GridView
-        android:id="@+id/category1_grid"
+        android:id="@+id/category_grid"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="20dp"
