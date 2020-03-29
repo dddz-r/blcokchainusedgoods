@@ -49,6 +49,7 @@
             android:layout_marginTop="5dp"
             android:background="@drawable/button_fill_border"
             android:text="구매내역"
+            android:stateListAnimator="@null"
             android:textColor="@color/darkGray"
             android:textStyle="bold" />
 
@@ -59,6 +60,7 @@
             android:layout_marginTop="5dp"
             android:background="@drawable/button_fill_border"
             android:text="판매내역"
+            android:stateListAnimator="@null"
             android:textColor="@color/darkGray"
             android:textStyle="bold" />
 
@@ -69,6 +71,7 @@
             android:layout_marginTop="5dp"
             android:background="@drawable/button_fill_border"
             android:text="후기"
+            android:stateListAnimator="@null"
             android:textColor="@color/darkGray"
             android:textStyle="bold" />
 
@@ -81,6 +84,7 @@
         android:layout_height="50dp"
         android:background="@drawable/button_fill_border"
         android:text="톡 보내기"
+        android:stateListAnimator="@null"
         android:layout_gravity="center"
         android:textColor="@color/darkGray"
         android:textStyle="bold" />

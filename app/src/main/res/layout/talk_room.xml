@@ -53,6 +53,7 @@
         android:layout_margin="3dp"
         android:background="@drawable/button_fill_border"
         android:textColor="@color/darkGray"
+        android:stateListAnimator="@null"
         android:text="전송">
     </Button>
 

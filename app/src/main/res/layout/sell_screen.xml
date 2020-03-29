@@ -66,6 +66,7 @@
             android:layout_height="65dp"
             android:layout_margin="24dp"
             android:layout_weight="1"
+            android:stateListAnimator="@null"
             android:background="@drawable/additem">
             <!--app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -110,16 +111,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center">
 
     <TextView
-        android:layout_width="55dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="30dp"
+        android:gravity="center"
+        android:layout_weight="1"
         android:text="상품명"
         android:textAlignment="center"
         android:textColor="@color/darkGray">
@@ -128,9 +131,12 @@
 
     <EditText
         android:id="@+id/device_name"
-        android:layout_width="250dp"
+        android:layout_width="0dp"
+        android:layout_weight="4"
         android:layout_height="49dp"
+        android:gravity="center"
         android:layout_marginLeft="5dp"
+        android:layout_marginRight="20dp"
         android:textColor="@color/darkGray"
         android:background="@drawable/buttonborder_maintextcolor">
 
@@ -141,13 +147,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:gravity="center">
 
         <TextView
-            android:layout_width="55dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
+            android:layout_weight="1"
             android:text="상품가격"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
@@ -156,9 +163,11 @@
 
         <EditText
             android:id="@+id/device_price"
-            android:layout_width="250dp"
+            android:layout_width="0dp"
             android:layout_height="49dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="4"
             android:background="@drawable/buttonborder_maintextcolor"
             android:inputType="number"
             android:textColor="@color/darkGray">
@@ -170,13 +179,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:gravity="center">
 
         <TextView
-            android:layout_width="55dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
+            android:layout_weight="1"
             android:text="카테고리"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
@@ -185,9 +195,11 @@
 
         <Spinner
             android:id="@+id/device_category"
-            android:layout_width="250dp"
+            android:layout_width="0dp"
             android:layout_height="49dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="4"
             android:entries="@array/category"
             android:textColor="@color/darkGray"
             android:background="@drawable/buttonborder_maintextcolor">
@@ -199,13 +211,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:gravity="center">
 
         <TextView
-            android:layout_width="55dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="30dp"
+            android:layout_weight="1"
             android:text="상품설명"
             android:textAlignment="center"
             android:textColor="@color/darkGray">
@@ -214,12 +227,13 @@
 
         <EditText
             android:id="@+id/device_inform"
-            android:layout_width="250dp"
-            android:layout_height="200dp"
+            android:layout_width="0dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="4"
+            android:layout_height="200dp"
             android:selectAllOnFocus="false"
             android:singleLine="false"
-            android:layout_marginRight="5dp"
             android:inputType="textMultiLine"
             android:visibility="visible"
             android:textColor="@color/darkGray"
@@ -238,6 +252,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/button_fill_border"
         android:text="물품등록"
+        android:stateListAnimator="@null"
         android:textColor="@color/darkGray"
         android:textStyle="bold" />
     </LinearLayout>
