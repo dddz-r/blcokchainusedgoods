@@ -32,7 +32,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:text="로그인">
+            android:text="로그인"
+            android:stateListAnimator="@null">
 
         </Button>
 
@@ -67,11 +68,12 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/white">
 
@@ -120,7 +122,8 @@
             android:background="@color/white"
             android:textColor="@color/mainTextColor"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:stateListAnimator="@null">
         </Button>
         <Button
             android:id="@+id/sold_product"
@@ -132,7 +135,8 @@
             android:background="@color/white"
             android:textColor="@color/mainTextColor"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:stateListAnimator="@null">
         </Button>
 
         <TextView
@@ -155,7 +159,8 @@
             android:background="@color/white"
             android:textColor="@color/mainTextColor"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:stateListAnimator="@null">
         </Button>
         <Button
             android:id="@+id/category2"
@@ -167,7 +172,8 @@
             android:background="@color/white"
             android:textColor="@color/mainTextColor"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:stateListAnimator="@null">
         </Button>
 
         <Button
@@ -180,7 +186,8 @@
             android:background="@color/white"
             android:textColor="@color/mainTextColor"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:stateListAnimator="@null">
         </Button>
 
         <Button
@@ -193,7 +200,8 @@
             android:background="@color/white"
             android:textColor="@color/mainTextColor"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:stateListAnimator="@null">
         </Button>
 
         <Button
@@ -206,7 +214,8 @@
             android:background="@color/white"
             android:textColor="@color/mainTextColor"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:stateListAnimator="@null">
         </Button>
 
         <Button
@@ -219,7 +228,8 @@
             android:background="@color/white"
             android:textColor="@color/mainTextColor"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:stateListAnimator="@null">
         </Button>
 
         <Button
@@ -232,7 +242,8 @@
             android:background="@color/white"
             android:textColor="@color/mainTextColor"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:stateListAnimator="@null">
         </Button>
 
     </LinearLayout>

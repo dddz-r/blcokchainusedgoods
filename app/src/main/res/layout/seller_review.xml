@@ -31,6 +31,7 @@
         android:textColor="@color/darkGray"
         android:background="@drawable/button_fill_border"
         android:layout_margin="10dp"
+        android:stateListAnimator="@null"
         android:layout_gravity="center"/>
 
 

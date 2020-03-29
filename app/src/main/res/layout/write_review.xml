@@ -80,6 +80,7 @@
         android:layout_marginTop="10dp"
         android:background="@drawable/button_fill_border"
         android:text="리뷰등록"
+        android:stateListAnimator="@null"
         android:textColor="@color/darkGray"
         android:textStyle="bold" />
 
