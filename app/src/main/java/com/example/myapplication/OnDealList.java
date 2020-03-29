@@ -23,9 +23,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SellList extends AppCompatActivity {
+public class OnDealList extends AppCompatActivity {
 
-    private ListView sl_listView;
+    private ListView odl_listView;
 
     ArrayList<BuyListItem> buyItems;
     BuyListAdapter buyListAdapter;// = new BuyListAdapter(buyItems);
@@ -39,7 +39,7 @@ public class SellList extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.sell_list);
+        setContentView(R.layout.on_deal_list);
 
 
 
@@ -49,11 +49,11 @@ public class SellList extends AppCompatActivity {
         buyItems = new ArrayList<>();
         buyListAdapter = new BuyListAdapter(buyItems);
 
-        sl_listView = (ListView)findViewById(R.id.sl_listView);
-        sl_listView.setAdapter(buyListAdapter);
+        odl_listView = (ListView)findViewById(R.id.odl_listView);
+        odl_listView.setAdapter(buyListAdapter);
 
-        SellList.getBuyList gbl = new SellList.getBuyList(user_id);
-        gbl.execute();
+        OnDealList.getOnDealDB getOnDealDB = new OnDealList.getOnDealDB(user_id);
+        getOnDealDB.execute();
 
 
 
@@ -67,22 +67,22 @@ public class SellList extends AppCompatActivity {
         //adapter.notifyDataSetChanged();
 
         // 리스트 아이템 눌렸을 때 이벤트 (쓸지안쓸지모름)
-        sl_listView.setOnItemClickListener(
+        odl_listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String buy_data = String.valueOf(parent.getItemAtPosition(position));
-                        //Toast.makeText(SellList.this, buy_data, Toast.LENGTH_SHORT).show();
+
                     }
                 }
         );
     }
 
-    private class getBuyList extends AsyncTask<Void, Void, String> {//트렌젝션디비
-        private String buyer_id;//서버에서 SELECT * FROM transaction_info where buyer_id = "";
+    private class getOnDealDB extends AsyncTask<Void, Void, String> {//트렌젝션디비
+        private String user_id;//서버에서 SELECT * FROM transaction_info where buyer_id = "";
 
-        getBuyList(String buyer_id) {
-            this.buyer_id = buyer_id;
+        getOnDealDB(String user_id) {
+            this.user_id = user_id;
         }
 
         @Override
@@ -101,9 +101,9 @@ public class SellList extends AppCompatActivity {
                 RequestHandler requestHandler = new RequestHandler();
 
                 HashMap<String, String> params = new HashMap<>();
-                params.put("user_id", buyer_id);
+                params.put("user_id", user_id);
 
-                return requestHandler.sendPostRequest(URLS.URL_GET_TRANSACTION_SELL_LIST, params);
+                return requestHandler.sendPostRequest(URLS.URL_GET_TRANSACTION_BUY_LIST, params);
 
 
             } catch (Exception e) {
@@ -138,7 +138,7 @@ public class SellList extends AppCompatActivity {
                     JSONObject json = jsonArray.getJSONObject(count);
                     String transactionNumber = json.getString("transaction_number");
 
-                    SellList.getTransaction gt = new SellList.getTransaction(transactionNumber);
+                    OnDealList.getTransaction gt = new OnDealList.getTransaction(transactionNumber);
                     gt.execute();
 
 
@@ -217,7 +217,7 @@ public class SellList extends AppCompatActivity {
                 String registerNumber = json.getString("registerNumber");
                 String completeTime = json.getString("completeTime");
 
-                SellList.getObjectBlock gob = new SellList.getObjectBlock(registerNumber);
+                OnDealList.getObjectBlock gob = new OnDealList.getObjectBlock(registerNumber);
                 gob.execute();
 
 

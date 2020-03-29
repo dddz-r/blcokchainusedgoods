@@ -99,6 +99,18 @@
             android:layout_marginRight="5dp">
         </Button>-->
         <Button
+            android:id="@+id/on_deal_product"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="거래중인 상품"
+            android:textSize="15dp"
+            android:gravity="left"
+            android:background="@color/white"
+            android:textColor="@color/mainTextColor"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp">
+        </Button>
+        <Button
             android:id="@+id/bought_product"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -3,7 +3,7 @@ package com.example.myapplication;
 public class URLS {
   
 
-    private static final String URL_ROOT = "http://ec2-54-180-121-32.ap-northeast-2.compute.amazonaws.com:5000/api";
+    private static final String URL_ROOT = "http://ec2-15-165-205-26.ap-northeast-2.compute.amazonaws.com:5000/api";
     public static final String URL_JOIN = URL_ROOT + "/join";
     public static  final String URL_TALK_SEND = URL_ROOT+"/talk_send";
     public static  final String URL_TALK_RECEIVE = URL_ROOT+"/talk_receive";
@@ -28,4 +28,6 @@ public class URLS {
     public static final String URL_GET_TRANSACTION_SELL_LIST  = URL_ROOT + "/get_transaction_sell_list";
     public static final String URL_GET_TRANSACTION_BUY_LIST  = URL_ROOT + "/get_transaction_buy_list";
     public static final String  URL_UPDATE_OBJECT_STATE = URL_ROOT + "/update_object_state";
+    public static final String  URL_GET_OBJECT_REGISTER_NUMBER = URL_ROOT + "/get_object_register_number";
+
 }
