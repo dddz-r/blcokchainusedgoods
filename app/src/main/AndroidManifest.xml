@@ -85,6 +85,7 @@
         <activity android:name=".Category5"/>
         <activity android:name=".Category6"/>
         <activity android:name=".Category7"/>
+        <activity android:name=".OnDealList"/>
 
 
         <activity android:name=".LoadingActivity">
