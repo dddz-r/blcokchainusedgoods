@@ -76,7 +76,7 @@ public class SellScreen extends AppCompatActivity {
     /* oItems랑 ob에 같은 인덱스에 같은 레지스터번호 있음 oItems는 ob 축소ver 표기용으로 이용 */
     ArrayList<ObjectBlock> ob = new ArrayList<>();
     ArrayList <String> oItems = new ArrayList<>();
-    String objectNumber = null;
+    String objectNumber = " ";
     String user_id;
     String category;
     User user;
@@ -172,7 +172,7 @@ public class SellScreen extends AppCompatActivity {
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
                 String formatedDate = dateFormat.format(date);*/
                 //물건넘버, 이름, 설명, 가격, 카테고리, 판매자, 등록시간
-                SellScreen.insertObject io = new SellScreen.insertObject("1", device_name.getText().toString(), device_inform.getText().toString(), device_price.getText().toString(),category, user_id);
+                SellScreen.insertObject io = new SellScreen.insertObject(objectNumber, device_name.getText().toString(), device_inform.getText().toString(), device_price.getText().toString(),category, user_id);
                 io.execute();
                 startActivity(new Intent(SellScreen.this, MainActivity.class));
             }

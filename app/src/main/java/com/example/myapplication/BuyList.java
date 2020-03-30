@@ -26,6 +26,7 @@ import java.util.List;
 public class BuyList extends AppCompatActivity {
 
     private ListView bl_listView;
+
     ArrayList<BuyListItem> buyItems;
     BuyListAdapter buyListAdapter;// = new BuyListAdapter(buyItems);
 
@@ -44,15 +45,17 @@ public class BuyList extends AppCompatActivity {
 
         user_id = getIntent().getStringExtra("user_id");
 
-        bl_listView = (ListView)findViewById(R.id.bl_listView);
 
+        buyItems = new ArrayList<>();
+        buyListAdapter = new BuyListAdapter(buyItems);
+
+        bl_listView = (ListView)findViewById(R.id.bl_listView);
         bl_listView.setAdapter(buyListAdapter);
 
         BuyList.getBuyList gbl = new BuyList.getBuyList(user_id);
         gbl.execute();
 
-        buyItems = new ArrayList<>();
-        buyListAdapter = new BuyListAdapter(buyItems);
+
         
         //테스트//순서 : 이름 가격 상태 그림
         //buyListAdapter.addBuyItem(ContextCompat.getDrawable(this,R.drawable.onlydog),"멍멍이","999억","판매중");
@@ -69,7 +72,7 @@ public class BuyList extends AppCompatActivity {
                      @Override
                      public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                          String buy_data = String.valueOf(parent.getItemAtPosition(position));
-                         Toast.makeText(BuyList.this, buy_data, Toast.LENGTH_SHORT).show();
+                         //Toast.makeText(BuyList.this, buy_data, Toast.LENGTH_SHORT).show();
                      }
                  }
          );
@@ -174,7 +177,7 @@ public class BuyList extends AppCompatActivity {
                 RequestHandler requestHandler = new RequestHandler();
 
                 HashMap<String, String> params = new HashMap<>();
-                params.put("transactionNumber", transactionNumber);
+                params.put("transaction_number", transactionNumber);
 
                 return requestHandler.sendPostRequest(URLS.URL_GET_TRANSACTION_BLOCK, params);
 
@@ -201,14 +204,14 @@ public class BuyList extends AppCompatActivity {
 
                 JSONObject object = new JSONObject(s);
 
-                JSONArray jsonArray = object.getJSONArray("obj");
+                //JSONArray jsonArray = object.getJSONArray("transaction");
                 //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
 
-                int count = 0;
+                //int count = 0;
 
-                while(count < jsonArray.length()){
+                //while(count < jsonArray.length()){
 
-                    JSONObject json = jsonArray.getJSONObject(count);
+                    JSONObject json = object.getJSONObject("transaction");
 
                     String transactionNumber = json.getString("transactionNumber");
                     String registerNumber = json.getString("registerNumber");
@@ -218,8 +221,8 @@ public class BuyList extends AppCompatActivity {
                     gob.execute();
 
 
-                    count++;
-                }
+                    //count++;
+                //}
                 //finish();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -280,26 +283,26 @@ public class BuyList extends AppCompatActivity {
 
                 JSONObject object = new JSONObject(s);
 
-                JSONArray jsonArray = object.getJSONArray("obj");
+                //JSONArray jsonArray = object.getJSONArray("obj");
                 //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
 
-                int count = 0;
+                //int count = 0;
 
-                while(count < jsonArray.length()){
+                //while(count < jsonArray.length()){
 
-                    JSONObject json = jsonArray.getJSONObject(count);
+                    JSONObject json = object.getJSONObject("obj");
 
                     //+이미지도 들고와야함
                     String register_number = json.getString("registerNumber");
                     String object_name = json.getString("objectName");
-                    String object_price = json.getString("objectCost");
+                    String object_condition = "거래완료";
 
-                    BuyListItem item = new BuyListItem(register_number,object_name, object_price); //,img
+                    BuyListItem item = new BuyListItem(register_number,object_name, object_condition); //,img
                     buyItems.add(item);
 
 
-                    count++;
-                }
+                    //count++;
+                //}
                 buyListAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();

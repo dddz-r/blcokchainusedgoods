@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     TextView main2_user_id;
     Button bought_product;
     Button sold_product;
+    Button on_deal_product;
 
     Button category1;
     Button category2;
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     String search_text;
 
     ArrayList<MainGridItem> gridItems;
+    ArrayList<ObjectBlock> objectBlocks = new ArrayList<>();
     MainGridAdapter gridViewAdapter;// = new MainGridAdapter();
 
     //String user_name = getIntent().getStringExtra("inputName");
@@ -131,8 +133,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 search_text = search_edit.getText().toString();
                 CASE_SEARCH = true;
+                gridItems.clear();
                 MainActivity.objectGrid og = new MainActivity.objectGrid("*"); //카테고리 전체라서 일단 *넣어둠
                 og.execute();
+
             }
         });
 
@@ -211,11 +215,10 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent groupScreenIntent = new Intent(getApplicationContext(), BuyScreen.class);
-                        groupScreenIntent.putExtra("register_number",gridItems.get(position).getRegister_number());
-                        //groupScreenIntent.putExtra("register_number","1");
-                        startActivity(groupScreenIntent);
-                        startActivity(new Intent(MainActivity.this, BuyScreen.class));
+                        Intent intent = new Intent(MainActivity.this, BuyScreen.class);
+                        intent.putExtra("register_number",gridItems.get(position).getRegister_number());
+                        //Toast.makeText(getApplicationContext(), gridItems.get(position).getRegister_number(), Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
 
                     }
                 }
@@ -254,6 +257,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SellList.class) ;
+                intent.putExtra("user_id", String.valueOf(user.getUser_id())) ;
+                startActivity(intent) ;
+            }
+        });
+
+        on_deal_product = (Button)findViewById(R.id.on_deal_product);
+        on_deal_product.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, OnDealList.class) ;
                 intent.putExtra("user_id", String.valueOf(user.getUser_id())) ;
                 startActivity(intent) ;
             }
@@ -452,16 +465,27 @@ public class MainActivity extends AppCompatActivity {
                     String object_name = json.getString("objectName");
                     String object_price = json.getString("objectCost"); /// 여기 이름 잘보기!
 
+                    String object_number = json.getString("originObjectNumber");
+                    String object_information = json.getString("objectInformation");
+                    String object_owner = json.getString("objectOwner");
+                    String register_time = json.getString("registerTime");
+
 
                 if(CASE_SEARCH){
                     if(object_name.equals(search_text)){
                     MainGridItem inform = new MainGridItem(register_number, object_name, object_price);
                     gridItems.add(inform);
+
+                    //ObjectBlock informm = new ObjectBlock(registerNumber,object_number,object_name,object_information,object_price, object_owner,register_time);
+                    //objectBlocks.add(informm);
                     }
                 }
                 else {
                     MainGridItem inform = new MainGridItem(register_number, object_name, object_price);
                     gridItems.add(inform);
+
+                    //ObjectBlock informm = new ObjectBlock(registerNumber,object_number,object_name,object_information,object_price, object_owner,register_time);
+                    //objectBlocks.add(informm);
                 }
 
                     //count++;

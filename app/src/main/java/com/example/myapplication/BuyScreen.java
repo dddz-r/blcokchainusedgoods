@@ -42,7 +42,7 @@ public class BuyScreen extends AppCompatActivity {
     private ArrayList<Integer> imageList;
 
     String object_owner = "수민";
-    String firstDate = "20.02.22";
+    String firstRegister = "20.02.22";
     String numTransaction = "디비에 object_number가 필요할듯!"; // 총 거래된 횟수
     String register_number = "72";
 
@@ -52,6 +52,7 @@ public class BuyScreen extends AppCompatActivity {
     String object_information;
     String object_number;
     String register_time;
+
     //거래정보 입력 할 거
     String buyer_id;
     String object_num;
@@ -96,6 +97,34 @@ public class BuyScreen extends AppCompatActivity {
             }
     );
 
+    Thread registerNumThread = new Thread(
+            new Runnable(){
+                public void run(){
+
+                    register_number = getIntent().getStringExtra("register_number");
+                    Looper.prepare();
+                    Toast.makeText(getApplicationContext(),  register_number, Toast.LENGTH_SHORT).show();
+                    Looper.loop();
+                }
+            }
+    );
+
+    Thread startGet = new Thread(
+            new Runnable(){
+                public void run(){
+
+                    BuyScreen.getObject go = new BuyScreen.getObject(register_number);
+                    go.execute();
+                }
+            }
+    );
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        startActivity(new Intent(BuyScreen.this, MainActivity.class));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,13 +134,12 @@ public class BuyScreen extends AppCompatActivity {
 
         /*물건정보 들고오기*/
         register_number = getIntent().getStringExtra("register_number");
-        Toast.makeText(getApplicationContext(),  register_number, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(),  register_number, Toast.LENGTH_SHORT).show();
 
-        BuyScreen.getObject go = new BuyScreen.getObject("72");
+
+        BuyScreen.getObject go = new BuyScreen.getObject(register_number);
         go.execute();
 
-        //BuyScreen.getObjectState gos = new BuyScreen.getObjectState("72");
-        //gos.execute();
 
         bs_device_name = findViewById(R.id.bs_device_name);
         bs_device_price = findViewById(R.id.bs_device_price);
@@ -135,11 +163,11 @@ public class BuyScreen extends AppCompatActivity {
         bs_device_inform_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BuyScreen.getObjectPopup gop = new BuyScreen.getObjectPopup(register_number);
-                gop.execute();
+                //BuyScreen.getObjectPopup gop = new BuyScreen.getObjectPopup(object_number);
+                //gop.execute();
                 AlertDialog.Builder ad = new AlertDialog.Builder(BuyScreen.this, android.R.style.Theme_DeviceDefault_Light_Dialog);
                 ad.setTitle("상품 정보");
-                ad.setMessage("최초 등록일 : "+firstDate+"\n거래 횟수 : "+numTransaction+"\n판매자 : "+object_owner);
+                ad.setMessage("최초 등록일 : "+firstRegister+"\n거래 횟수 : "+numTransaction+"\n판매자 : "+object_owner);
 
                 ad.setPositiveButton("확인", new DialogInterface.OnClickListener() {
                     @Override
@@ -324,10 +352,90 @@ public class BuyScreen extends AppCompatActivity {
         imageList.add(R.drawable.onlydog);
     }
 
-    private class getObjectPopup extends AsyncTask<Void, Void, String> { //블록체인
+    private class getObjectPopup extends AsyncTask<Void, Void, String> { //DB
+        private String object_number;
+
+        getObjectPopup(String object_number) {
+            this.object_number = object_number;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            try {
+
+                Log.d("tag", "doInBackground실행");
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("object_number", object_number); //오브젝트 넘버가 같은 레지스터넘버 갯수, 젤 처음블록 레지스터 넘버
+
+                return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_REGISTER_NUMBER, params);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("doInBackground 에러", "doInBackground Exception");
+            }
+            return null;
+
+        }
+
+        public void onProgressUpdate(Void... values){
+            super.onProgressUpdate();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+            Log.d("onPost실행", "onPost실행");
+
+            try {
+
+                JSONObject object = new JSONObject(s);
+
+                JSONArray jsonArray = object.getJSONArray("objdb");
+                //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
+
+                int count = 0;
+
+                while(count < jsonArray.length()){
+
+                    JSONObject json = jsonArray.getJSONObject(count);
+
+                    String register_number = json.getString("register_number");
+                    //오브젝트 넘버가 같은 레지스터넘버 갯수, 젤 처음블록 레지스터 넘버
+
+                    if(count == 0){ //처음 등록 날짜 가져오기 위함
+                    BuyScreen.getObjectPopupBlock gopb = new BuyScreen.getObjectPopupBlock(register_number);
+                    gopb.execute();
+                    }
+
+                    count++;
+                    numTransaction = String.valueOf(count);
+                }
+                //finish();
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
+    }
+
+    private class getObjectPopupBlock extends AsyncTask<Void, Void, String> { //블록체인
         private String registerNumber;
 
-        getObjectPopup(String registerNumber) {
+        getObjectPopupBlock(String registerNumber) {
             this.registerNumber = registerNumber;
         }
 
@@ -347,7 +455,7 @@ public class BuyScreen extends AppCompatActivity {
                 RequestHandler requestHandler = new RequestHandler();
 
                 HashMap<String, String> params = new HashMap<>();
-                params.put("register_number", registerNumber); //디비에 오브젝트 넘버 추가
+                params.put("register_number", registerNumber);
 
                 return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_BLOCK, params);
 
@@ -374,25 +482,14 @@ public class BuyScreen extends AppCompatActivity {
 
                 JSONObject object = new JSONObject(s);
 
-                JSONArray jsonArray = object.getJSONArray("popup");
-                //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
 
-                int count = 0;
-
-                while(count < jsonArray.length()){
-
-                    JSONObject json = jsonArray.getJSONObject(count);
-                    //소유자, 거래횟수, 처음거래일자 //다가져와서 안스에서 세야할수도 잇음
-                    String originNumber = json.getString("originObjectNumber");
-
-                    //이 밑에꺼 딴데로 옮기기 오브젝트넘버가 같은거 디비에서 레지스터 넘버 다가져와야함.->이걸 블록체인에서 또 다가져와야함
-                    String objectOwner = json.getString("objectOwner");//마지막블럭꺼
-                    String firstRegister = json.getString("firstRegister"); //처음 블럭꺼
-                    String transferCount = json.getString("transferCount"); //개수
+                JSONObject json = object.getJSONObject("obj");
 
 
-                    count++;
-                }
+                firstRegister = json.getString("registerTime");
+
+
+
                 //finish();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -402,7 +499,6 @@ public class BuyScreen extends AppCompatActivity {
 
         }
     }
-
 
     private class getObject extends AsyncTask<Void, Void, String> { //블록체인
         private String registerNumber;
@@ -467,7 +563,7 @@ public class BuyScreen extends AppCompatActivity {
                     //JSONObject json = jsonArray.getJSONObject(count);
 
                     //+이미지도 들고와야함
-                    String register_number = json.getString("registerNumber");
+                    register_number = json.getString("registerNumber");
                     object_number = json.getString("originObjectNumber");
 
                     object_name = json.getString("objectName");
@@ -485,8 +581,10 @@ public class BuyScreen extends AppCompatActivity {
                     //object_state = json.getString("object_state");//<-블록체인이 아님! 따로 만들것
 
                     whoThread.start();
+                    BuyScreen.getObjectPopup gop = new BuyScreen.getObjectPopup(object_number);
+                    gop.execute();
 
-                    BuyScreen.getObjectState gos = new BuyScreen.getObjectState("72");
+                    BuyScreen.getObjectState gos = new BuyScreen.getObjectState(register_number);
                     gos.execute();
 
                     //count++;
@@ -554,6 +652,7 @@ public class BuyScreen extends AppCompatActivity {
                 JSONObject object = new JSONObject(s);
 
                 JSONObject json = object.getJSONObject("objdb");
+
                 //JSONArray jsonArray = object.getJSONArray("obj");
                 //Toast.makeText(getApplicationContext(), object.getString("obj"), Toast.LENGTH_SHORT).show();
 
