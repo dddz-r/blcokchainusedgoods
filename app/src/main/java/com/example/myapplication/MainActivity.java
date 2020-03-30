@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         //로그인 된 현재 유저 정보를 저장
         final PrefManager prefManager = PrefManager.getInstance(MainActivity.this);
         user = prefManager.getUser();
-
+        prefManager.setUserLogin(user);
 
         main2_user_name = (TextView)findViewById(R.id.main2_user_name);
         main2_user_id = (TextView)findViewById(R.id.main2_user_id);
