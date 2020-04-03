@@ -72,7 +72,9 @@ public class OnDealList extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String buy_data = String.valueOf(parent.getItemAtPosition(position));
-
+                        Intent intent = new Intent(OnDealList.this, BuyScreen.class) ;
+                        intent.putExtra("register_number",buyItems.get(position).getRegister_number());
+                        startActivity(intent);
                     }
                 }
         );
@@ -103,7 +105,7 @@ public class OnDealList extends AppCompatActivity {
                 HashMap<String, String> params = new HashMap<>();
                 params.put("user_id", user_id);
 
-                return requestHandler.sendPostRequest(URLS.URL_GET_TRANSACTION_BUY_LIST, params);
+                return requestHandler.sendPostRequest(URLS.URL_GET_ON_DEAL_LIST, params);
 
 
             } catch (Exception e) {
@@ -128,7 +130,7 @@ public class OnDealList extends AppCompatActivity {
 
                 JSONObject object = new JSONObject(s);
 
-                JSONArray jsonArray = object.getJSONArray("buyList");
+                JSONArray jsonArray = object.getJSONArray("onDealList");
                 //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
 
                 int count = 0;
@@ -136,181 +138,30 @@ public class OnDealList extends AppCompatActivity {
                 while(count < jsonArray.length()){
 
                     JSONObject json = jsonArray.getJSONObject(count);
-                    String transactionNumber = json.getString("transaction_number");
+                    String register_number = json.getString("register_number");
+                    String object_name = json.getString("object_name");
+                    String object_price = json.getString("object_cost");
+                    String object_state = json.getString("object_state");
+                    String object_number = json.getString("object_number");
+                    String object_information = json.getString("object_information");
+                    String object_owner = json.getString("object_owner");
+                    String register_time = json.getString("register_time");
 
-                    OnDealList.getTransaction gt = new OnDealList.getTransaction(transactionNumber);
-                    gt.execute();
-
+                    BuyListItem item = new BuyListItem(register_number,object_name, object_state); //,img
+                    buyItems.add(item);
 
                     count++;
                 }
-                //finish();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
-
-            }
-
-        }
-    }
-
-    private class getTransaction extends AsyncTask<Void, Void, String> { //트렌젝션 블록체인
-        private String transactionNumber;
-
-        getTransaction(String transactionNumber) {
-            this.transactionNumber = transactionNumber;
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            try {
-
-                Log.d("tag", "doInBackground실행");
-
-                RequestHandler requestHandler = new RequestHandler();
-
-                HashMap<String, String> params = new HashMap<>();
-                params.put("transaction_number", transactionNumber);
-
-                return requestHandler.sendPostRequest(URLS.URL_GET_TRANSACTION_BLOCK, params);
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e("doInBackground 에러", "doInBackground Exception");
-            }
-            return null;
-
-        }
-
-        public void onProgressUpdate(Void... values){
-            super.onProgressUpdate();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-
-            super.onPostExecute(s);
-            Log.d("onPost실행", "onPost실행");
-
-            try {
-
-                JSONObject object = new JSONObject(s);
-
-                //JSONArray jsonArray = object.getJSONArray("transaction");
-                //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
-
-                //int count = 0;
-
-                //while(count < jsonArray.length()){
-
-                JSONObject json = object.getJSONObject("transaction");
-
-                String transactionNumber = json.getString("transactionNumber");
-                String registerNumber = json.getString("registerNumber");
-                String completeTime = json.getString("completeTime");
-
-                OnDealList.getObjectBlock gob = new OnDealList.getObjectBlock(registerNumber);
-                gob.execute();
-
-
-                //count++;
-                //}
-                //finish();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
-
-            }
-
-        }
-    }
-
-    private class getObjectBlock extends AsyncTask<Void, Void, String> {//물건 블록체인
-        private String registerNumber;
-
-        getObjectBlock(String registerNumber) {
-            this.registerNumber = registerNumber;
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            try {
-
-                Log.d("tag", "doInBackground실행");
-
-                RequestHandler requestHandler = new RequestHandler();
-
-                HashMap<String, String> params = new HashMap<>();
-                params.put("register_number", registerNumber);
-
-                return requestHandler.sendPostRequest(URLS.URL_GET_OBJECT_BLOCK, params);
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e("doInBackground 에러", "doInBackground Exception");
-            }
-            return null;
-
-        }
-
-        public void onProgressUpdate(Void... values){
-            super.onProgressUpdate();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-
-            super.onPostExecute(s);
-            Log.d("onPost실행", "onPost실행");
-
-            try {
-
-                JSONObject object = new JSONObject(s);
-
-                //JSONArray jsonArray = object.getJSONArray("obj");
-                //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
-
-                //int count = 0;
-
-                //while(count < jsonArray.length()){
-
-                JSONObject json = object.getJSONObject("obj");
-
-                //+이미지도 들고와야함
-                String register_number = json.getString("registerNumber");
-                String object_name = json.getString("objectName");
-                String object_condition = "거래완료";
-
-                BuyListItem item = new BuyListItem(register_number,object_name, object_condition); //,img
-                buyItems.add(item);
-
-
-                //count++;
-                //}
                 buyListAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "서버가 꺼져있어요^^", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
 
             }
 
         }
     }
+
+
 
 }

@@ -391,8 +391,8 @@ public class MainActivity extends AppCompatActivity {
 
                     String register_number = json.getString("register_number");
                     String object_name = json.getString("object_name");
-                    String object_price = json.getString("object_cost"); /// 여기 이름 잘보기!
-
+                    String object_price = json.getString("object_cost");
+                    String object_state = json.getString("object_state");
                     String object_number = json.getString("object_number");
                     String object_information = json.getString("object_information");
                     String object_owner = json.getString("object_owner");

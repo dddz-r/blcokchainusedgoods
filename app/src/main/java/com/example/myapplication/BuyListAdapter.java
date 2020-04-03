@@ -53,7 +53,7 @@ public class BuyListAdapter extends BaseAdapter {
         BuyListItem b = BuyItem.get(position);
 
         bli_device_name.setText(b.getDevice_name());
-        bli_device_price.setText(b.getDevice_price());
+        bli_device_price.setText(b.getRegister_number());
         bli_device_condition.setText(b.getDevice_condition());
         //bli_device_image.setImageDrawable(b.getD());
 

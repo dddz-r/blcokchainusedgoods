@@ -4,7 +4,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -43,10 +45,10 @@ public class BuyScreen extends AppCompatActivity {
 
     private ArrayList<Integer> imageList;
 
-    String object_owner = "수민";
-    String firstRegister = "20.02.22";
-    String numTransaction = "디비에 object_number가 필요할듯!"; // 총 거래된 횟수
-    String register_number = "72";
+    String object_owner;
+    String firstRegister;
+    String numTransaction; // 총 거래된 횟수
+    String register_number;
 
     //물건정보 들고 올 거
     String object_name;
@@ -66,11 +68,16 @@ public class BuyScreen extends AppCompatActivity {
 
 
     Thread stateThread = new Thread(
+
+            /*본인이 올린 글에서는 구매하기 버튼 안보인다*/
+            //대신 배송확인 눌리는 버튼이 있어야한다.
             new Runnable(){
                 public void run(){
 
                     if(object_state.equals("onSale")){//구매요청전에는 택배보내면 안되지
-                        bs_sendOk.setVisibility(View.GONE);
+                        //bs_sendOk.setVisibility(View.GONE);
+                        Message msg = handler1.obtainMessage();
+                        handler1.sendMessage(msg);
                     } else if(object_state.equals("onBuy")){
                         bs_buyOk.setText("구매중");
                         bs_sendOk.setText("배송 확인");
@@ -86,40 +93,41 @@ public class BuyScreen extends AppCompatActivity {
             new Runnable(){
                 public void run(){
                     if(buyer_id.equals(object_owner)){
-                        /*if(object_state.equals("onSale")){//구매요청전에는 택배보내면 안되지
-                            bs_sendOk.setVisibility(View.GONE);
-                        }*/
+                        if(object_state.equals("onSale")){//구매요청전에는 택배보내면 안되지
+                            Message msg = handler1.obtainMessage();
+                            handler1.sendMessage(msg);
+                        }
+                        Message msg = handler2.obtainMessage();
+                        handler2.sendMessage(msg);
+                        /*bs_sendOk.setVisibility(View.VISIBLE);
                         bs_buyOk.setVisibility(View.GONE);
-                        bs_seller_inform_btn.setVisibility(View.GONE);
+                        bs_seller_inform_btn.setVisibility(View.GONE);*/
                     }else {
-                        bs_sendOk.setVisibility(View.GONE);
+                        Message msg = handler1.obtainMessage();
+                        handler1.sendMessage(msg);
                     }
 
                 }
             }
     );
 
-    Thread registerNumThread = new Thread(
-            new Runnable(){
-                public void run(){
+    final Handler handler1 = new Handler() {
+        public void handleMessage(Message msg)
+        {
+            bs_sendOk.setVisibility(View.GONE);
+            bs_buyOk.setVisibility(View.VISIBLE);
+            bs_seller_inform_btn.setVisibility(View.VISIBLE);
+        }
+    };
 
-                    register_number = getIntent().getStringExtra("register_number");
-                    Looper.prepare();
-                    Toast.makeText(getApplicationContext(),  register_number, Toast.LENGTH_SHORT).show();
-                    Looper.loop();
-                }
-            }
-    );
-
-    Thread startGet = new Thread(
-            new Runnable(){
-                public void run(){
-
-                    BuyScreen.getObject go = new BuyScreen.getObject(register_number);
-                    go.execute();
-                }
-            }
-    );
+    final Handler handler2 = new Handler() {
+        public void handleMessage(Message msg)
+        {
+            bs_sendOk.setVisibility(View.VISIBLE);
+            bs_buyOk.setVisibility(View.GONE);
+            bs_seller_inform_btn.setVisibility(View.GONE);
+        }
+    };
 
     @Override
     public void onBackPressed() {
@@ -134,8 +142,10 @@ public class BuyScreen extends AppCompatActivity {
 
         /*물건정보 들고오기*/
         register_number = getIntent().getStringExtra("register_number");
+        //object_state = getIntent().getStringExtra("object_state");
         //Toast.makeText(getApplicationContext(),  register_number, Toast.LENGTH_SHORT).show();
-
+        BuyScreen.getObjectState gos = new BuyScreen.getObjectState(register_number);
+        gos.execute();
 
         BuyScreen.getObject go = new BuyScreen.getObject(register_number);
         go.execute();
@@ -144,6 +154,11 @@ public class BuyScreen extends AppCompatActivity {
         bs_device_name = findViewById(R.id.bs_device_name);
         bs_device_price = findViewById(R.id.bs_device_price);
         bs_device_description = findViewById(R.id.bs_device_description);
+
+        bs_sendOk = findViewById(R.id.bs_send_Ok);
+        bs_buyOk = findViewById(R.id.bs_buyOK);
+        bs_seller_inform_btn = findViewById(R.id.bs_seller_inform_btn);
+
 
 
         /* buyer id */
@@ -156,6 +171,7 @@ public class BuyScreen extends AppCompatActivity {
         }else{ //로그인 안 되어있을 경우
 
         }
+
 
         /*물품 정보 팝업창 띄우기*/
         bs_device_inform_btn = (Button)findViewById(R.id.bs_device_inform_btn);
@@ -188,6 +204,15 @@ public class BuyScreen extends AppCompatActivity {
         bs_seller_inform_btn = findViewById(R.id.bs_seller_inform_btn);
 
 
+        /*if(object_state.equals("onSale")){//구매요청전에는 택배보내면 안되지
+            bs_sendOk.setVisibility(View.GONE);
+        } else if(object_state.equals("onBuy")){
+            bs_buyOk.setText("구매중");
+            bs_sendOk.setText("배송 확인");
+        }else if(object_state.equals("onTransportation")){
+            bs_sendOk.setText("배송중");//클릭할수없도록 내일 설정하자
+            bs_buyOk.setText("수취 확인");
+        }*/
 
         /* 배송확인버튼 - 판매자가 택배를 보낸 후 클릭해야하는 버튼 */
         bs_sendOk.setOnClickListener(new View.OnClickListener() {
@@ -234,6 +259,10 @@ public class BuyScreen extends AppCompatActivity {
                             object_state = "onBuy";
                             BuyScreen.setObjectState sos = new BuyScreen.setObjectState(register_number, object_state);
                             sos.execute();
+
+                            BuyScreen.setBuyReq sbr = new BuyScreen.setBuyReq(register_number, buyer_id);
+                            sbr.execute();
+
                             bs_buyOk.setText("구매중");//onBuy 상태
                         }
                     });
@@ -281,6 +310,9 @@ public class BuyScreen extends AppCompatActivity {
 
                             BuyScreen.setObjectState sos = new BuyScreen.setObjectState(register_number, "onSale");
                             sos.execute();
+
+                            BuyScreen.setBuyReq sbr = new BuyScreen.setBuyReq(register_number, null);
+                            sbr.execute();
 
                             long now = System.currentTimeMillis();
                             Date date = new Date(now);
@@ -584,8 +616,8 @@ public class BuyScreen extends AppCompatActivity {
                     BuyScreen.getObjectPopup gop = new BuyScreen.getObjectPopup(object_number);
                     gop.execute();
 
-                    BuyScreen.getObjectState gos = new BuyScreen.getObjectState(register_number);
-                    gos.execute();
+                    //BuyScreen.getObjectState gos = new BuyScreen.getObjectState(register_number);
+                    //gos.execute();
 
                     //count++;
                 //}
@@ -667,7 +699,6 @@ public class BuyScreen extends AppCompatActivity {
                 //object_number = json.getString("originObjectNumber");
 
                 object_state = json.getString("object_state");
-
                 String object_category = json.getString("object_category");
                 stateThread.start();
 
@@ -752,6 +783,77 @@ public class BuyScreen extends AppCompatActivity {
 
         }
     }
+
+
+    private class setBuyReq extends AsyncTask<Void, Void, String> { //데이터베이스
+
+        private String register_number, buy_req_id;
+
+        setBuyReq(String register_number, String buy_req_id) {
+
+            this.register_number = register_number;
+            this.buy_req_id = buy_req_id;
+
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+
+
+            try {
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("register_number", register_number);
+                params.put("buy_req_id", buy_req_id);
+
+
+                return requestHandler.sendPostRequest(URLS.URL_UPDATE_BUY_REQ_ID, params);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        public void onProgressUpdate(Void... values){
+            super.onProgressUpdate();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+
+            try {
+
+                JSONObject obj = new JSONObject(s);
+
+                if (!obj.getString("code").equals(404)) {
+
+                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                }else if(!obj.getString("code").equals(200)){
+                    Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                }else
+                {
+
+                    Toast.makeText(getApplicationContext(), "Some error occur", Toast.LENGTH_SHORT).show();
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
 
     private class insertTransaction extends AsyncTask<Void, Void, String> {
 
