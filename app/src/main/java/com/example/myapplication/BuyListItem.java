@@ -3,17 +3,17 @@ package com.example.myapplication;
 import android.graphics.drawable.Drawable;
 
 public class BuyListItem {
+    private String bli_register_number;
     private String bli_device_name;
-    private String bli_device_price;
     private String bli_device_condition;
     //private Drawable bli_d; //private int bli_d;
 
     //순서 : 이름 가격 상태 그림
-    public BuyListItem(String bli_device_name,String bli_device_price, String bli_device_condition){//, Drawable bli_d
+    public BuyListItem(String bli_register_number,String bli_device_name, String bli_device_condition){//, Drawable bli_d
         //this.bli_d=bli_d;
         this.bli_device_condition=bli_device_condition;
         this.bli_device_name=bli_device_name;
-        this.bli_device_price=bli_device_price;
+        this.bli_register_number=bli_register_number;
 
     }
 
@@ -28,8 +28,8 @@ public class BuyListItem {
         this.bli_device_name = device_name;
     }
 
-    public void setDevice_price(String device_price) {
-        this.bli_device_price = device_price;
+    public void setRegister_number(String register_number) {
+        this.bli_register_number = register_number;
     }
 
     //public Drawable getD() { return bli_d; }
@@ -42,7 +42,7 @@ public class BuyListItem {
         return bli_device_name;
     }
 
-    public String getDevice_price() {
-        return bli_device_price;
+    public String getRegister_number() {
+        return bli_register_number;
     }
 }
