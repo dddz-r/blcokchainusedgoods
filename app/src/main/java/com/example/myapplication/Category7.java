@@ -149,11 +149,18 @@ public class Category7  extends AppCompatActivity {
                     JSONObject json = jsonArray.getJSONObject(count);
 
                     String register_number = json.getString("register_number");
+                    String object_name = json.getString("object_name");
+                    String object_price = json.getString("object_cost"); /// 여기 이름 잘보기!
 
-                    //Toast.makeText(getApplicationContext(), register_number, Toast.LENGTH_SHORT).show();
+                    String object_number = json.getString("object_number");
+                    String object_information = json.getString("object_information");
+                    String object_owner = json.getString("object_owner");
+                    String register_time = json.getString("register_time");
 
-                    Category7.objectGridBlock ogb = new Category7.objectGridBlock(register_number); //카테고리 전체라서 일단 *넣어둠
-                    ogb.execute();
+                    MainGridItem inform = new MainGridItem(register_number, object_name, object_price);
+                    gridItems.add(inform);
+
+                    gridViewAdapter.notifyDataSetChanged();
 
                     count++;
                 }
