@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
         if( 0 <= getTime && 1000 >= getTime) {
 
             android.os.Process.killProcess(android.os.Process.myPid());
+            this.finish();
             super.onBackPressed();
 
         } else {
@@ -95,13 +96,14 @@ public class MainActivity extends AppCompatActivity {
         //로그인 된 현재 유저 정보를 저장
         final PrefManager prefManager = PrefManager.getInstance(MainActivity.this);
         user = prefManager.getUser();
-        prefManager.setUserLogin(user);
+        //prefManager.setUserLogin(user);
 
         main2_user_name = (TextView)findViewById(R.id.main2_user_name);
         main2_user_id = (TextView)findViewById(R.id.main2_user_id);
         login_btn = (Button)findViewById(R.id.login_btn);
 
         if(prefManager.isLoggedIn()){
+
             main2_user_name.setText(String.valueOf(user.getUser_name()));
             main2_user_id.setText(String.valueOf(user.getUser_id()));
             login_btn.setText("로그아웃");
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     Toast.makeText(MainActivity.this, "로그아웃 되었습니다", Toast.LENGTH_SHORT).show();
+                    login_btn.setText("로그인");
                     prefManager.logout();
                     finish();
                 }
@@ -285,6 +288,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /*
         Button login_btn = (Button)findViewById(R.id.login_btn);
         login_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -292,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, Login2Activity.class));
             }
         });
+        */
 
         drawerLayout.setDrawerListener(listner);
         drawerView.setOnTouchListener(new View.OnTouchListener() {
