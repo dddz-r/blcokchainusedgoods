@@ -12,8 +12,8 @@ public class PrefManager {
     private static final String KEY_PHONE_NUMBER = "user_phone_number";
     private static final String KEY_ADDRESS = "user_address";
     private static final String KEY_ACCOUNT = "user_account";
-    private static final String KEY_TOKEN = "user_token";
-    private static final String KEY_IS_LOGGED_IN = "is_logged-in";
+    //private static final String KEY_TOKEN = "user_token";
+    private static final String KEY_IS_LOGGED_IN = "is_logged_in";
     private static PrefManager instance;
     private static Context ctx;
 

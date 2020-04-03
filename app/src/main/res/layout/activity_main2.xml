@@ -110,7 +110,8 @@
             android:background="@color/white"
             android:textColor="@color/mainTextColor"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp">
+            android:layout_marginRight="5dp"
+            android:stateListAnimator="@null">
         </Button>
         <Button
             android:id="@+id/bought_product"

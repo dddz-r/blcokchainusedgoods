@@ -109,8 +109,9 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onClick(View view) {
-                    finish();
+                    Toast.makeText(MainActivity.this, "로그아웃 되었습니다", Toast.LENGTH_SHORT).show();
                     prefManager.logout();
+                    finish();
                 }
             });
 

@@ -34,11 +34,13 @@ public class BuyScreen extends AppCompatActivity {
     Button bs_seller_inform_btn;
     Button bs_buyOk;
     Button bs_sendOk;
+
     ViewPager bs_viewpager;
     TextView bs_device_name;
     TextView bs_device_price;
     TextView bs_device_description;
     User user;
+
     private ArrayList<Integer> imageList;
 
     String object_owner = "수민";
@@ -129,8 +131,6 @@ public class BuyScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.buy_screen);
-
-
 
         /*물건정보 들고오기*/
         register_number = getIntent().getStringExtra("register_number");
