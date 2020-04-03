@@ -385,11 +385,37 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject json = jsonArray.getJSONObject(count);
 
                     String register_number = json.getString("register_number");
+                    String object_name = json.getString("object_name");
+                    String object_price = json.getString("object_cost"); /// 여기 이름 잘보기!
+
+                    String object_number = json.getString("object_number");
+                    String object_information = json.getString("object_information");
+                    String object_owner = json.getString("object_owner");
+                    String register_time = json.getString("register_time");
 
                     //Toast.makeText(getApplicationContext(), register_number, Toast.LENGTH_SHORT).show();
+                    if(CASE_SEARCH){
+                        if(object_name.equals(search_text)){
+                            MainGridItem inform = new MainGridItem(register_number, object_name, object_price);
+                            gridItems.add(inform);
 
-                    MainActivity.objectGridBlock ogb = new MainActivity.objectGridBlock(register_number); //카테고리 전체라서 일단 *넣어둠
-                    ogb.execute();
+                            //ObjectBlock informm = new ObjectBlock(registerNumber,object_number,object_name,object_information,object_price, object_owner,register_time);
+                            //objectBlocks.add(informm);
+                        }
+                    }
+                    else {
+                        MainGridItem inform = new MainGridItem(register_number, object_name, object_price);
+                        gridItems.add(inform);
+
+                        //ObjectBlock informm = new ObjectBlock(registerNumber,object_number,object_name,object_information,object_price, object_owner,register_time);
+                        //objectBlocks.add(informm);
+                    }
+
+                    //count++;
+                    //}
+                    gridViewAdapter.notifyDataSetChanged();
+                    //MainActivity.objectGridBlock ogb = new MainActivity.objectGridBlock(register_number); //카테고리 전체라서 일단 *넣어둠
+                    //ogb.execute();
 
                     count++;
                 }
