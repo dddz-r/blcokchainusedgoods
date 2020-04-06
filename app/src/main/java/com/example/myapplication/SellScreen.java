@@ -717,6 +717,15 @@ public class SellScreen extends AppCompatActivity {
         }
 
     }
+
+    private void askPermissions() {
+
+        permissions.add(WRITE_EXTERNAL_STORAGE);
+        permissions.add(READ_EXTERNAL_STORAGE);
+        //permissionsToRequest = findUnAskedPermissions(permissions);
+
+    }
+
     private class insertImage extends AsyncTask<Void, Void, String> {
 
         private ArrayList<String> img;
