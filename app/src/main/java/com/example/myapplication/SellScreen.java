@@ -67,6 +67,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import static android.content.Intent.ACTION_GET_CONTENT;
+
 public class SellScreen extends AppCompatActivity {
 
     Button addItems;
@@ -169,6 +171,9 @@ public class SellScreen extends AppCompatActivity {
                 if(isPermission) goToAlbum();
                 else Toast.makeText(v.getContext(), getResources().getString(R.string.permission_2), Toast.LENGTH_LONG).show();
                 conuti++;
+                if(conuti==5){
+                    conuti=0;
+                }
             }
 
         });
@@ -282,12 +287,11 @@ public class SellScreen extends AppCompatActivity {
         // Check which request we're responding to
         if (requestCode == PICK_FROM_ALBUM) {
            if(data == null){
-               Toast.makeText(SellScreen.this, "선택된 사진이 없습니다.", Toast.LENGTH_SHORT).show();
+               //Toast.makeText(SellScreen.this, "선택된 사진이 없습니다.", Toast.LENGTH_SHORT).show();
             }else {
                 if(data.getClipData()==null){
                     Toast.makeText(SellScreen.this, "다중선택이 불가능한 기기입니다.", Toast.LENGTH_SHORT).show();
 
-                        //StringImageList.add(data.getData().toString()); // 스트링 어레이
                         if(conuti==1){
                             imageView1.setImageURI(data.getData());
 
@@ -306,9 +310,13 @@ public class SellScreen extends AppCompatActivity {
                             }
 
                             //절대경로
-                            Cursor c = getContentResolver().query(Uri.parse(data.getData().toString()), null,null,null,null);
-                            c.moveToNext();
-                            String absolutePath = c.getString(c.getColumnIndex(MediaStore.MediaColumns.DATA));
+                            String[] projection = {MediaStore.Images.Media.DATA};
+                            Cursor c = getContentResolver().query(Uri.parse(data.getData().toString()), projection,null,null,null);
+                            //c.moveToNext();
+                            int column_index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                            c.moveToFirst();
+                            //String absolutePath = c.getString(c.getColumnIndex(MediaStore.MediaColumns.DATA));
+                            String absolutePath = c.getString(column_index);
                             StringImageList.add(absolutePath);
                             Toast.makeText(SellScreen.this, absolutePath,Toast.LENGTH_SHORT).show();
                         }
@@ -365,6 +373,7 @@ public class SellScreen extends AppCompatActivity {
                     if (clipData.getItemCount()>5){
                         Toast.makeText(SellScreen.this, "사진은 최대 5장까지 선택 가능합니다.", Toast.LENGTH_SHORT).show();
                     }else if (clipData.getItemCount() == 1){
+                        //Toast.makeText(SellScreen.this, "한장을 골랏다.", Toast.LENGTH_SHORT).show();
                         String dataStr = String.valueOf(clipData.getItemAt(0).getUri());
                         imageView1.setImageURI(clipData.getItemAt(0).getUri());
                         StringImageList.add(dataStr); // 스트링 어레이
@@ -379,7 +388,7 @@ public class SellScreen extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         //imageList.add(dataStr);
-                    }else if (clipData.getItemCount() >1 && clipData.getItemCount() < 5){
+                    }else if (clipData.getItemCount() >1 && clipData.getItemCount() < 6){
                         int i;
                         for(i = 0 ; i < clipData.getItemCount() ; i++){
                             String dataStr = String.valueOf(clipData.getItemAt(0).getUri());
@@ -402,6 +411,7 @@ public class SellScreen extends AppCompatActivity {
                         i=0;
                     }
                 }
+
            }
         }
 
@@ -409,10 +419,13 @@ public class SellScreen extends AppCompatActivity {
 
     private void goToAlbum() {
 
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        //intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        intent.setType("image/*");
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        //Intent intent = new Intent(Intent.ACTION_PICK);
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);//여러장
+        //intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        //Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/이미지/");
+        //intent.setDataAndType(uri, "image/*");
+        intent.setAction(ACTION_GET_CONTENT);
         intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_FROM_ALBUM);
 
