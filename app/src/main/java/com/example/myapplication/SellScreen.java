@@ -39,6 +39,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -67,7 +68,33 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+//for making insert image function
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.util.List;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 public class SellScreen extends AppCompatActivity {
+
+    //for making insert image function
+    ApiService apisService;
+    private ArrayList<String> permissionsToRequest;
+    private ArrayList<String> permissionsRejected = new ArrayList<>();
+    private ArrayList<String> permissions = new ArrayList<>();
+    private final static int ALL_PERMISSIONS_RESULT = 107;
+    private final static int IMAGE_RESULT = 200;
+    Bitmap bitmap;
 
     Button addItems;
     Button sell_Ok;
@@ -682,6 +709,14 @@ public class SellScreen extends AppCompatActivity {
 
     }
 
+    private class insertImageArray extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            return null;
+        }
+
+    }
     private class insertImage extends AsyncTask<Void, Void, String> {
 
         private ArrayList<String> img;
