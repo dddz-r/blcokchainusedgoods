@@ -290,23 +290,33 @@ public class SellScreen extends AppCompatActivity {
                         //StringImageList.add(data.getData().toString()); // 스트링 어레이
                         if(conuti==1){
                             imageView1.setImageURI(data.getData());
+
+                            // 스트링 어레이
                             Toast.makeText(SellScreen.this, data.getData().toString(),Toast.LENGTH_SHORT).show();
-                            StringImageList.add(String.valueOf(data.getData())); // 스트링 어레이
+                            StringImageList.add(String.valueOf(data.getData()));
+
+                            // 비트맵 어레이
                             try {
                                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                                bitmapImageList.add(bitmap);// 비트맵 어레이
+                                bitmapImageList.add(bitmap);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }
+
+                            //절대경로
+                            Cursor c = getContentResolver().query(Uri.parse(data.getData().toString()), null,null,null,null);
+                            c.moveToNext();
+                            String absolutePath = c.getString(c.getColumnIndex(MediaStore.MediaColumns.DATA));
+                            Toast.makeText(SellScreen.this, absolutePath,Toast.LENGTH_SHORT).show();
                         }
                         else if(conuti==2){
                             imageView2.setImageURI(data.getData());
-                            StringImageList.add(String.valueOf(data.getData())); // 스트링 어레이
+                            StringImageList.add(String.valueOf(data.getData()));
                             try {
                                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                                bitmapImageList.add(bitmap);// 비트맵 어레이
+                                bitmapImageList.add(bitmap);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
@@ -315,10 +325,10 @@ public class SellScreen extends AppCompatActivity {
                         }
                         else if(conuti==3){
                             imageView3.setImageURI(data.getData());
-                            StringImageList.add(String.valueOf(data.getData())); // 스트링 어레이
+                            StringImageList.add(String.valueOf(data.getData()));
                             try {
                                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                                bitmapImageList.add(bitmap);// 비트맵 어레이
+                                bitmapImageList.add(bitmap);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
@@ -326,20 +336,20 @@ public class SellScreen extends AppCompatActivity {
                             }
                         }
                         else if(conuti==4){ imageView4.setImageURI(data.getData());
-                            StringImageList.add(String.valueOf(data.getData())); // 스트링 어레이
+                            StringImageList.add(String.valueOf(data.getData()));
                             try {
                                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                                bitmapImageList.add(bitmap);// 비트맵 어레이
+                                bitmapImageList.add(bitmap);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }}
                         else if(conuti==5) {imageView5.setImageURI(data.getData());
-                            StringImageList.add(String.valueOf(data.getData())); // 스트링 어레이
+                            StringImageList.add(String.valueOf(data.getData()));
                             try {
                                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                                bitmapImageList.add(bitmap);// 비트맵 어레이
+                                bitmapImageList.add(bitmap);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
@@ -399,7 +409,8 @@ public class SellScreen extends AppCompatActivity {
     private void goToAlbum() {
 
         Intent intent = new Intent(Intent.ACTION_PICK);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        //intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        intent.setType("image/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);//여러장
         intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_FROM_ALBUM);
