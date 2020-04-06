@@ -128,7 +128,7 @@ public class SellList extends AppCompatActivity {
 
                 JSONObject object = new JSONObject(s);
 
-                JSONArray jsonArray = object.getJSONArray("buyList");
+                JSONArray jsonArray = object.getJSONArray("sellList");
                 //Toast.makeText(getApplicationContext(), object.getString("reviews"), Toast.LENGTH_SHORT).show();
 
                 int count = 0;

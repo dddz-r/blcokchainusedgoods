@@ -137,6 +137,8 @@
         android:gravity="center"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="20dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:textColor="@color/darkGray"
         android:background="@drawable/buttonborder_maintextcolor">
 
@@ -168,6 +170,8 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="20dp"
             android:layout_weight="4"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:background="@drawable/buttonborder_maintextcolor"
             android:inputType="number"
             android:textColor="@color/darkGray">
@@ -202,6 +206,8 @@
             android:layout_weight="4"
             android:entries="@array/category"
             android:textColor="@color/darkGray"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:background="@drawable/buttonborder_maintextcolor">
 
         </Spinner>
@@ -232,6 +238,8 @@
             android:layout_marginRight="20dp"
             android:layout_weight="4"
             android:layout_height="200dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:selectAllOnFocus="false"
             android:singleLine="false"
             android:inputType="textMultiLine"

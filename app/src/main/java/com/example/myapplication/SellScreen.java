@@ -46,14 +46,25 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class SellScreen extends AppCompatActivity {
@@ -82,9 +93,9 @@ public class SellScreen extends AppCompatActivity {
     User user;
 
 
-    //private  ArrayList<Bitmap> imageList;
+    private  ArrayList<Bitmap> bitmapImageList = new ArrayList<>();
     private ArrayList<Integer> imageList;
-    //private ArrayList<String> imageList;
+    private ArrayList<String> StringImageList = new ArrayList<>();
     //ViewPager ss_viewpager;
 
     private Boolean isPermission = true;
@@ -174,6 +185,8 @@ public class SellScreen extends AppCompatActivity {
                 //물건넘버, 이름, 설명, 가격, 카테고리, 판매자, 등록시간
                 SellScreen.insertObject io = new SellScreen.insertObject(objectNumber, device_name.getText().toString(), device_inform.getText().toString(), device_price.getText().toString(),category, user_id);
                 io.execute();
+                SellScreen.insertImage ii = new SellScreen.insertImage(bitmapImageList);
+                ii.execute();
                 startActivity(new Intent(SellScreen.this, MainActivity.class));
             }
         });
@@ -273,21 +286,68 @@ public class SellScreen extends AppCompatActivity {
             }else {
                 if(data.getClipData()==null){
                     Toast.makeText(SellScreen.this, "다중선택이 불가능한 기기입니다.", Toast.LENGTH_SHORT).show();
-                    //imageList.add(String.valueOf(data.getData()));
-                        if(conuti==1) imageView1.setImageURI(data.getData());
-                        else if(conuti==2) imageView2.setImageURI(data.getData());
-                        else if(conuti==3) imageView3.setImageURI(data.getData());
-                        else if(conuti==4) imageView4.setImageURI(data.getData());
-                        else if(conuti==5) {imageView5.setImageURI(data.getData());conuti=0;}
 
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                        //imageList.add(bitmap);
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                        //StringImageList.add(data.getData().toString()); // 스트링 어레이
+                        if(conuti==1){
+                            imageView1.setImageURI(data.getData());
+                            Toast.makeText(SellScreen.this, data.getData().toString(),Toast.LENGTH_SHORT).show();
+                            StringImageList.add(String.valueOf(data.getData())); // 스트링 어레이
+                            try {
+                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                                bitmapImageList.add(bitmap);// 비트맵 어레이
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else if(conuti==2){
+                            imageView2.setImageURI(data.getData());
+                            StringImageList.add(String.valueOf(data.getData())); // 스트링 어레이
+                            try {
+                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                                bitmapImageList.add(bitmap);// 비트맵 어레이
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else if(conuti==3){
+                            imageView3.setImageURI(data.getData());
+                            StringImageList.add(String.valueOf(data.getData())); // 스트링 어레이
+                            try {
+                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                                bitmapImageList.add(bitmap);// 비트맵 어레이
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        else if(conuti==4){ imageView4.setImageURI(data.getData());
+                            StringImageList.add(String.valueOf(data.getData())); // 스트링 어레이
+                            try {
+                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                                bitmapImageList.add(bitmap);// 비트맵 어레이
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }}
+                        else if(conuti==5) {imageView5.setImageURI(data.getData());
+                            StringImageList.add(String.valueOf(data.getData())); // 스트링 어레이
+                            try {
+                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                                bitmapImageList.add(bitmap);// 비트맵 어레이
+                            } catch (FileNotFoundException e) {
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            conuti=0;}
+
+
                 }else {
                     ClipData clipData = data.getClipData();
 
@@ -296,8 +356,10 @@ public class SellScreen extends AppCompatActivity {
                     }else if (clipData.getItemCount() == 1){
                         String dataStr = String.valueOf(clipData.getItemAt(0).getUri());
                         imageView1.setImageURI(clipData.getItemAt(0).getUri());
-;                       try {
+                        StringImageList.add(dataStr); // 스트링 어레이
+                       try {
                             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), clipData.getItemAt(0).getUri());
+                            bitmapImageList.add(bitmap); // 비트맵 어레이
                             Drawable drawable = new BitmapDrawable(bitmap);
                             //imageList.add(getResources().getDrawable(drawable));
                         } catch (FileNotFoundException e) {
@@ -309,9 +371,11 @@ public class SellScreen extends AppCompatActivity {
                     }else if (clipData.getItemCount() >1 && clipData.getItemCount() < 5){
                         int i;
                         for(i = 0 ; i < clipData.getItemCount() ; i++){
+                            String dataStr = String.valueOf(clipData.getItemAt(0).getUri());
+                            StringImageList.add(dataStr); // 스트링 어레이
                             try {
                             bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), clipData.getItemAt(i).getUri());
-                                //imageList.add(bitmap);
+                            bitmapImageList.add(bitmap);  // 비트맵 어레이
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
@@ -604,5 +668,146 @@ public class SellScreen extends AppCompatActivity {
 
         }
 
+    }
+
+    private class insertImage extends AsyncTask<Void, Void, String> {
+
+        private ArrayList<Bitmap> img;
+        //registerNumber는 자동으로 서버에서 매겨짐
+        //오브젝트 넘버도기본적으로 자동으로 증가하게 하지만, 만약 체크박스에 체크가 됐을 경우에는 기존의 오브젝트 넘버로 등록.
+
+        insertImage(ArrayList<Bitmap> img) {
+
+            this.img = img;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected String doInBackground(Void... voids) {
+
+
+            try {
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, ArrayList<Bitmap>> params = new HashMap<>();
+
+                params.put("photo", img);
+
+                return sendPostRequest(URLS.URL_STORE_IMAGE, params);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.d("인저트오브젝트오류", "doInBackground Exception");
+            }
+            return null;
+        }
+
+        public void onProgressUpdate(Void... values) {
+            super.onProgressUpdate();
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+            super.onPostExecute(s);
+            Log.d("인저트오브젝트오류 온포스트", "실행");
+
+            try {
+
+                JSONObject obj = new JSONObject(s);
+
+                if (!obj.getString("code").equals(404)) {
+
+                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+
+                } else if (!obj.getString("code").equals(200)) {
+                    Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                } else {
+
+                    Toast.makeText(getApplicationContext(), "Some error occur", Toast.LENGTH_SHORT).show();
+
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
+    String sendPostRequest(String requestURL, HashMap<String, ArrayList<Bitmap>> postDataParams) {
+
+        URL url;
+        StringBuilder sb = new StringBuilder();
+
+        try{
+
+            url = new URL(requestURL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setReadTimeout(15000);
+            connection.setConnectTimeout(15000);
+            connection.setRequestMethod("POST");
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+
+            OutputStream os = connection.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+
+            writer.write(getPostDataString(postDataParams));
+
+            Log.d("request 입력", getPostDataString(postDataParams));
+            writer.flush();
+            writer.close();
+            os.close();
+
+            /* */
+
+            int responseCode = connection.getResponseCode();
+
+            Log.d("리스폰스",Integer.toString(responseCode));
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+
+                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                sb = new StringBuilder();
+                String response;
+
+                while ((response = br.readLine()) != null) {
+
+                    sb.append(response);
+                }
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return sb.toString();
+
+    }
+    private String getPostDataString(HashMap<String, ArrayList<Bitmap>> params) throws UnsupportedEncodingException {
+
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+        for (Map.Entry<String,  ArrayList<Bitmap>> entry : params.entrySet()) {
+
+            if (first)
+                first = false;
+            else
+                result.append("&");
+            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+
+            result.append("=");
+            result.append(URLEncoder.encode(String.valueOf(entry.getValue()), "UTF-8"));
+        }
+        return result.toString();
     }
 }
