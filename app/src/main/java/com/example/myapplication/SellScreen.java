@@ -185,7 +185,7 @@ public class SellScreen extends AppCompatActivity {
                 //물건넘버, 이름, 설명, 가격, 카테고리, 판매자, 등록시간
                 SellScreen.insertObject io = new SellScreen.insertObject(objectNumber, device_name.getText().toString(), device_inform.getText().toString(), device_price.getText().toString(),category, user_id);
                 io.execute();
-                SellScreen.insertImage ii = new SellScreen.insertImage(bitmapImageList);
+                SellScreen.insertImage ii = new SellScreen.insertImage(StringImageList);
                 ii.execute();
                 startActivity(new Intent(SellScreen.this, MainActivity.class));
             }
@@ -293,7 +293,7 @@ public class SellScreen extends AppCompatActivity {
 
                             // 스트링 어레이
                             Toast.makeText(SellScreen.this, data.getData().toString(),Toast.LENGTH_SHORT).show();
-                            StringImageList.add(String.valueOf(data.getData()));
+                            //StringImageList.add(String.valueOf(data.getData()));
 
                             // 비트맵 어레이
                             try {
@@ -309,6 +309,7 @@ public class SellScreen extends AppCompatActivity {
                             Cursor c = getContentResolver().query(Uri.parse(data.getData().toString()), null,null,null,null);
                             c.moveToNext();
                             String absolutePath = c.getString(c.getColumnIndex(MediaStore.MediaColumns.DATA));
+                            StringImageList.add(absolutePath);
                             Toast.makeText(SellScreen.this, absolutePath,Toast.LENGTH_SHORT).show();
                         }
                         else if(conuti==2){
@@ -683,11 +684,11 @@ public class SellScreen extends AppCompatActivity {
 
     private class insertImage extends AsyncTask<Void, Void, String> {
 
-        private ArrayList<Bitmap> img;
+        private ArrayList<String> img;
         //registerNumber는 자동으로 서버에서 매겨짐
         //오브젝트 넘버도기본적으로 자동으로 증가하게 하지만, 만약 체크박스에 체크가 됐을 경우에는 기존의 오브젝트 넘버로 등록.
 
-        insertImage(ArrayList<Bitmap> img) {
+        insertImage(ArrayList<String> img) {
 
             this.img = img;
         }
@@ -706,7 +707,7 @@ public class SellScreen extends AppCompatActivity {
             try {
                 RequestHandler requestHandler = new RequestHandler();
 
-                HashMap<String, ArrayList<Bitmap>> params = new HashMap<>();
+                HashMap<String, ArrayList<String>> params = new HashMap<>();
 
                 params.put("photo", img);
 
@@ -750,7 +751,7 @@ public class SellScreen extends AppCompatActivity {
         }
 
     }
-    String sendPostRequest(String requestURL, HashMap<String, ArrayList<Bitmap>> postDataParams) {
+    String sendPostRequest(String requestURL, HashMap<String, ArrayList<String>> postDataParams) {
 
         URL url;
         StringBuilder sb = new StringBuilder();
@@ -804,11 +805,11 @@ public class SellScreen extends AppCompatActivity {
         return sb.toString();
 
     }
-    private String getPostDataString(HashMap<String, ArrayList<Bitmap>> params) throws UnsupportedEncodingException {
+    private String getPostDataString(HashMap<String, ArrayList<String>> params) throws UnsupportedEncodingException {
 
         StringBuilder result = new StringBuilder();
         boolean first = true;
-        for (Map.Entry<String,  ArrayList<Bitmap>> entry : params.entrySet()) {
+        for (Map.Entry<String,  ArrayList<String>> entry : params.entrySet()) {
 
             if (first)
                 first = false;
