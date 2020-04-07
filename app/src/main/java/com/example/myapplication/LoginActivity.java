@@ -78,7 +78,6 @@ public class LoginActivity extends AppCompatActivity {
 
                 user_id = findViewById(R.id.userId);
                 user_password = findViewById(R.id.password);
-
                 //여기서 메소드 실행
                 login();
             }
@@ -133,6 +132,11 @@ public class LoginActivity extends AppCompatActivity {
             params.put("user_password", user_password);
 
             String json = requestHandler.sendPostRequest(URLS.URL_LOGIN, params);
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(String json) {
 
             Log.i("login", "info" + json);
 
@@ -144,13 +148,13 @@ public class LoginActivity extends AppCompatActivity {
 
                     if(obj.getString("code").equals("204")) { //정보 불일치
 
-                        Looper.prepare();
+
                         Toast.makeText(getApplicationContext(),  obj.getString("message"), Toast.LENGTH_SHORT).show();
-                        Looper.loop();
+
 
                     } else { //정보 일치
 
-                        Looper.prepare();
+
                         Toast.makeText(getApplicationContext(),  obj.getString("message"), Toast.LENGTH_SHORT).show();
 
 
@@ -162,19 +166,19 @@ public class LoginActivity extends AppCompatActivity {
                                 userJson.getString("user_phone_number"),
                                 userJson.getString("user_address"),
                                 userJson.getString("user_account")
-          //                      userJson.getString("user_token")
+                                //                      userJson.getString("user_token")
                         );
 
                         PrefManager.getInstance(getApplicationContext()).setUserLogin(user);
-
                         finish();
+
 
                         String inputId = user.getUser_id();
                         String inputName = user.getUser_name();
                         String inputPhoneNumber = user.getUser_phone_number();
                         String inputAddress = user.getUser_address();
                         String inputAccount = user.getUser_account();
-         //               String inputToken = user.getUser_token();
+                        //               String inputToken = user.getUser_token();
 
                         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                         intent.putExtra("inputId", inputId);
@@ -182,10 +186,10 @@ public class LoginActivity extends AppCompatActivity {
                         intent.putExtra("inputPhoneNumber", inputPhoneNumber);
                         intent.putExtra("inputAddress", inputAddress);
                         intent.putExtra("inputAccount", inputAccount);
-          //              intent.putExtra("inputToken", inputToken);
+                        //              intent.putExtra("inputToken", inputToken);
 
                         startActivity(intent);
-                        Looper.loop();
+
 
                         /*
 
@@ -203,7 +207,6 @@ public class LoginActivity extends AppCompatActivity {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return json;
         }
     }
 
