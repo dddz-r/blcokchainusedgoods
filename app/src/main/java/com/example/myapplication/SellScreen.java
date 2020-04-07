@@ -39,7 +39,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
@@ -51,6 +50,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -85,16 +85,18 @@ import retrofit2.Retrofit;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
+import static android.content.Intent.ACTION_GET_CONTENT;
+
 public class SellScreen extends AppCompatActivity {
 
     //for making insert image function
-    ApiService apisService;
+    ApiService apiService;
     private ArrayList<String> permissionsToRequest;
     private ArrayList<String> permissionsRejected = new ArrayList<>();
     private ArrayList<String> permissions = new ArrayList<>();
     private final static int ALL_PERMISSIONS_RESULT = 107;
     private final static int IMAGE_RESULT = 200;
-    Bitmap bitmap;
+    Bitmap mBitmap;
 
     Button addItems;
     Button sell_Ok;
@@ -196,6 +198,9 @@ public class SellScreen extends AppCompatActivity {
                 if(isPermission) goToAlbum();
                 else Toast.makeText(v.getContext(), getResources().getString(R.string.permission_2), Toast.LENGTH_LONG).show();
                 conuti++;
+                if(conuti==5){
+                    conuti=0;
+                }
             }
 
         });
@@ -212,8 +217,15 @@ public class SellScreen extends AppCompatActivity {
                 //물건넘버, 이름, 설명, 가격, 카테고리, 판매자, 등록시간
                 SellScreen.insertObject io = new SellScreen.insertObject(objectNumber, device_name.getText().toString(), device_inform.getText().toString(), device_price.getText().toString(),category, user_id);
                 io.execute();
-                SellScreen.insertImage ii = new SellScreen.insertImage(StringImageList);
-                ii.execute();
+
+                for(int i=0; i < bitmapImageList.size() ; i++) {
+
+                    mBitmap = bitmapImageList.get(i);
+                    multipartImageUpload();
+                }
+
+                //SellScreen.insertImage ii = new SellScreen.insertImage(StringImageList);
+                //ii.execute();
                 startActivity(new Intent(SellScreen.this, MainActivity.class));
             }
         });
@@ -309,7 +321,7 @@ public class SellScreen extends AppCompatActivity {
         // Check which request we're responding to
         if (requestCode == PICK_FROM_ALBUM) {
            if(data == null){
-               Toast.makeText(SellScreen.this, "선택된 사진이 없습니다.", Toast.LENGTH_SHORT).show();
+               //Toast.makeText(SellScreen.this, "선택된 사진이 없습니다.", Toast.LENGTH_SHORT).show();
             }else {
                 if(data.getClipData()==null){
                     Toast.makeText(SellScreen.this, "다중선택이 불가능한 기기입니다.", Toast.LENGTH_SHORT).show();
@@ -333,9 +345,13 @@ public class SellScreen extends AppCompatActivity {
                             }
 
                             //절대경로
-                            Cursor c = getContentResolver().query(Uri.parse(data.getData().toString()), null,null,null,null);
-                            c.moveToNext();
-                            String absolutePath = c.getString(c.getColumnIndex(MediaStore.MediaColumns.DATA));
+                            String[] projection = {MediaStore.Images.Media.DATA};
+                            Cursor c = getContentResolver().query(Uri.parse(data.getData().toString()), projection,null,null,null);
+                            //c.moveToNext();
+                            int column_index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                            c.moveToFirst();
+                            //String absolutePath = c.getString(c.getColumnIndex(MediaStore.MediaColumns.DATA));
+                            String absolutePath = c.getString(column_index);
                             StringImageList.add(absolutePath);
                             Toast.makeText(SellScreen.this, absolutePath,Toast.LENGTH_SHORT).show();
                         }
@@ -392,6 +408,7 @@ public class SellScreen extends AppCompatActivity {
                     if (clipData.getItemCount()>5){
                         Toast.makeText(SellScreen.this, "사진은 최대 5장까지 선택 가능합니다.", Toast.LENGTH_SHORT).show();
                     }else if (clipData.getItemCount() == 1){
+                        //Toast.makeText(SellScreen.this, "한장을 골랏다.", Toast.LENGTH_SHORT).show();
                         String dataStr = String.valueOf(clipData.getItemAt(0).getUri());
                         imageView1.setImageURI(clipData.getItemAt(0).getUri());
                         StringImageList.add(dataStr); // 스트링 어레이
@@ -406,7 +423,7 @@ public class SellScreen extends AppCompatActivity {
                             e.printStackTrace();
                         }
                         //imageList.add(dataStr);
-                    }else if (clipData.getItemCount() >1 && clipData.getItemCount() < 5){
+                    }else if (clipData.getItemCount() >1 && clipData.getItemCount() < 6){
                         int i;
                         for(i = 0 ; i < clipData.getItemCount() ; i++){
                             String dataStr = String.valueOf(clipData.getItemAt(0).getUri());
@@ -436,10 +453,13 @@ public class SellScreen extends AppCompatActivity {
 
     private void goToAlbum() {
 
-        Intent intent = new Intent(Intent.ACTION_PICK);
-        //intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-        intent.setType("image/*");
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        //Intent intent = new Intent(Intent.ACTION_PICK);
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);//여러장
+        //intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        //Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/이미지/");
+        //intent.setDataAndType(uri, "image/*");
+        intent.setAction(ACTION_GET_CONTENT);
         intent.setData(MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         startActivityForResult(intent, PICK_FROM_ALBUM);
 
@@ -709,6 +729,7 @@ public class SellScreen extends AppCompatActivity {
 
     }
 
+    //여기서부터 송이
     private class insertImageArray extends AsyncTask<Void, Void, String> {
 
         @Override
@@ -724,6 +745,72 @@ public class SellScreen extends AppCompatActivity {
         permissions.add(READ_EXTERNAL_STORAGE);
         //permissionsToRequest = findUnAskedPermissions(permissions);
 
+        //sdk 버전 확인해서 permission 있는지
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if(permissionsToRequest.size() > 0)
+                requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+        }
+    }
+
+    private void initRetrofitClient() {
+
+        OkHttpClient client = new OkHttpClient.Builder().build();
+        apiService = new Retrofit.Builder().baseUrl(URLS.URL_STORE_IMAGE).client(client).build().create(ApiService.class);
+
+    }
+
+    //이거 업로드
+    private void multipartImageUpload() {
+
+        try{
+
+            File filesDir = getApplicationContext().getFilesDir();
+            File file = new File(filesDir, "image" +".png");
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            mBitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
+            byte[] bitmapdata = bos.toByteArray();
+
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+
+            //이거 우리서버에서는 photo 일수도
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+            //업로드할 바디
+            MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+            //업로드할 이름
+            RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload");
+
+            Call<ResponseBody> req = apiService.postImage(body, name);
+
+            req.enqueue(new Callback<ResponseBody>() {
+
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    if(response.code() ==200) {
+                        //Toast.makeText(SellScreen.this,"uploaded successfully!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    Toast.makeText(SellScreen.this, response.code() + " ", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    Toast.makeText(SellScreen.this, "request fail", Toast.LENGTH_SHORT).show();
+                    t.printStackTrace();
+
+                }
+            });
+        }catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private class insertImage extends AsyncTask<Void, Void, String> {

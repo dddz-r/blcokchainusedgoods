@@ -3,6 +3,8 @@ package com.example.myapplication;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +21,8 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.util.HashMap;
+
+import static android.net.wifi.p2p.WifiP2pDevice.FAILED;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -140,11 +144,15 @@ public class LoginActivity extends AppCompatActivity {
 
                     if(obj.getString("code").equals("204")) { //정보 불일치
 
+                        Looper.prepare();
                         Toast.makeText(getApplicationContext(),  obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        Looper.loop();
 
                     } else { //정보 일치
 
+                        Looper.prepare();
                         Toast.makeText(getApplicationContext(),  obj.getString("message"), Toast.LENGTH_SHORT).show();
+
 
                         JSONObject userJson = obj.getJSONObject("user");
 
@@ -177,6 +185,8 @@ public class LoginActivity extends AppCompatActivity {
           //              intent.putExtra("inputToken", inputToken);
 
                         startActivity(intent);
+                        Looper.loop();
+
                         /*
 
     public String getUser_id() { return user_id; }
