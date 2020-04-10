@@ -329,7 +329,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private class objectGrid extends AsyncTask<Void, Void, String> {
+    private class objectGrid extends AsyncTask<Void, Void, String> { //DB
         private String object_category;
 
         objectGrid(String object_category) {
