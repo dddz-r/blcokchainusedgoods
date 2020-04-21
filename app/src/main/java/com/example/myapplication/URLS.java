@@ -4,6 +4,7 @@ public class URLS {
   
 
     private static final String URL_ROOT = "http://ec2-52-79-133-153.ap-northeast-2.compute.amazonaws.com:5000/api";
+
     public static final String URL_JOIN = URL_ROOT + "/join";
     public static  final String URL_TALK_SEND = URL_ROOT+"/talk_send";
     public static  final String URL_TALK_RECEIVE = URL_ROOT+"/talk_receive";

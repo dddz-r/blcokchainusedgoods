@@ -134,9 +134,15 @@ public class SellScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*유저 아이디 들고오는 코드*/
+        final PrefManager prefManager = PrefManager.getInstance(SellScreen.this);
+        user = prefManager.getUser();
 
-        askPermissions();
-        initRetrofitClient();
+        //askPermissions();
+        //initRetrofitClient();
+        if (prefManager.isLoggedIn()) {
+            user_id = String.valueOf(user.getUser_id());
+        }
 
         setContentView(R.layout.sell_screen);
 
@@ -232,6 +238,8 @@ public class SellScreen extends AppCompatActivity {
                 startActivity(new Intent(SellScreen.this, MainActivity.class));
             }
         });
+        SellScreen.selectObjectPop sop = new SellScreen.selectObjectPop(user_id);
+        sop.execute(); //여기서 oItems가 세팅된다.
 
         /*체크박스 */
         checkBox = (CheckBox)findViewById(R.id.checkBox);
@@ -240,8 +248,7 @@ public class SellScreen extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(checkBox.isChecked()){
 
-                    SellScreen.selectObjectPop sop = new SellScreen.selectObjectPop(user_id);
-                    sop.execute(); //여기서 oItems가 세팅된다.
+
 
                     //oItems.add("ffff");
                     /* oItems 랑 ob 에 같은 인덱스에 같은 레지스터번호 있음 */
@@ -292,13 +299,7 @@ public class SellScreen extends AppCompatActivity {
             }
         });
 
-        /*유저 아이디 들고오는 코드*/
-        final PrefManager prefManager = PrefManager.getInstance(SellScreen.this);
-        user = prefManager.getUser();
 
-        if (prefManager.isLoggedIn()) {
-            user_id = String.valueOf(user.getUser_id());
-        }
     }
 
 
@@ -327,7 +328,7 @@ public class SellScreen extends AppCompatActivity {
                //Toast.makeText(SellScreen.this, "선택된 사진이 없습니다.", Toast.LENGTH_SHORT).show();
             }else {
                 if(data.getClipData()==null){
-                    Toast.makeText(SellScreen.this, "다중선택이 불가능한 기기입니다.", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SellScreen.this, "한장씩 선택.", Toast.LENGTH_SHORT).show();
 
                         //StringImageList.add(data.getData().toString()); // 스트링 어레이
                         if(conuti==1){
@@ -553,8 +554,13 @@ public class SellScreen extends AppCompatActivity {
 
                     JSONObject json = jsonArray.getJSONObject(count);
                     String registerNumber = json.getString("register_number");
+                    String transaction_time = json.getString("complete_time");
+                    //oItems.add(registerNumber+"  ("+transaction_time+") ");
+
                     SellScreen.selectObjectBlock sob = new SellScreen.selectObjectBlock(registerNumber);
                     sob.execute();
+
+                    count++;
 
                 }
                 //finish();
@@ -566,8 +572,8 @@ public class SellScreen extends AppCompatActivity {
 
         }
     }
-
-    private class selectObjectBlock extends AsyncTask<Void, Void, String> { //블록체인
+/*여기 중간에 물건 디비 거치도록 수정할 것!*/
+    private class selectObjectBlock extends AsyncTask<Void, Void, String> { //블록체인->db
         private String registerNumber;
 
         selectObjectBlock(String registerNumber) {
@@ -626,7 +632,7 @@ public class SellScreen extends AppCompatActivity {
 
                     JSONObject json = object.getJSONObject("obj");
                     String registerNumber = json.getString("registerNumber");
-                    String object_number = json.getString("objectNumber");
+                    String object_number = json.getString("originObjectNumber");
                     String object_name = json.getString("objectName");
                     String object_cost = json.getString("objectCost");
                     String object_owner = json.getString("objectOwner");
@@ -814,10 +820,15 @@ public class SellScreen extends AppCompatActivity {
 
             //이거 우리서버에서는 photo 일수도
             RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+            //image
             //업로드할 바디
             MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+            Log.d( body+"@@@@@@@@@", body+"@@@@@@@@@@@@");
+
             //업로드할 이름
             RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload");
+            Log.d( name+"@@@@@@@@@", name+"@@@@@@@@@@@@");
+
 
             Call<ResponseBody> req = apiService.postImage(body, name);
 

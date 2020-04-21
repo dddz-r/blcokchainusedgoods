@@ -243,7 +243,11 @@ public class MainActivity extends AppCompatActivity {
         talk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, TalkList.class));
+                if(prefManager.isLoggedIn()){
+                startActivity(new Intent(MainActivity.this, TalkList.class));}
+                else{
+                    Toast.makeText(getApplicationContext(), "로그인해주세요", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -251,7 +255,11 @@ public class MainActivity extends AppCompatActivity {
         add_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SellScreen.class));
+                if(prefManager.isLoggedIn()){
+                    startActivity(new Intent(MainActivity.this, SellScreen.class));}
+                else{
+                    Toast.makeText(getApplicationContext(), "로그인해주세요", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -299,15 +307,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        /*
-        Button login_btn = (Button)findViewById(R.id.login_btn);
-        login_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, Login2Activity.class));
-            }
-        });
-        */
 
         drawerLayout.setDrawerListener(listner);
         drawerView.setOnTouchListener(new View.OnTouchListener() {
@@ -341,7 +340,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private class objectGrid extends AsyncTask<Void, Void, String> {
+    private class objectGrid extends AsyncTask<Void, Void, String> { //DB
         private String object_category;
 
         objectGrid(String object_category) {
