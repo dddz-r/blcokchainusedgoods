@@ -56,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     Button category6;
     Button category7;
 
+    //이거이미지업로드테스트
+    Button category8;
+
     boolean CASE_SEARCH = false;
     String search_text;
 
@@ -193,6 +196,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,Category7.class));
+            }
+        });
+
+        category8 = (Button)findViewById(R.id.category8);
+        category8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, TestUploadImage.class));
             }
         });
 

@@ -247,6 +247,20 @@
             android:stateListAnimator="@null">
         </Button>
 
+        <Button
+            android:id="@+id/category8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="이미지 업로드 테스트"
+            android:textSize="15dp"
+            android:gravity="left"
+            android:background="@color/white"
+            android:textColor="@color/mainTextColor"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:stateListAnimator="@null">
+        </Button>
+
     </LinearLayout>
     </ScrollView>
 

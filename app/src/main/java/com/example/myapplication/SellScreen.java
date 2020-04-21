@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -134,6 +135,8 @@ public class SellScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        askPermissions();
+        initRetrofitClient();
 
         setContentView(R.layout.sell_screen);
 
@@ -743,7 +746,7 @@ public class SellScreen extends AppCompatActivity {
 
         permissions.add(WRITE_EXTERNAL_STORAGE);
         permissions.add(READ_EXTERNAL_STORAGE);
-        //permissionsToRequest = findUnAskedPermissions(permissions);
+        permissionsToRequest = findUnAskedPermissions(permissions);
 
         //sdk 버전 확인해서 permission 있는지
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -760,6 +763,38 @@ public class SellScreen extends AppCompatActivity {
 
     }
 
+    private ArrayList<String> findUnAskedPermissions(ArrayList<String> wanted) {
+
+        ArrayList<String> result = new ArrayList<String>();
+
+        for(String perm : wanted) {
+
+            if(!hasPermission(perm)) {
+
+                result.add(perm);
+            }
+        }
+
+        return result;
+    }
+
+    private boolean hasPermission(String permission) {
+
+        if(canMakeSmores()) {
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                return (checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
+            }
+        }
+
+        return false;
+    }
+
+    private boolean canMakeSmores() {
+
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
     //이거 업로드
     private void multipartImageUpload() {
 
