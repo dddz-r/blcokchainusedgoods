@@ -37,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
     Button search_btn;
     EditText search_edit;
 
-    //Drawable testImage = ContextCompat.getDrawable(this,R.drawable.onlydog);
-
     User user;
     //메인2
     Button login_btn;

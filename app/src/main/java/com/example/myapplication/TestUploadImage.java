@@ -147,6 +147,7 @@ public class TestUploadImage extends AppCompatActivity {
         //initRetrofitClient();
     }
 
+    //완
     private void askPermission() {
 
         permissions.add(WRITE_EXTERNAL_STORAGE);
@@ -161,7 +162,7 @@ public class TestUploadImage extends AppCompatActivity {
         }
 
     }
-
+    //완
     private void initRetrofitClient() {
 
         OkHttpClient client = new OkHttpClient.Builder().build();
@@ -169,7 +170,7 @@ public class TestUploadImage extends AppCompatActivity {
         apiService = new Retrofit.Builder().baseUrl(URL_UPLOAD).client(client).build().create(ApiService.class);
     }
 
-    //이미지 가져오기
+    //이미지 가져오기 //ㄴ
     public void getPickImageChooserIntent() {
 
 
@@ -177,16 +178,15 @@ public class TestUploadImage extends AppCompatActivity {
         PackageManager packageManager = getPackageManager();
         ArrayList<Image> images = new ArrayList<>();
         //Intent intent = new Intent(Intent.ACTION_PICK);
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        //intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(Intent.createChooser(intent, "이미지 다중 선택"), REQUEST_CODE);
 
     }
 
-    //이미지 촬영 후 Uri데 안쓸거 같지만 일단 놔두자
+    //이미지 촬영 후 Uri데 안쓸거 같지만 일단 놔두자 //완
     private Uri getCaptureImageOutputUri() {
 
         Uri outputFileUri = null;

@@ -83,6 +83,7 @@ public class BuyScreen extends AppCompatActivity {
                         bs_sendOk.setText("배송 확인");
                     }else if(object_state.equals("onTransportation")){
                         bs_sendOk.setText("배송중");//클릭할수없도록 내일 설정하자
+                        bs_sendOk.setEnabled(false);
                         bs_buyOk.setText("수취 확인");
                     }
                 }
@@ -703,8 +704,6 @@ public class BuyScreen extends AppCompatActivity {
                 stateThread.start();
 
 
-                //count++;
-                //}
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), "서버연결ㄴㄴ", Toast.LENGTH_SHORT).show();
