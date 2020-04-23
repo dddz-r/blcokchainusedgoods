@@ -22,6 +22,9 @@ android {
         sourceCompatibility = 1.8
         targetCompatibility = 1.8
     }
+    //dataBinding {
+    //    enabled = true
+    //}
 }
 
 dependencies {
@@ -45,10 +48,19 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.firebase:firebase-core:17.0.0'
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
+    implementation 'com.github.yongbeam:Android-Y-PhotoPicker:1.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    compile ('org.web3j:core:4.2.0-android')
+    implementation 'com.github.esafirm.android-image-picker:imagepicker:2.2.0'
+    // for experimental rx picker
+    implementation 'com.github.esafirm.android-image-picker:rximagepicker:2.2.0'
+    // If you have a problem with Glide, please use the same Glide version or simply open an issue
+    implementation 'com.github.bumptech.glide:glide:4.5.0'
+    //implementation 'gun0912.ted:tedimagepicker:1.0.12'
+    //implementation('org.web3j:core:4.2.0-android')
+    //implementation 'com.android.support:design:28.0.0'
+
     //compile 'com.google.code.gson:gson:2.8.2'
     //implementation group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
     //compile('io.socket:socket.io-client:1.0.0') {

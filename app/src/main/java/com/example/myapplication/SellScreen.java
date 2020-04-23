@@ -1,12 +1,14 @@
 package com.example.myapplication;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +20,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PersistableBundle;
 import android.provider.MediaStore;
 import android.text.InputFilter;
 import android.util.Log;
@@ -33,6 +36,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -86,6 +90,7 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 import static android.content.Intent.ACTION_GET_CONTENT;
+import static com.example.myapplication.URLS.URL_UPLOAD;
 
 public class SellScreen extends AppCompatActivity {
 
@@ -111,6 +116,7 @@ public class SellScreen extends AppCompatActivity {
     ImageView imageView4;
     ImageView imageView5;
 
+
     int conuti =0;
 
     /* oItems랑 ob에 같은 인덱스에 같은 레지스터번호 있음 oItems는 ob 축소ver 표기용으로 이용 */
@@ -119,8 +125,9 @@ public class SellScreen extends AppCompatActivity {
     String objectNumber = " ";
     String user_id;
     String category;
+    String register_number;
     User user;
-
+    Uri picUri;
 
     private  ArrayList<Bitmap> bitmapImageList = new ArrayList<>();
     private ArrayList<Integer> imageList;
@@ -133,15 +140,21 @@ public class SellScreen extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.sell_screen);
+
+        askPermission();
+        initRetrofitClient();
         /*유저 아이디 들고오는 코드*/
         final PrefManager prefManager = PrefManager.getInstance(SellScreen.this);
         user = prefManager.getUser();
 
+        //askPermissions();
+        //initRetrofitClient();
         if (prefManager.isLoggedIn()) {
             user_id = String.valueOf(user.getUser_id());
         }
 
-        setContentView(R.layout.sell_screen);
+
 
         imageView1 = findViewById(R.id.imageView1);
         imageView2 = findViewById(R.id.imageView2);
@@ -192,8 +205,6 @@ public class SellScreen extends AppCompatActivity {
         viewPagerAdapter.notifyDataSetChanged();
       */
 
-        /*갤러리 사용자권한? 안드버전따라서 필요할수도있는데 일단쓰면 꺼짐*/
-        //tedPermission();
 
         /*사진 추가 버튼*/
         addItems = (Button)findViewById(R.id.addItems);
@@ -224,12 +235,6 @@ public class SellScreen extends AppCompatActivity {
                 SellScreen.insertObject io = new SellScreen.insertObject(objectNumber, device_name.getText().toString(), device_inform.getText().toString(), device_price.getText().toString(),category, user_id);
                 io.execute();
 
-                for(int i=0; i < bitmapImageList.size() ; i++) {
-
-                    mBitmap = bitmapImageList.get(i);
-                    multipartImageUpload();
-                }
-
                 //SellScreen.insertImage ii = new SellScreen.insertImage(StringImageList);
                 //ii.execute();
                 startActivity(new Intent(SellScreen.this, MainActivity.class));
@@ -245,9 +250,6 @@ public class SellScreen extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(checkBox.isChecked()){
 
-
-
-                    //oItems.add("ffff");
                     /* oItems 랑 ob 에 같은 인덱스에 같은 레지스터번호 있음 */
                     //final CharSequence[] oItems = {"예", "를", "들", "어", "서"};
                     CharSequence [] ooItems = oItems.toArray (new String[oItems.size()]);
@@ -318,138 +320,172 @@ public class SellScreen extends AppCompatActivity {
     /*go앨범 하고나서 실행된다*/
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        String imagePath = null;
+        ArrayList<String> imageListUri = new ArrayList<>();
+        ArrayList<Uri> realUri = new ArrayList<>();
         Bitmap bitmap = null;
-        // Check which request we're responding to
+
+
         if (requestCode == PICK_FROM_ALBUM) {
-           if(data == null){
-               //Toast.makeText(SellScreen.this, "선택된 사진이 없습니다.", Toast.LENGTH_SHORT).show();
-            }else {
-                if(data.getClipData()==null){
+            if (data == null) {
+                //Toast.makeText(SellScreen.this, "선택된 사진이 없습니다.", Toast.LENGTH_SHORT).show();
+            } else {
+                if (data.getClipData() == null) {
                     //Toast.makeText(SellScreen.this, "한장씩 선택.", Toast.LENGTH_SHORT).show();
 
-                        //StringImageList.add(data.getData().toString()); // 스트링 어레이
-                        if(conuti==1){
-                            imageView1.setImageURI(data.getData());
+                    //StringImageList.add(data.getData().toString()); // 스트링 어레이
+                    if (conuti == 1) {
+                        imageView1.setImageURI(data.getData());
 
-                            // 스트링 어레이
-                            Toast.makeText(SellScreen.this, data.getData().toString(),Toast.LENGTH_SHORT).show();
-                            //StringImageList.add(String.valueOf(data.getData()));
+                        // 스트링 어레이
+                        Toast.makeText(SellScreen.this, data.getData().toString(), Toast.LENGTH_SHORT).show();
+                        //StringImageList.add(String.valueOf(data.getData()));
 
-                            // 비트맵 어레이
-                            try {
-                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                                bitmapImageList.add(bitmap);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-
-                            //절대경로
-                            String[] projection = {MediaStore.Images.Media.DATA};
-                            Cursor c = getContentResolver().query(Uri.parse(data.getData().toString()), projection,null,null,null);
-                            //c.moveToNext();
-                            int column_index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                            c.moveToFirst();
-                            //String absolutePath = c.getString(c.getColumnIndex(MediaStore.MediaColumns.DATA));
-                            String absolutePath = c.getString(column_index);
-                            StringImageList.add(absolutePath);
-                            Toast.makeText(SellScreen.this, absolutePath,Toast.LENGTH_SHORT).show();
-                        }
-                        else if(conuti==2){
-                            imageView2.setImageURI(data.getData());
-                            StringImageList.add(String.valueOf(data.getData()));
-                            try {
-                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                                bitmapImageList.add(bitmap);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        else if(conuti==3){
-                            imageView3.setImageURI(data.getData());
-                            StringImageList.add(String.valueOf(data.getData()));
-                            try {
-                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                                bitmapImageList.add(bitmap);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        else if(conuti==4){ imageView4.setImageURI(data.getData());
-                            StringImageList.add(String.valueOf(data.getData()));
-                            try {
-                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                                bitmapImageList.add(bitmap);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }}
-                        else if(conuti==5) {imageView5.setImageURI(data.getData());
-                            StringImageList.add(String.valueOf(data.getData()));
-                            try {
-                                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                                bitmapImageList.add(bitmap);
-                            } catch (FileNotFoundException e) {
-                                e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                            conuti=0;}
-
-
-                }else {
-                    ClipData clipData = data.getClipData();
-
-                    if (clipData.getItemCount()>5){
-                        Toast.makeText(SellScreen.this, "사진은 최대 5장까지 선택 가능합니다.", Toast.LENGTH_SHORT).show();
-                    }else if (clipData.getItemCount() == 1){
-                        //Toast.makeText(SellScreen.this, "한장을 골랏다.", Toast.LENGTH_SHORT).show();
-                        String dataStr = String.valueOf(clipData.getItemAt(0).getUri());
-                        imageView1.setImageURI(clipData.getItemAt(0).getUri());
-                        StringImageList.add(dataStr); // 스트링 어레이
-                       try {
-                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), clipData.getItemAt(0).getUri());
-                            bitmapImageList.add(bitmap); // 비트맵 어레이
-                            Drawable drawable = new BitmapDrawable(bitmap);
-                            //imageList.add(getResources().getDrawable(drawable));
+                        // 비트맵 어레이
+                        try {
+                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                            bitmapImageList.add(bitmap);
                         } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        //imageList.add(dataStr);
-                    }else if (clipData.getItemCount() >1 && clipData.getItemCount() < 6){
+
+
+                        //절대경로
+                       /* String[] projection = {MediaStore.Images.Media.DATA};
+                        Cursor c = getContentResolver().query(Uri.parse(data.getData().toString()), projection, null, null, null);
+                        //c.moveToNext();
+                        int column_index = c.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                        c.moveToFirst();
+                        //String absolutePath = c.getString(c.getColumnIndex(MediaStore.MediaColumns.DATA));
+                        String absolutePath = c.getString(column_index);
+                        StringImageList.add(absolutePath);
+                        Toast.makeText(SellScreen.this, absolutePath, Toast.LENGTH_SHORT).show();*/
+                    } else if (conuti == 2) {
+                        imageView2.setImageURI(data.getData());
+                        StringImageList.add(String.valueOf(data.getData()));
+                        try {
+                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                            bitmapImageList.add(bitmap);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (conuti == 3) {
+                        imageView3.setImageURI(data.getData());
+                        StringImageList.add(String.valueOf(data.getData()));
+                        try {
+                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                            bitmapImageList.add(bitmap);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (conuti == 4) {
+                        imageView4.setImageURI(data.getData());
+                        StringImageList.add(String.valueOf(data.getData()));
+                        try {
+                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                            bitmapImageList.add(bitmap);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (conuti == 5) {
+                        imageView5.setImageURI(data.getData());
+                        StringImageList.add(String.valueOf(data.getData()));
+                        try {
+                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                            bitmapImageList.add(bitmap);
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        conuti = 0;
+                    }
+
+
+                } else {
+                    ClipData clipData = data.getClipData();
+
+                    if (clipData.getItemCount() > 5) {
+                        Toast.makeText(SellScreen.this, "사진은 최대 5장까지 선택 가능합니다.", Toast.LENGTH_SHORT).show();
+                    } else if (clipData.getItemCount() == 1) {
+
+                        Uri tempUri;
+                        tempUri = clipData.getItemAt(0).getUri();
+                        imagePath = tempUri.toString();
+
+                        String dataStr = String.valueOf(clipData.getItemAt(0).getUri());
+                        //imageView1.setImageURI(clipData.getItemAt(0).getUri());
+                        StringImageList.add(dataStr); // 스트링 어레이
+
+                        bitmapImageList.add(BitmapFactory.decodeFile(imagePath));
+                        imageView1.setImageBitmap(bitmapImageList.get(0));
+
+                    } else if (clipData.getItemCount() > 1 && clipData.getItemCount() < 6) {
                         int i;
-                        for(i = 0 ; i < clipData.getItemCount() ; i++){
-                            String dataStr = String.valueOf(clipData.getItemAt(0).getUri());
-                            StringImageList.add(dataStr); // 스트링 어레이
+                        for (i = 0; i < clipData.getItemCount(); i++) {
+
+
+                            Uri tempUri;
+                            tempUri = clipData.getItemAt(i).getUri();
+                            Log.i("temp: ", i + " " + tempUri.toString());
+                            imageListUri.add(tempUri.toString());
+                            realUri.add(tempUri);
+                            //mBitmap.add(i, BitmapFactory.decodeFile(imageListUri.get(i)));
+
                             try {
-                            bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), clipData.getItemAt(i).getUri());
-                            bitmapImageList.add(bitmap);  // 비트맵 어레이
+
+                                bitmapImageList.add(i,BitmapFactory.decodeStream(getContentResolver().openInputStream(realUri.get(i))));
+
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
+
                             //imageList.add(String.valueOf(clipData.getItemAt(i).getUri()));
-                            if(i==0)imageView1.setImageURI(clipData.getItemAt(i).getUri());
-                            else if(i==1)imageView2.setImageURI(clipData.getItemAt(i).getUri());
-                            else if(i==2)imageView3.setImageURI(clipData.getItemAt(i).getUri());
-                            else if(i==3)imageView4.setImageURI(clipData.getItemAt(i).getUri());
-                            else if(i==4)imageView5.setImageURI(clipData.getItemAt(i).getUri());
+
+                            if (i == 0) imageView1.setImageBitmap(bitmapImageList.get(i));
+                            else if (i == 1) imageView2.setImageBitmap(bitmapImageList.get(i));
+                            else if (i == 2) imageView3.setImageBitmap(bitmapImageList.get(i));
+                            else if (i == 3) imageView4.setImageBitmap(bitmapImageList.get(i));
+                            else if (i == 4) imageView5.setImageBitmap(bitmapImageList.get(i));
                         }
-                        i=0;
+                        i = 0;
                     }
                 }
-           }
+            }
         }
 
+    }
+    /*펄미션*/
+    private void askPermission() {
+
+        permissions.add(WRITE_EXTERNAL_STORAGE);
+        permissions.add(READ_EXTERNAL_STORAGE);
+        permissionsToRequest = findUnAskedPermissions(permissions);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            if (permissionsToRequest.size() > 0)
+                requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+
+        }
+
+    }
+
+    private void initRetrofitClient() {
+
+        OkHttpClient client = new OkHttpClient.Builder().build();
+
+        apiService = new Retrofit.Builder().baseUrl(URL_UPLOAD).client(client).build().create(ApiService.class);
     }
 
     private void goToAlbum() {
@@ -466,32 +502,182 @@ public class SellScreen extends AppCompatActivity {
 
     }
 
+    //이미지 촬영 후 Uri데 안쓸거 같지만 일단 놔두자
+    private Uri getCaptureImageOutputUri() {
 
+        Uri outputFileUri = null;
+        File getImage = getExternalFilesDir("");
+        if (getImage != null) {
+            outputFileUri = Uri.fromFile(new File(getImage.getPath(), "profile.png"));
+        }
+        return outputFileUri;
+    }
 
-    private void tedPermission() {
+    /*이미지 부분*/
+    private String getImageFromFilePath(Intent data) {
+        return getPathFromUri(data.getData());
+    }
 
-        PermissionListener permissionListener = new PermissionListener() {
-            @Override
-            public void onPermissionGranted() {
-                // 권한 요청 성공
+    public String getImageFilePath(Intent data) {
+        return getImageFromFilePath(data);
+    }
 
+    private String getPathFromUri(Uri contentUri) {
+        String[] proj = {MediaStore.Audio.Media.DATA};
+        Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle
+            outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+
+        outState.putParcelable("pic_uri", picUri);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        picUri = savedInstanceState.getParcelable("pic_uri");
+    }
+
+    private ArrayList<String> findUnAskedPermissions(ArrayList<String> wanted) {
+
+        ArrayList<String> result = new ArrayList<String>();
+
+        for (String perm : wanted) {
+            if (!hasPermissions(perm)) {
+                result.add(perm);
             }
+        }
 
-            @Override
-            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
-                // 권한 요청 실패
+        return result;
+    }
+
+    private boolean hasPermissions(String permissions) {
+
+        if (canMakeSmores()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                return (checkSelfPermission(permissions) == PackageManager.PERMISSION_GRANTED);
             }
-        };
+        }
+        return true;
+    }
 
-        TedPermission.with(this)
-                .setPermissionListener(permissionListener)
-                .setRationaleMessage(getResources().getString(R.string.permission_2))
-                .setDeniedMessage(getResources().getString(R.string.permission_1))
-                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
-                .check();
+    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
+
+        new AlertDialog.Builder(this)
+                .setMessage(message)
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", null)
+                .create()
+                .show();
+    }
+
+    private boolean canMakeSmores() {
+        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+
+            case ALL_PERMISSIONS_RESULT:
+
+                for (String perms : permissionsToRequest) {
+
+                    if (!hasPermissions(perms)) {
+                        permissionsRejected.add(perms);
+                    }
+                }
+
+                if (permissionsRejected.size() > 0) {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
+                            showMessageOKCancel("These permissions are mandatory for the application. Please allow access",
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            requestPermissions(permissionsRejected.toArray(new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
+                                        }
+                                    });
+                            return;
+                        }
+                    }
+                }
+
+                break;
+        }
 
     }
 
+    //실제 이미지를 업로드 하는 파트
+    //여기서 파일의 이름을 바꿔야함
+    private void multipartImageUpload(int index) {
+
+        try {
+
+            File filesDir = getApplicationContext().getFilesDir();
+            //여기서 png 앞에를 유저 id + 레지스터 넘버 이런식으로 바꿀 것
+            File file = new File(filesDir, user_id+"_" + register_number+"_" + index + ".png");
+//filesDir.getName() +
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            bitmapImageList.get(index).compress(Bitmap.CompressFormat.PNG, 0, bos);
+            byte[] bitmapdata = bos.toByteArray();
+
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+
+
+            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
+            RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload");
+
+            Call<ResponseBody> req = apiService.postImage(body, name);
+
+            req.enqueue(new Callback<ResponseBody>() {
+
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    if (response.code() == 200) {
+                        //textView.setText("uploaded success");
+                        //textView.setTextColor(Color.BLUE);
+                    }
+
+                    Toast.makeText(getApplicationContext(), response.code() + "", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    //textView.setText("uploaded fail");
+                    //textView.setTextColor(Color.RED);
+                    Toast.makeText(getApplicationContext(), "req fail", Toast.LENGTH_SHORT).show();
+                    t.printStackTrace();
+                }
+            });
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    /*여기밑엔 이미지뺀 물건정보*/
     private class selectObjectPop extends AsyncTask<Void, Void, String> { //DB
         private String user_id;
 
@@ -692,12 +878,10 @@ public class SellScreen extends AppCompatActivity {
                 params.put("object_owner", objectOwner);
                 params.put("category",objectCategory);
                 params.put("object_information",objectInformation);
-                Log.d("실행댐", "ㅇㅇㅇㅇ");
 
                 return requestHandler.sendPostRequest(URLS.URL_INSERT_OBJECT, params);
             } catch (Exception e) {
                 e.printStackTrace();
-                Log.d("인저트오브젝트오류", "doInBackground Exception");
             }
             return null;
         }
@@ -710,7 +894,6 @@ public class SellScreen extends AppCompatActivity {
         protected void onPostExecute(String s) {
 
             super.onPostExecute(s);
-            Log.d("인저트오브젝트오류 온포스트", "실행");
 
             try {
 
@@ -721,12 +904,16 @@ public class SellScreen extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 
                 } else if (!obj.getString("code").equals(200)) {
+
                     Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+
                 } else {
 
                     Toast.makeText(getApplicationContext(), "Some error occur", Toast.LENGTH_SHORT).show();
 
                 }
+                SellScreen.getRegisterNumber grn = new SellScreen.getRegisterNumber(user_id);
+                grn.execute();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -735,39 +922,84 @@ public class SellScreen extends AppCompatActivity {
 
     }
 
-    //여기서부터 송이
-    private class insertImageArray extends AsyncTask<Void, Void, String> {
+
+    private class getRegisterNumber extends AsyncTask<Void, Void, String> { //DB
+        private String object_owner;
+
+
+        getRegisterNumber(String object_owner) {
+            this.object_owner = object_owner;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
 
         @Override
         protected String doInBackground(Void... voids) {
+            try {
+
+                Log.d("tag", "--------doInBackground실행");
+
+                RequestHandler requestHandler = new RequestHandler();
+
+                HashMap<String, String> params = new HashMap<>();
+                params.put("object_owner", object_owner);
+
+                return requestHandler.sendPostRequest(URLS.URL_GET_RECENT_REGISTER_NUMBER, params);
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("doInBackground 에러", "doInBackground Exception");
+            }
             return null;
+
         }
 
-    }
-
-    private void askPermissions() {
-
-        permissions.add(WRITE_EXTERNAL_STORAGE);
-        permissions.add(READ_EXTERNAL_STORAGE);
-        //permissionsToRequest = findUnAskedPermissions(permissions);
-
-        //sdk 버전 확인해서 permission 있는지
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            if(permissionsToRequest.size() > 0)
-                requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+        public void onProgressUpdate(Void... values){
+            super.onProgressUpdate();
         }
-    }
 
-    private void initRetrofitClient() {
+        @Override
+        protected void onPostExecute(String s) {
 
-        OkHttpClient client = new OkHttpClient.Builder().build();
-        apiService = new Retrofit.Builder().baseUrl(URLS.URL_STORE_IMAGE).client(client).build().create(ApiService.class);
+            super.onPostExecute(s);
+            Log.d("onPost---@@@@@@@@@@@@@@@getobjectdb실행", "onPost실행");
 
+            try {
+
+                JSONObject object = new JSONObject(s);
+
+                JSONObject json = object.getJSONObject("num");
+
+
+                register_number = json.getString("register_number");
+
+                if (bitmapImageList != null) {
+
+                    for (int i = 0; i < bitmapImageList.size(); i++)
+                        multipartImageUpload(i);
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "Bitmap is null. Try again", Toast.LENGTH_SHORT).show();
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(getApplicationContext(), "서버연결ㄴㄴ", Toast.LENGTH_SHORT).show();
+
+            }
+
+        }
     }
 
     //이거 업로드
-    private void multipartImageUpload() {
+    /*private void multipartImageUpload() {
 
         try{
 
@@ -822,146 +1054,6 @@ public class SellScreen extends AppCompatActivity {
         }catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
-    private class insertImage extends AsyncTask<Void, Void, String> {
-
-        private ArrayList<String> img;
-        //registerNumber는 자동으로 서버에서 매겨짐
-        //오브젝트 넘버도기본적으로 자동으로 증가하게 하지만, 만약 체크박스에 체크가 됐을 경우에는 기존의 오브젝트 넘버로 등록.
-
-        insertImage(ArrayList<String> img) {
-
-            this.img = img;
-        }
-
-        @Override
-        protected void onPreExecute() {
-
-            super.onPreExecute();
-
-        }
-
-        @Override
-        protected String doInBackground(Void... voids) {
-
-
-            try {
-                RequestHandler requestHandler = new RequestHandler();
-
-                HashMap<String, ArrayList<String>> params = new HashMap<>();
-
-                params.put("photo", img);
-
-                return sendPostRequest(URLS.URL_STORE_IMAGE, params);
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.d("인저트오브젝트오류", "doInBackground Exception");
-            }
-            return null;
-        }
-
-        public void onProgressUpdate(Void... values) {
-            super.onProgressUpdate();
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-
-            super.onPostExecute(s);
-            Log.d("인저트오브젝트오류 온포스트", "실행");
-
-            try {
-
-                JSONObject obj = new JSONObject(s);
-
-                if (!obj.getString("code").equals(404)) {
-
-                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
-
-                } else if (!obj.getString("code").equals(200)) {
-                    Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
-                } else {
-
-                    Toast.makeText(getApplicationContext(), "Some error occur", Toast.LENGTH_SHORT).show();
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-        }
-
-    }
-    String sendPostRequest(String requestURL, HashMap<String, ArrayList<String>> postDataParams) {
-
-        URL url;
-        StringBuilder sb = new StringBuilder();
-
-        try{
-
-            url = new URL(requestURL);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setReadTimeout(15000);
-            connection.setConnectTimeout(15000);
-            connection.setRequestMethod("POST");
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-
-            OutputStream os = connection.getOutputStream();
-            BufferedWriter writer = new BufferedWriter(
-                    new OutputStreamWriter(os, "UTF-8"));
-
-            writer.write(getPostDataString(postDataParams));
-
-            Log.d("request 입력", getPostDataString(postDataParams));
-            writer.flush();
-            writer.close();
-            os.close();
-
-            /* */
-
-            int responseCode = connection.getResponseCode();
-
-            Log.d("리스폰스",Integer.toString(responseCode));
-
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                sb = new StringBuilder();
-                String response;
-
-                while ((response = br.readLine()) != null) {
-
-                    sb.append(response);
-                }
-            }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return sb.toString();
-
-    }
-    private String getPostDataString(HashMap<String, ArrayList<String>> params) throws UnsupportedEncodingException {
-
-        StringBuilder result = new StringBuilder();
-        boolean first = true;
-        for (Map.Entry<String,  ArrayList<String>> entry : params.entrySet()) {
-
-            if (first)
-                first = false;
-            else
-                result.append("&");
-            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
-
-            result.append("=");
-            result.append(URLEncoder.encode(String.valueOf(entry.getValue()), "UTF-8"));
-        }
-        return result.toString();
-    }
 }
