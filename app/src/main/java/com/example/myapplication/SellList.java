@@ -295,9 +295,10 @@ public class SellList extends AppCompatActivity {
                 //+이미지도 들고와야함
                 String register_number = json.getString("registerNumber");
                 String object_name = json.getString("objectName");
+                String object_coast = json.getString("objectCost");
                 String object_condition = "거래완료";
 
-                BuyListItem item = new BuyListItem(register_number,object_name, object_condition); //,img
+                BuyListItem item = new BuyListItem(register_number,object_name, object_condition, object_coast); //,img
                 buyItems.add(item);
 
 

@@ -628,7 +628,7 @@ public class SellScreen extends AppCompatActivity {
 
             File filesDir = getApplicationContext().getFilesDir();
             //여기서 png 앞에를 유저 id + 레지스터 넘버 이런식으로 바꿀 것
-            File file = new File(filesDir, user_id+"_" + register_number+"_" + index + ".png");
+            File file = new File(filesDir, register_number+"_" + index + ".png");
 //filesDir.getName() +
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             bitmapImageList.get(index).compress(Bitmap.CompressFormat.PNG, 0, bos);
@@ -998,62 +998,5 @@ public class SellScreen extends AppCompatActivity {
         }
     }
 
-    //이거 업로드
-    /*private void multipartImageUpload() {
-
-        try{
-
-            File filesDir = getApplicationContext().getFilesDir();
-            File file = new File(filesDir, "image" +".png");
-
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            mBitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
-            byte[] bitmapdata = bos.toByteArray();
-
-            FileOutputStream fos = new FileOutputStream(file);
-            fos.write(bitmapdata);
-            fos.flush();
-            fos.close();
-
-            //이거 우리서버에서는 photo 일수도
-            RequestBody reqFile = RequestBody.create(MediaType.parse("image/*"), file);
-            //image
-            //업로드할 바디
-            MultipartBody.Part body = MultipartBody.Part.createFormData("upload", file.getName(), reqFile);
-            Log.d( body+"@@@@@@@@@", body+"@@@@@@@@@@@@");
-
-            //업로드할 이름
-            RequestBody name = RequestBody.create(MediaType.parse("text/plain"), "upload");
-            Log.d( name+"@@@@@@@@@", name+"@@@@@@@@@@@@");
-
-
-            Call<ResponseBody> req = apiService.postImage(body, name);
-
-            req.enqueue(new Callback<ResponseBody>() {
-
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                    if(response.code() ==200) {
-                        //Toast.makeText(SellScreen.this,"uploaded successfully!", Toast.LENGTH_SHORT).show();
-                    }
-
-                    Toast.makeText(SellScreen.this, response.code() + " ", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                    Toast.makeText(SellScreen.this, "request fail", Toast.LENGTH_SHORT).show();
-                    t.printStackTrace();
-
-                }
-            });
-        }catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 
 }

@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,23 +51,28 @@ public class MainGridAdapter extends BaseAdapter {
 
         TextView  grid_item_name = (TextView) convertView.findViewById(R.id. grid_item_name);
         TextView grid_item_price = (TextView) convertView.findViewById(R.id.grid_item_price);
-        //ImageView grid_item_img = (ImageView) convertView.findViewById(R.id.grid_item_img);
+        ImageView grid_item_img = (ImageView) convertView.findViewById(R.id.grid_item_img);
 
         MainGridItem g = GridItem.get(position);
 
         grid_item_name.setText(g.getGrid_item_name());
         grid_item_price.setText(g.getGrid_item_price());
-        //grid_item_img.setImageDrawable(g.getGrid_item_img());
+
+        if(g.getGrid_item_img()==null){
+
+        }else{
+            grid_item_img.setImageBitmap(g.getGrid_item_img());
+        }
 
         return convertView;
     }
 
     //순서 : 그림 이름 가격
-    public void addGridItem(String register_number,String grid_item_name, String grid_item_price){
-        MainGridItem g = new MainGridItem(register_number,grid_item_name,grid_item_price);
+    public void addGridItem(String register_number, String grid_item_name, String grid_item_price, Bitmap grid_item_img){
+        MainGridItem g = new MainGridItem(register_number,grid_item_name,grid_item_price, grid_item_img);
 
         g.setRegister_number(register_number);
-        //g.setGrid_item_img(grid_item_img);
+        g.setGrid_item_img(grid_item_img);
         g.setGrid_item_name(grid_item_name);
         g.setGrid_item_price(grid_item_price);
         //g.setGrid_item_category(grid_item_category);

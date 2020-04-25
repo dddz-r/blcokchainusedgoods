@@ -13,40 +13,89 @@
         android:orientation="horizontal"
         android:layout_margin="5dp">
 
-        <ImageView
+        <!--<ImageView
             android:id="@+id/bli_device_image"
             android:layout_width="110dp"
             android:layout_height="match_parent"
-            app:srcCompat="@drawable/onlydog" />
+            app:srcCompat="@drawable/onlydog" />-->
 
         <LinearLayout
-            android:layout_width="180dp"
+            android:layout_width="260dp"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "등록번호"
+                    android:layout_margin="5dp"
+                    android:textColor="@color/darkGray"/>
+
+                <TextView
+                    android:id="@+id/bli_device_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:textSize="15dp"
+                    android:singleLine="false"
+                    android:textColor="@color/mainTextColor"
+                    android:textStyle="bold"
+                    android:text="상품번호" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text = "상품명"
+                android:textColor="@color/darkGray"/>
             <TextView
                 android:id="@+id/bli_device_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:text="상품명"
                 android:singleLine="false"
-                android:textSize="18dp"
+                android:textSize="15dp"
                 android:textColor="@color/mainTextColor"
                 android:textStyle="bold" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/bli_device_price"
+
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:textSize="15dp"
-                android:singleLine="false"
-                android:textColor="@color/mainTextColor"
-                android:textStyle="bold"
-                android:text="상품번호" />
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text = "가격"
+                    android:layout_margin="5dp"
+                    android:textColor="@color/darkGray"/>
+
+                <TextView
+                    android:id="@+id/bli_coast"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:textSize="15dp"
+                    android:singleLine="false"
+                    android:textColor="@color/mainTextColor"
+                    android:textStyle="bold"
+                    android:text="상품번호" />
+            </LinearLayout>
 
         </LinearLayout>
 

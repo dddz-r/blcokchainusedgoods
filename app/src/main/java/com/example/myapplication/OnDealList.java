@@ -147,7 +147,7 @@ public class OnDealList extends AppCompatActivity {
                     String object_owner = json.getString("object_owner");
                     String register_time = json.getString("register_time");
 
-                    BuyListItem item = new BuyListItem(register_number,object_name, object_state); //,img
+                    BuyListItem item = new BuyListItem(register_number,object_name, object_state,object_price); //,img
                     buyItems.add(item);
 
                     count++;
