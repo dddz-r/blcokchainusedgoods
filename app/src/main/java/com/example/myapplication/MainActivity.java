@@ -1,6 +1,8 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -23,8 +25,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -400,39 +415,22 @@ public class MainActivity extends AppCompatActivity {
                     String register_number = json.getString("register_number");
                     String object_name = json.getString("object_name");
                     String object_price = json.getString("object_cost");
+
+
                     String object_state = json.getString("object_state");
                     String object_number = json.getString("object_number");
                     String object_information = json.getString("object_information");
                     String object_owner = json.getString("object_owner");
                     String register_time = json.getString("register_time");
 
-                    //Toast.makeText(getApplicationContext(), register_number, Toast.LENGTH_SHORT).show();
-                    if(CASE_SEARCH){
-                        if(object_name.equals(search_text)){
-                            MainGridItem inform = new MainGridItem(register_number, object_name, object_price);
-                            gridItems.add(inform);
 
-                            //ObjectBlock informm = new ObjectBlock(registerNumber,object_number,object_name,object_information,object_price, object_owner,register_time);
-                            //objectBlocks.add(informm);
-                        }
-                    }
-                    else {
-                        MainGridItem inform = new MainGridItem(register_number, object_name, object_price);
-                        gridItems.add(inform);
+                    MainActivity.getImg gi = new MainActivity.getImg(register_number, object_name, object_price, "0");
+                    gi.execute();
 
-                        //ObjectBlock informm = new ObjectBlock(registerNumber,object_number,object_name,object_information,object_price, object_owner,register_time);
-                        //objectBlocks.add(informm);
-                    }
-
-                    //count++;
-                    //}
-                    gridViewAdapter.notifyDataSetChanged();
-                    //MainActivity.objectGridBlock ogb = new MainActivity.objectGridBlock(register_number); //카테고리 전체라서 일단 *넣어둠
-                    //ogb.execute();
 
                     count++;
                 }
-                gridViewAdapter.notifyDataSetChanged();
+                //gridViewAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(getApplicationContext(), "서버가 꺼져있어요ㅠ-ㅠ", Toast.LENGTH_SHORT).show();
@@ -442,7 +440,196 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class objectGridBlock extends AsyncTask<Void, Void, String> {
+    private class getImg extends AsyncTask<String, Integer, Bitmap> { //서버
+        private String register_number;
+        String object_name;
+        String object_price;
+        String img_cnt;
+        Bitmap bitmapImg = null;
+
+        getImg(String register_number, String object_name, String object_price, String img_cnt) {
+            this.register_number = register_number;
+            this.object_name = object_name;
+            this.object_price = object_price;
+            this.img_cnt = img_cnt;
+        }
+
+        @Override
+        protected void onPreExecute() {
+
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            /*try {
+                URL myFileUrl = new URL(URLS.URL_GETIMG);
+                HttpURLConnection connection = (HttpURLConnection) myFileUrl.openConnection();
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.connect();*/
+
+
+            HashMap<String, String> params = new HashMap<>();
+            params.put("register_number", register_number);
+            params.put("img_cnt", img_cnt);
+
+
+                /*OutputStream os = connection.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+
+                writer.write(getPostDataString(params));
+
+                Log.d("request 입력", getPostDataString(params));
+                writer.flush();
+                writer.close();
+                os.close();
+
+
+
+                int responseCode = connection.getResponseCode();
+
+                Log.d("이미지리스폰스",Integer.toString(responseCode));
+
+
+
+                InputStream is = ThisSendPostRequest(URLS.URL_GETIMG, params);
+
+
+                //InputStream is = conn.getInputStream();
+
+
+                bitmapImg = BitmapFactory.decodeStream(is);
+            }catch (IOException e) {
+                e.printStackTrace();
+            }*/
+
+            InputStream is = ThisSendPostRequest(URLS.URL_GETIMG, params);
+            //Log.d("is",is.toString());
+
+            bitmapImg = BitmapFactory.decodeStream(is);
+            return bitmapImg;
+
+        }
+
+        protected void onPostExecute (Bitmap img){
+
+            //bitmapImageList.add(img);
+            //bs_test1.setImageBitmap(bitmapImageList.get(0));
+            if(CASE_SEARCH){
+                if(object_name.equals(search_text)){
+                    MainGridItem inform = new MainGridItem(register_number, object_name, object_price,img);
+                    gridItems.add(inform);
+
+                }
+            }
+            else {
+                MainGridItem inform = new MainGridItem(register_number, object_name, object_price, img);
+                gridItems.add(inform);
+
+
+            }
+
+            gridViewAdapter.notifyDataSetChanged();
+
+
+
+
+        }
+
+
+        public void onProgressUpdate(Void... values){
+            super.onProgressUpdate();
+        }
+
+    }
+
+
+    InputStream ThisSendPostRequest(String requestURL, HashMap<String, String> postDataParams) {
+
+        URL url;
+        StringBuilder sb = new StringBuilder();
+        InputStream is = null;
+
+        try{
+            Log.d("url",requestURL);
+            Log.d("params",postDataParams.toString());
+            url = new URL(requestURL);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setReadTimeout(15000);
+            connection.setConnectTimeout(15000);
+            connection.setRequestMethod("POST");
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+            connection.connect();//
+
+            OutputStream os = connection.getOutputStream();
+            BufferedWriter writer = new BufferedWriter(
+                    new OutputStreamWriter(os, "UTF-8"));
+
+            writer.write(getPostDataString(postDataParams));
+
+            Log.d("request 입력", getPostDataString(postDataParams));
+            writer.flush();
+            writer.close();
+            os.close();
+
+
+
+            int responseCode = connection.getResponseCode();
+
+            Log.d("이미지리스폰스",Integer.toString(responseCode));
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                is = connection.getInputStream();
+
+                /*BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                sb = new StringBuilder();
+
+                String response;
+
+                while ((response = br.readLine()) != null) {
+
+                    sb.append(response);
+                }*/
+            }
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            Log.d("asdf", "ThisSendPostRequest: E11111111");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("asdf", "ThisSendPostRequest: E222222222");
+        }
+
+        return is;
+
+    }
+
+    private String getPostDataString(HashMap<String, String> params) throws UnsupportedEncodingException {
+
+        StringBuilder result = new StringBuilder();
+        boolean first = true;
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+
+            if (first)
+                first = false;
+            else
+                result.append("&");
+            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+
+            result.append("=");
+            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+        }
+        Log.d("getPostData", result.toString());
+        return result.toString();
+    }
+
+    /*블록체인*/
+    /*private class objectGridBlock extends AsyncTask<Void, Void, String> {
         private String registerNumber;
 
         objectGridBlock(String registerNumber) {
@@ -538,6 +725,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
-    }
+    }*/
 
 }

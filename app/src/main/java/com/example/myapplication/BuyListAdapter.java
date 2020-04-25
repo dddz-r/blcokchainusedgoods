@@ -48,13 +48,17 @@ public class BuyListAdapter extends BaseAdapter {
         TextView bli_device_name = (TextView) convertView.findViewById(R.id.bli_device_name);
         TextView bli_device_price = (TextView) convertView.findViewById(R.id.bli_device_price);
         TextView bli_device_condition = (TextView) convertView.findViewById(R.id.bli_device_condition);
-        ImageView bli_device_image = (ImageView) convertView.findViewById(R.id.bli_device_image);
+        //TextView bli_time = (TextView) convertView.findViewById(R.id.bli_time);
+        TextView bli_coast = (TextView) convertView.findViewById(R.id.bli_coast);
+        //ImageView bli_device_image = (ImageView) convertView.findViewById(R.id.bli_device_image);
 
         BuyListItem b = BuyItem.get(position);
 
         bli_device_name.setText(b.getDevice_name());
         bli_device_price.setText(b.getRegister_number());
         bli_device_condition.setText(b.getDevice_condition());
+        //bli_time.setText(b.getTime());
+        bli_coast.setText(b.getCoast());
         //bli_device_image.setImageDrawable(b.getD());
 
         return convertView;

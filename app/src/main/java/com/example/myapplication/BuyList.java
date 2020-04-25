@@ -215,9 +215,11 @@ public class BuyList extends AppCompatActivity {
 
                     String transactionNumber = json.getString("transactionNumber");
                     String registerNumber = json.getString("registerNumber");
+                    String sellerId = json.getString("sellerId");
+                    String buyerId = json.getString("buyerId");
                     String completeTime = json.getString("completeTime");
 
-                    BuyList.getObjectBlock gob = new BuyList.getObjectBlock(registerNumber);
+                    BuyList.getObjectBlock gob = new BuyList.getObjectBlock(registerNumber, sellerId, completeTime);
                     gob.execute();
 
 
@@ -235,9 +237,13 @@ public class BuyList extends AppCompatActivity {
 
     private class getObjectBlock extends AsyncTask<Void, Void, String> {//물건 블록체인
         private String registerNumber;
+        String sellerId;
+        String completeTime;
 
-        getObjectBlock(String registerNumber) {
+        getObjectBlock(String registerNumber, String sellerId, String completeTime) {
             this.registerNumber = registerNumber;
+            this.sellerId = sellerId;
+            this.completeTime = completeTime;
         }
 
         @Override
@@ -295,9 +301,12 @@ public class BuyList extends AppCompatActivity {
                     //+이미지도 들고와야함
                     String register_number = json.getString("registerNumber");
                     String object_name = json.getString("objectName");
+                    String object_number = json.getString("originObjectNumber");
+                    String object_coast = json.getString("objectCost");
+                    String object_owner = json.getString("objectOwner");
                     String object_condition = "거래완료";
 
-                    BuyListItem item = new BuyListItem(register_number,object_name, object_condition); //,img
+                    BuyListItem item = new BuyListItem(register_number,object_name, object_condition, object_coast); //,img
                     buyItems.add(item);
 
 
