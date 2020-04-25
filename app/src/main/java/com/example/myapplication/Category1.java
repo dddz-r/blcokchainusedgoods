@@ -80,7 +80,10 @@ public class Category1  extends AppCompatActivity {
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        startActivity(new Intent(Category1.this, BuyScreen.class));
+                        Intent intent = new Intent(Category1.this, BuyScreen.class);
+                        intent.putExtra("register_number",gridItems.get(position).getRegister_number());
+                        //Toast.makeText(getApplicationContext(), gridItems.get(position).getRegister_number(), Toast.LENGTH_SHORT).show();
+                        startActivity(intent);
 
                     }
                 }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -77,10 +78,15 @@ public class SellerInform extends AppCompatActivity {
         si_lets_talk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(prefManager.isLoggedIn()){
                 Intent intent = new Intent(SellerInform.this, TalkRoom.class) ;
                 intent.putExtra("opposit_id", si_seller_id.getText().toString()) ;
                 intent.putExtra("user_id", user_id);
                 startActivity(intent) ;
+                }else{
+                    Toast.makeText(getApplicationContext(), "로그인 해주세요.", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 

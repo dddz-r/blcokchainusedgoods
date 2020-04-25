@@ -435,7 +435,7 @@ public class MainActivity extends AppCompatActivity {
                 gridViewAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "서버가 꺼져있어요^^", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "서버가 꺼져있어요ㅠ-ㅠ", Toast.LENGTH_SHORT).show();
 
             }
 

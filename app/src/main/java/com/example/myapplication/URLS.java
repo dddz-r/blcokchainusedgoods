@@ -3,7 +3,7 @@ package com.example.myapplication;
 public class URLS {
   
 
-    private static final String URL_ROOT = "http://ec2-13-125-109-165.ap-northeast-2.compute.amazonaws.com:5000/api";
+    private static final String URL_ROOT = "http://ec2-54-180-120-154.ap-northeast-2.compute.amazonaws.com:5000/api";
 
     public static final String URL_JOIN = URL_ROOT + "/join";
     public static  final String URL_TALK_SEND = URL_ROOT+"/talk_send";
@@ -34,6 +34,7 @@ public class URLS {
     public static final String URL_GET_ON_DEAL_LIST = URL_ROOT + "/get_object_on_deal_list";
     public static final String URL_GET_RECENT_REGISTER_NUMBER = URL_ROOT + "/get_recent_register_number";
     public static final String URL_STORE_IMAGE = URL_ROOT + "/upload";
-    public static final String URL_UPLOAD = "http://ec2-13-125-109-165.ap-northeast-2.compute.amazonaws.com:5000";
+    public static final String URL_UPLOAD = "http://ec2-54-180-120-154.ap-northeast-2.compute.amazonaws.com:5000";
+    public static final String URL_GETIMG = "http://ec2-54-180-120-154.ap-northeast-2.compute.amazonaws.com:5000/getimg";
 
 }

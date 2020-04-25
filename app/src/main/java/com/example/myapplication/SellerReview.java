@@ -32,11 +32,22 @@ public class SellerReview extends AppCompatActivity {
     Button sr_write_review;
     SellerReviewAdapter sellerReviewAdapter = new SellerReviewAdapter();
     String seller_id;
+    String user_id;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.seller_review);
+
+        final PrefManager prefManager = PrefManager.getInstance(SellerReview.this);
+        user = prefManager.getUser();
+        if(prefManager.isLoggedIn()){
+            user_id=String.valueOf(user.getUser_id());
+
+        }else{ //로그인 안 되어있을 경우
+
+        }
 
         sr_listview = (ListView)findViewById(R.id.sr_listview);
         sr_write_review = (Button)findViewById(R.id.sr_write_review);
@@ -51,9 +62,13 @@ public class SellerReview extends AppCompatActivity {
         sr_write_review.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(prefManager.isLoggedIn()){
                 Intent intent = new Intent(SellerReview.this, WriteReview.class) ;
                 intent.putExtra("seller_id", seller_id) ;
                 startActivity(intent) ;
+                }else{
+                    Toast.makeText(getApplicationContext(), "로그인 해주세요.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
