@@ -32,7 +32,7 @@ public class WriteReview extends AppCompatActivity {
     String commenter_id;
     String comment;
     String score;
-    int scoreInt;
+    String scoreInt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,17 +66,17 @@ public class WriteReview extends AppCompatActivity {
                 score = (String) parent.getItemAtPosition(position);
                 ((TextView)parent.getChildAt(0)).setTextColor(Color.YELLOW);
                 if(score.equals("☆☆☆☆☆")){
-                    scoreInt = 0;
+                    scoreInt = "0";
                 }else if (score.equals("★☆☆☆☆")){
-                    scoreInt = 1;
+                    scoreInt = "1";
                 }else if (score.equals("★★☆☆☆")){
-                    scoreInt = 2;
+                    scoreInt = "2";
                 }else if (score.equals("★★★☆☆")){
-                    scoreInt = 3;
+                    scoreInt = "3";
                 }else if (score.equals("★★★★☆")){
-                    scoreInt = 4;
+                    scoreInt = "4";
                 }else if (score.equals("★★★★★")){
-                    scoreInt = 5;
+                    scoreInt = "5";
                 }
             }
 
@@ -92,7 +92,7 @@ public class WriteReview extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 comment = wr_comment.getText().toString();
-                reviewWrite rw = new reviewWrite(seller_id, commenter_id ,comment, score);
+                reviewWrite rw = new reviewWrite(seller_id, commenter_id ,comment, scoreInt);
                 rw.execute();
 
                 startActivity(new Intent(WriteReview.this, BuyScreen.class));
@@ -105,14 +105,14 @@ public class WriteReview extends AppCompatActivity {
 
     private class reviewWrite extends AsyncTask<Void, Void, String> {
 
-        private String seller_id, commenter_id, comment, score;
+        private String seller_id, commenter_id, comment, scoreInt;
 
-        reviewWrite(String seller_id, String commenter_id, String comment, String score) {
+        reviewWrite(String seller_id, String commenter_id, String comment, String scoreInt) {
 
             this.seller_id = seller_id;
             this.commenter_id = commenter_id;
             this.comment = comment;
-            this.score = score;
+            this.scoreInt = scoreInt;
 
         }
 
@@ -134,7 +134,7 @@ public class WriteReview extends AppCompatActivity {
                 params.put("seller_id", seller_id);
                 params.put("commenter_id", commenter_id);
                 params.put("comment", comment);
-                params.put("score", score);
+                params.put("score", scoreInt);
 
 
                 return requestHandler.sendPostRequest(URLS.URL_REVIEW_WRITE, params);//이거 에러
