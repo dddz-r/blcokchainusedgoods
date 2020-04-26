@@ -94,8 +94,9 @@ public class WriteReview extends AppCompatActivity {
                 comment = wr_comment.getText().toString();
                 reviewWrite rw = new reviewWrite(seller_id, commenter_id ,comment, scoreInt);
                 rw.execute();
-
-                startActivity(new Intent(WriteReview.this, BuyScreen.class));
+                Intent intent = new Intent(WriteReview.this, SellerReview.class) ;
+                intent.putExtra("seller_id", seller_id) ;
+                startActivity(intent) ;
 
             }
         });
