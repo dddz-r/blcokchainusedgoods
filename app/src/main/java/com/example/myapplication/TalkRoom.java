@@ -327,7 +327,6 @@ public class TalkRoom extends AppCompatActivity {
                     count++;
                 }
 
-
                 //finish();
             } catch (JSONException e) {
                 e.printStackTrace();
