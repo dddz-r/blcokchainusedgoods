@@ -143,17 +143,53 @@ public class TalkList extends AppCompatActivity {
 
                 int count = 0;
 
-                while(count < jsonArray.length()){
+                while(count < jsonArray.length()) {
 
                     JSONObject json = jsonArray.getJSONObject(count);
 
                     //반대사람 인텐트로 넘겨야해서 위에서 선언함
+
+                    String get_owner_id = json.getString("owner_id");
                     opposit_id = json.getString("opposit_id");
                     String time = json.getString("time");
 
+
+                    if(arrayList.size()==0){
+                        TalkListItem inform = new TalkListItem(opposit_id, time);
+                        arrayList.add(inform);
+                    }else{
+
+                    if(opposit_id.equals(owner_id)){
+                        opposit_id=get_owner_id;
+                        for(int i =0;i<arrayList.size();i++) {
+                            if(arrayList.get(i).getOpposit_id().equals(opposit_id)){
+                                //Toast.makeText(getApplicationContext(), arrayList.get(i).getOpposit_id(), Toast.LENGTH_SHORT).show();
+                                break;
+                            }
+                            if(i==arrayList.size()-1){
+                                //Toast.makeText(getApplicationContext(), "중복노!", Toast.LENGTH_SHORT).show();
+                                    TalkListItem inform = new TalkListItem(opposit_id, time);
+                                    arrayList.add(inform);
+                            }
+                        }
+
+
+                    }else{
+                        for(int i =0;i<arrayList.size();i++) {
+                            if (arrayList.get(i).getOpposit_id().equals(opposit_id)) {
+                                //Toast.makeText(getApplicationContext(), arrayList.get(i).getOpposit_id() + "왓와오앗", Toast.LENGTH_SHORT).show();
+                                break;
+                            }
+                            if (i == arrayList.size() - 1) {
+                                //Toast.makeText(getApplicationContext(), "중복노!와와앙", Toast.LENGTH_SHORT).show();
+                                TalkListItem inform = new TalkListItem(opposit_id, time);
+                                arrayList.add(inform);
+                            }
+                        }
+
+                    }
+                    }
                     //ItemAdapter.addTalkListItem(opposit_id, time);
-                    TalkListItem inform = new TalkListItem(opposit_id, time);
-                    arrayList.add(inform);
 
 
                     count++;
