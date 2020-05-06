@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,6 +40,7 @@ public class TalkRoom extends AppCompatActivity {
     private EditText talk_edit;
     private Button talk_send_btn;
     private TextView tr_opposit_id;
+    private LinearLayout talkbackground;
 
 
     String owner_id;
@@ -76,8 +78,8 @@ public class TalkRoom extends AppCompatActivity {
         //talkAdapter.addOppositTalkItem("나", "상대방", "안녕하신가~", "12:01");
         //talkAdapter.addMyTalkItem("나", "상대방", "반갑군~", "12:53");
 
-
-        /*talk_contents.setOnTouchListener(new View.OnTouchListener() {
+        talkbackground= findViewById(R.id.talkbackground);
+        talkbackground.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -102,7 +104,7 @@ public class TalkRoom extends AppCompatActivity {
                 }
                 return true;
             }
-        });*/
+        });
 
         talk_contents.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {

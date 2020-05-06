@@ -17,10 +17,17 @@
 
     </TextView>
 
+    <LinearLayout
+        android:id="@+id/talkbackground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="10"
+        android:background="@color/brightGray">
     <ListView
         android:id="@+id/talk_contents"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
+        android:layout_height="wrap_content"
         android:dividerHeight="0dp"
         android:divider="@color/white"
         android:transcriptMode="alwaysScroll"
@@ -28,10 +35,12 @@
 
     </ListView>
 
+    </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="55dp"
     android:layout_margin="5dp"
+    android:layout_weight="1"
     android:orientation="horizontal"
     android:background="@drawable/buttonborder_maintextcolor">
 
