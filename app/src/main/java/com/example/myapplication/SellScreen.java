@@ -828,14 +828,33 @@ public class SellScreen extends AppCompatActivity {
                     String object_name = json.getString("objectName");
                     String object_cost = json.getString("objectCost");
                     String object_owner = json.getString("objectOwner");
-                    String register_time = json.getString("registerTime");
+                    String time = json.getString("registerTime");
                     String object_information = json.getString("objectInformation");
                     //String object_state = json.getString("objectState");
                     //String object_category = json.getString("category");
 
-                    ObjectBlock inform = new ObjectBlock(registerNumber,object_number,object_name,object_information,object_cost,object_owner,register_time);
+                String year = time.substring(11,15);
+                String month = time.substring(4,7);
+                String day = time.substring(8,10);
+                String hour = time.substring(16,18);
+                int hours = Integer.parseInt(hour);
+                hours = hours + 9;
+
+                if(hours >= 24) {
+                    hours = hours - 24;
+                }
+
+                hour = Integer.toString(hours);
+                String minutes = time.substring(19,21);
+
+                String newTime =  month+ " " + day + " " + year +"." + hour + ":" + minutes;
+
+
+
+
+                    ObjectBlock inform = new ObjectBlock(registerNumber,object_number,object_name,object_information,object_cost,object_owner,newTime);
                     ob.add(inform);
-                    oItems.add(registerNumber+" : "+object_number+" ("+register_time+") ");
+                    oItems.add("등록번호 : " + registerNumber+" ,물품명 : "+object_name+" (거래날짜 : "+newTime+") ");
                     //count++;
                 //}
                 //finish();
