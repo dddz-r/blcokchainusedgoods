@@ -144,6 +144,7 @@ public class SellScreen extends AppCompatActivity {
         startActivity(new Intent(SellScreen.this, MainActivity.class));
         finish();
     }
+    ProgressDialog pd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +163,7 @@ public class SellScreen extends AppCompatActivity {
             user_id = String.valueOf(user.getUser_id());
         }
 
-
+        pd = new ProgressDialog(SellScreen.this);
 
         imageView1 = findViewById(R.id.imageView1);
         imageView2 = findViewById(R.id.imageView2);
@@ -768,13 +769,16 @@ public class SellScreen extends AppCompatActivity {
     private class selectObjectBlock extends AsyncTask<Void, Void, String> { //블록체인->db
         private String registerNumber;
 
+
         selectObjectBlock(String registerNumber) {
             this.registerNumber = registerNumber;
         }
 
         @Override
         protected void onPreExecute() {
-
+            pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            pd.setMessage("잠시만 기다려주세요.");
+            pd.show();
             super.onPreExecute();
 
         }
@@ -807,7 +811,7 @@ public class SellScreen extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-
+            pd.dismiss();
             super.onPostExecute(s);
             Log.d("onPost실행", "onPost실행");
 
