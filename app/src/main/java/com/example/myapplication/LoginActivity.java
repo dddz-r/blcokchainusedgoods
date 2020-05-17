@@ -152,15 +152,12 @@ public class LoginActivity extends AppCompatActivity {
 
                     if(obj.getString("code").equals("204")) { //정보 불일치
 
-
-                        Toast.makeText(getApplicationContext(),  obj.getString("message"), Toast.LENGTH_SHORT).show();
-
+                        //Toast.makeText(getApplicationContext(),  obj.getString("message"), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "로그인 정보가 일치하지 않습니다" , Toast.LENGTH_SHORT).show();
 
                     } else { //정보 일치
 
-
-                        Toast.makeText(getApplicationContext(),  obj.getString("message"), Toast.LENGTH_SHORT).show();
-
+                       // Toast.makeText(getApplicationContext(),  "로그인성공", Toast.LENGTH_SHORT).show();
 
                         JSONObject userJson = obj.getJSONObject("user");
 

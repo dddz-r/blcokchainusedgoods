@@ -56,7 +56,7 @@ public class TalkList extends AppCompatActivity {
 
 
         }else{ //로그인 안 되어있을 경우
-            Toast.makeText(TalkList.this, "로그인 하세요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TalkList.this, "로그인 하세요.", Toast.LENGTH_SHORT).show();
         }
 
 

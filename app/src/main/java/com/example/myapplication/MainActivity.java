@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(MainActivity.this, "로그아웃 되었습니다", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
                     login_btn.setText("로그인");
                     prefManager.logout();
                     finish();
@@ -270,7 +270,7 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "로그인해주세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "로그인 해주세요.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
                     finish();
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "로그인해주세요", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "로그인 해주세요.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -460,7 +460,7 @@ public class MainActivity extends AppCompatActivity {
                 //gridViewAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "서버가 꺼져있어요ㅠ-ㅠ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "서버가 비활성화된 상태입니다.", Toast.LENGTH_SHORT).show();
 
             }
 
