@@ -36,10 +36,10 @@ public class TalkListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Context c = parent.getContext();
 
-        if(convertView == null){
+        //if(convertView == null){
             LayoutInflater li = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = li.inflate(R.layout.talk_list_item,parent,false);
-        }
+        //}
 
         TextView tli_opposit_id = (TextView) convertView.findViewById(R.id.tli_opposit_id);
         TextView tli_date = (TextView) convertView.findViewById(R.id.tli_date);

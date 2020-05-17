@@ -61,17 +61,21 @@ public class TalkAdapter extends BaseAdapter {
 
         int type = getItemViewType(position);
         Context c = parent.getContext();
+        //PersonViewHolder viewHolder;
 
-        if(convertView == null){
+        //if(convertView == null){
 
             LayoutInflater li = (LayoutInflater)c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             TalkItem t = talkItems.get(position);
 
+            TextView opposit_id;
+            TextView time;
+            TextView contents;
             switch (type) {
                 case TYPE_ITEM:
                     convertView = li.inflate(R.layout.sent_talk, parent, false);
-                    TextView contents = (TextView) convertView.findViewById(R.id.sent_talk_contents);
-                    TextView time = (TextView) convertView.findViewById(R.id.sent_talk_time);
+                    contents = (TextView) convertView.findViewById(R.id.sent_talk_contents);
+                    time = (TextView) convertView.findViewById(R.id.sent_talk_time);
 
                     contents.setText(t.getContents());
                     time.setText(t.getTime());
@@ -79,7 +83,7 @@ public class TalkAdapter extends BaseAdapter {
 
                 case TYPE_SEPARATOR:
                     convertView = li.inflate(R.layout.received_talk, parent, false);
-                    TextView opposit_id = (TextView) convertView.findViewById(R.id.received_talk_opposit);
+                    opposit_id = (TextView) convertView.findViewById(R.id.received_talk_opposit);
                     contents = (TextView) convertView.findViewById(R.id.received_talk_contents);
                     time = (TextView) convertView.findViewById(R.id.received_talk_time);
 
@@ -90,13 +94,21 @@ public class TalkAdapter extends BaseAdapter {
             }
 
 
-    }
+    //}else{
+            //viewHolder = (PersonViewHolder) convertView.getTag();
+        //}
         return convertView;
 
 
     }
 
-
+/*    public class PersonViewHolder
+    {
+        public TextView contents;
+        public TextView time;
+        public TextView opposit_id;
+    }
+*/
     public void addMyTalkItem(String owner_id, String opposit_id, String contents, String time){
 
         TalkItem t = new TalkItem(owner_id,opposit_id,contents,time);

@@ -6,6 +6,7 @@
 
 
     <TextView
+        android:id="@+id/on_deal_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="거래중인 상품들"

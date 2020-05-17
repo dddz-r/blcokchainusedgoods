@@ -33,6 +33,14 @@ public class TalkList extends AppCompatActivity {
     ArrayList<TalkListItem> arrayList;
     TalkListAdapter ItemAdapter;// = new TalkListAdapter(arrayList);
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        startActivity(new Intent(TalkList.this, MainActivity.class));
+        finish();
+    }
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.talk_list);
@@ -73,6 +81,7 @@ public class TalkList extends AppCompatActivity {
                         Intent intent = new Intent(TalkList.this, TalkRoom.class);
                         intent.putExtra("opposit_id",arrayList.get(position).getOpposit_id());
                         startActivity(intent);
+                        finish();
                     }
                 }
         );
@@ -160,15 +169,15 @@ public class TalkList extends AppCompatActivity {
                     }else{
 
                     if(opposit_id.equals(owner_id)){
-                        opposit_id=get_owner_id;
+                        //opposit_id=get_owner_id;
                         for(int i =0;i<arrayList.size();i++) {
-                            if(arrayList.get(i).getOpposit_id().equals(opposit_id)){
+                            if(arrayList.get(i).getOpposit_id().equals(get_owner_id)){
                                 //Toast.makeText(getApplicationContext(), arrayList.get(i).getOpposit_id(), Toast.LENGTH_SHORT).show();
                                 break;
                             }
                             if(i==arrayList.size()-1){
                                 //Toast.makeText(getApplicationContext(), "중복노!", Toast.LENGTH_SHORT).show();
-                                    TalkListItem inform = new TalkListItem(opposit_id, time);
+                                    TalkListItem inform = new TalkListItem(get_owner_id, time);
                                     arrayList.add(inform);
                             }
                         }

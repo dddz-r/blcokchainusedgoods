@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class OnDealList extends AppCompatActivity { //판매
+public class OnDealList2 extends AppCompatActivity { //구매
 
     private ListView odl_listView;
 
@@ -41,7 +41,7 @@ public class OnDealList extends AppCompatActivity { //판매
     @Override
     public void onBackPressed() {
         //super.onBackPressed();
-        startActivity(new Intent(OnDealList.this, MainActivity.class));
+        startActivity(new Intent(OnDealList2.this, MainActivity.class));
         finish();
     }
 
@@ -55,7 +55,7 @@ public class OnDealList extends AppCompatActivity { //판매
         user_id = getIntent().getStringExtra("user_id");
 
         on_deal_text = findViewById(R.id.on_deal_text);
-        on_deal_text.setText("판매중인 상품");
+        on_deal_text.setText("구매중인 상품");
 
         buyItems = new ArrayList<>();
         buyListAdapter = new BuyListAdapter(buyItems);
@@ -63,7 +63,7 @@ public class OnDealList extends AppCompatActivity { //판매
         odl_listView = (ListView)findViewById(R.id.odl_listView);
         odl_listView.setAdapter(buyListAdapter);
 
-        OnDealList.getOnDealDB getOnDealDB = new OnDealList.getOnDealDB(user_id);
+        OnDealList2.getOnDealDB getOnDealDB = new OnDealList2.getOnDealDB(user_id);
         getOnDealDB.execute();
 
 
@@ -83,7 +83,7 @@ public class OnDealList extends AppCompatActivity { //판매
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String buy_data = String.valueOf(parent.getItemAtPosition(position));
-                        Intent intent = new Intent(OnDealList.this, BuyScreen.class) ;
+                        Intent intent = new Intent(OnDealList2.this, BuyScreen.class) ;
                         intent.putExtra("register_number",buyItems.get(position).getRegister_number());
                         startActivity(intent);
                     }
@@ -116,7 +116,7 @@ public class OnDealList extends AppCompatActivity { //판매
                 HashMap<String, String> params = new HashMap<>();
                 params.put("user_id", user_id);
 
-                return requestHandler.sendPostRequest(URLS.URL_GET_ON_DEAL_LIST, params);
+                return requestHandler.sendPostRequest(URLS.URL_GET_ON_DEAL_LIST2, params);
 
 
             } catch (Exception e) {

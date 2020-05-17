@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_weight="10"
-        android:background="@color/brightGray">
+        android:background= "@color/brightGray">
     <ListView
         android:id="@+id/talk_contents"
         android:layout_width="match_parent"

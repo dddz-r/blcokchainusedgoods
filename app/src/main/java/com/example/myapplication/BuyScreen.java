@@ -161,6 +161,7 @@ public class BuyScreen extends AppCompatActivity {
     public void onBackPressed() {
         //super.onBackPressed();
         startActivity(new Intent(BuyScreen.this, MainActivity.class));
+        finish();
     }
 
     @Override
@@ -680,7 +681,7 @@ public class BuyScreen extends AppCompatActivity {
                 //finish();
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -747,7 +748,7 @@ public class BuyScreen extends AppCompatActivity {
                 //finish();
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
 
             }
 
