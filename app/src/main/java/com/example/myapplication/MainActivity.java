@@ -256,7 +256,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("register_number",gridItems.get(position).getRegister_number());
                         //Toast.makeText(getApplicationContext(), gridItems.get(position).getRegister_number(), Toast.LENGTH_SHORT).show();
                         startActivity(intent);
-
+                        finish();
                     }
                 }
         );
