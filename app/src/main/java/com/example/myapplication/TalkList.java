@@ -56,7 +56,7 @@ public class TalkList extends AppCompatActivity {
 
 
         }else{ //로그인 안 되어있을 경우
-            Toast.makeText(TalkList.this, "로그인 하세요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(TalkList.this, "로그인 하세요.", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -162,8 +162,24 @@ public class TalkList extends AppCompatActivity {
                     opposit_id = json.getString("opposit_id");
                     String time = json.getString("time");
 
+                    String year = time.substring(0,4);
+                    String month = time.substring(5,7);
+                    String day = time.substring(8,10);
+                    String hour = time.substring(11,13);
+                    int hours = Integer.parseInt(hour);
+                    hours = hours + 9;
+
+                    if(hours >= 24) {
+                        hours = hours - 24;
+                    }
+
+                    hour = Integer.toString(hours);
+                    String minutes = time.substring(14,16);
+
+                    String newTime = year + "-" + month + "-" + day + "." + hour + ":" + minutes;
+
                     if(arrayList.size()==0){
-                        TalkListItem inform = new TalkListItem(opposit_id, time);
+                        TalkListItem inform = new TalkListItem(opposit_id, newTime);
                         arrayList.add(inform);
                     }else{
 
@@ -176,7 +192,7 @@ public class TalkList extends AppCompatActivity {
                             }
                             if(i==arrayList.size()-1){
                                 //Toast.makeText(getApplicationContext(), "중복노!", Toast.LENGTH_SHORT).show();
-                                    TalkListItem inform = new TalkListItem(get_owner_id, time);
+                                    TalkListItem inform = new TalkListItem(get_owner_id, newTime);
                                     arrayList.add(inform);
                             }
                         }
@@ -190,7 +206,7 @@ public class TalkList extends AppCompatActivity {
                             }
                             if (i == arrayList.size() - 1) {
                                 //Toast.makeText(getApplicationContext(), "중복노!와와앙", Toast.LENGTH_SHORT).show();
-                                TalkListItem inform = new TalkListItem(opposit_id, time);
+                                TalkListItem inform = new TalkListItem(opposit_id, newTime);
                                 arrayList.add(inform);
                             }
                         }
@@ -206,7 +222,7 @@ public class TalkList extends AppCompatActivity {
                 ItemAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "서버가 꺼져있어요^^", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "서버가 꺼져있어요^^", Toast.LENGTH_SHORT).show();
 
             }
 

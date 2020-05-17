@@ -665,7 +665,7 @@ public class SellScreen extends AppCompatActivity {
                         //textView.setTextColor(Color.BLUE);
                     }
 
-                    Toast.makeText(getApplicationContext(), response.code() + "", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getApplicationContext(), response.code() + "", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -673,7 +673,7 @@ public class SellScreen extends AppCompatActivity {
 
                     //textView.setText("uploaded fail");
                     //textView.setTextColor(Color.RED);
-                    Toast.makeText(getApplicationContext(), "req fail", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "요청에 실패하였습니다.", Toast.LENGTH_SHORT).show();
                     t.printStackTrace();
                 }
             });
