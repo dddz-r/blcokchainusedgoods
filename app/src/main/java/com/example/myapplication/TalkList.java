@@ -162,7 +162,6 @@ public class TalkList extends AppCompatActivity {
                     opposit_id = json.getString("opposit_id");
                     String time = json.getString("time");
 
-
                     if(arrayList.size()==0){
                         TalkListItem inform = new TalkListItem(opposit_id, time);
                         arrayList.add(inform);

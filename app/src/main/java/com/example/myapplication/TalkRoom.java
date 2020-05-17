@@ -347,13 +347,30 @@ public class TalkRoom extends AppCompatActivity {
                     String owner_id = json.getString("owner_id");
                     String opposit_id = json.getString("opposit_id");
                     String time = json.getString("time");
+
+                    String year = time.substring(0,4);
+                    String month = time.substring(5,7);
+                    String day = time.substring(8,10);
+                    String hour = time.substring(11,13);
+                    int hours = Integer.parseInt(hour);
+                    hours = hours + 9;
+
+                    if(hours >= 24) {
+                        hours = hours - 24;
+                    }
+
+                    hour = Integer.toString(hours);
+                    String minutes = time.substring(14,16);
+
+                    String newTime = year + "-" + month + "-" + day + "." + hour + ":" + minutes;
+
                     String contents = json.getString("contents");
 
                     if (owner_id.equals(this.owner_id)) {
-                        talkAdapter.addMyTalkItem(owner_id,opposit_id,contents,time);
+                        talkAdapter.addMyTalkItem(owner_id,opposit_id,contents,newTime);
 
                     } else{
-                        talkAdapter.addOppositTalkItem(opposit_id,owner_id,contents,time);
+                        talkAdapter.addOppositTalkItem(opposit_id,owner_id,contents,newTime);
                     }
                     count++;
                 }
