@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -99,14 +100,16 @@ public class TalkList extends AppCompatActivity {
 
     private class talklist extends AsyncTask<Void, Void, String> {
         private String owner_id;
-
+        ProgressDialog pd = new ProgressDialog(TalkList.this);
         talklist(String owner_id) {
             this.owner_id = owner_id;
         }
 
         @Override
         protected void onPreExecute() {
-
+            pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            pd.setMessage("잠시만 기다려주세요.");
+            pd.show();
             super.onPreExecute();
 
         }
@@ -139,7 +142,7 @@ public class TalkList extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-
+            pd.dismiss();
             super.onPostExecute(s);
             Log.d("onPost실행", "onPost실행");
 

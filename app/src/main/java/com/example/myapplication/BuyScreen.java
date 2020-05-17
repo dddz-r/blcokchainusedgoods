@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -42,6 +43,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class BuyScreen extends AppCompatActivity {
+
+    private Handler mHandler;
+    ProgressDialog progressDialog;
 
     Button bs_device_inform_btn;
     Button bs_seller_inform_btn;
@@ -164,6 +168,8 @@ public class BuyScreen extends AppCompatActivity {
         finish();
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -174,6 +180,39 @@ public class BuyScreen extends AppCompatActivity {
         bs_test3 = findViewById(R.id.bs_test3);
         bs_test4 = findViewById(R.id.bs_test4);
         bs_test5 = findViewById(R.id.bs_test5);
+
+        mHandler = new Handler();
+
+/*        runOnUiThread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                progressDialog = ProgressDialog.show(BuyScreen.this,"",
+                        "잠시만 기다려 주세요.",true);
+                mHandler.postDelayed( new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            if (progressDialog!=null&&progressDialog.isShowing()){
+                                progressDialog.dismiss();
+                            }
+                        }
+                        catch ( Exception e )
+                        {
+                            e.printStackTrace();
+                        }
+                    }
+                }, 3000);
+            }
+        } );
+*/
+
+
+
 
         /*물건정보 들고오기*/
         register_number = getIntent().getStringExtra("register_number");
@@ -611,6 +650,7 @@ public class BuyScreen extends AppCompatActivity {
     private class getObjectPopup extends AsyncTask<Void, Void, String> { //DB
         private String object_number;
 
+
         getObjectPopup(String object_number) {
             this.object_number = object_number;
         }
@@ -619,7 +659,6 @@ public class BuyScreen extends AppCompatActivity {
         protected void onPreExecute() {
 
             super.onPreExecute();
-
         }
 
         @Override
@@ -650,7 +689,6 @@ public class BuyScreen extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-
             super.onPostExecute(s);
             Log.d("onPost실행", "onPost실행");
 
@@ -758,14 +796,16 @@ public class BuyScreen extends AppCompatActivity {
     private class getObject extends AsyncTask<Void, Void, String> { //블록체인
         private String registerNumber;
 
-
+        ProgressDialog pd = new ProgressDialog(BuyScreen.this);
         getObject(String registerNumber) {
             this.registerNumber = registerNumber;
         }
 
         @Override
         protected void onPreExecute() {
-
+            pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            pd.setMessage("잠시만 기다려주세요.");
+            pd.show();
             super.onPreExecute();
 
         }
@@ -799,7 +839,7 @@ public class BuyScreen extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-
+            pd.dismiss();
             super.onPostExecute(s);
             Log.d("onPost실행", "onPost실행");
 
