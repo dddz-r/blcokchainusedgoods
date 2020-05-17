@@ -656,7 +656,7 @@ public class SellScreen extends AppCompatActivity {
                         //textView.setTextColor(Color.BLUE);
                     }
 
-                    Toast.makeText(getApplicationContext(), response.code() + "", Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getApplicationContext(), response.code() + "", Toast.LENGTH_SHORT).show();
                 }
 
                 @Override
@@ -664,7 +664,7 @@ public class SellScreen extends AppCompatActivity {
 
                     //textView.setText("uploaded fail");
                     //textView.setTextColor(Color.RED);
-                    Toast.makeText(getApplicationContext(), "req fail", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "요청에 실패하였습니다.", Toast.LENGTH_SHORT).show();
                     t.printStackTrace();
                 }
             });
@@ -905,7 +905,8 @@ public class SellScreen extends AppCompatActivity {
 
                 } else if (!obj.getString("code").equals(200)) {
 
-                    Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "상품등록에 성공하였습니다.", Toast.LENGTH_SHORT).show();
 
                 } else {
 
@@ -991,7 +992,7 @@ public class SellScreen extends AppCompatActivity {
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "서버연결ㄴㄴ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "서버가 연결되어있지 않습니다.", Toast.LENGTH_SHORT).show();
 
             }
 

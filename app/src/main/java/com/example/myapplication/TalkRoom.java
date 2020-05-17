@@ -12,8 +12,11 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,6 +40,7 @@ public class TalkRoom extends AppCompatActivity {
     private EditText talk_edit;
     private Button talk_send_btn;
     private TextView tr_opposit_id;
+    private LinearLayout talkbackground;
 
 
     String owner_id;
@@ -49,6 +53,9 @@ public class TalkRoom extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.talk_room);
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
 
         /*유저 아이디*/
         final PrefManager prefManager = PrefManager.getInstance(TalkRoom.this);
@@ -70,12 +77,9 @@ public class TalkRoom extends AppCompatActivity {
         /*테스트*/
         //talkAdapter.addOppositTalkItem("나", "상대방", "안녕하신가~", "12:01");
         //talkAdapter.addMyTalkItem("나", "상대방", "반갑군~", "12:53");
-         //어댑터 새로고침--------------->위치 옮겨야할듯
-        //talkAdapter.notifyDataSetChanged();
-        /*톡 불러오기*/
-        //talkReceiveExecute();
 
-        talk_contents.setOnTouchListener(new View.OnTouchListener() {
+        talkbackground= findViewById(R.id.talkbackground);
+        talkbackground.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
@@ -101,6 +105,20 @@ public class TalkRoom extends AppCompatActivity {
                 return true;
             }
         });
+
+        talk_contents.setOnItemClickListener(
+                new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        talkAdapter = new TalkAdapter(); //이거 새로해서 리스트뷰 초기화
+                        talk_contents.setAdapter(talkAdapter);
+                        //talk_contents.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+                        talkReceiveExecute();
+
+                    }
+                }
+        );
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -122,8 +140,8 @@ public class TalkRoom extends AppCompatActivity {
                 } else {
                     talkAdapter = new TalkAdapter(); //이거 새로해서 리스트뷰 초기화
                     talk_contents.setAdapter(talkAdapter);
+                    //talk_contents.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
                     talkSendExecute();
-                    //sendtalk();
                 }
 
             }
@@ -135,9 +153,7 @@ public class TalkRoom extends AppCompatActivity {
             @Override
 
             public void onChanged() {
-
                 super.onChanged();
-
                 talk_contents.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
             }
 
@@ -161,7 +177,6 @@ public class TalkRoom extends AppCompatActivity {
         Date date = new Date(now);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
         String time = dateFormat.format(date);*/
-
         TalkRoom.talkSend ts = new TalkRoom.talkSend(owner_id, opposit_id, talk_edit.getText().toString());
         ts.execute();
         talk_edit.setText("");
@@ -311,7 +326,6 @@ public class TalkRoom extends AppCompatActivity {
                     }
                     count++;
                 }
-
 
                 //finish();
             } catch (JSONException e) {
