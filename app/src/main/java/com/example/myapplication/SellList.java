@@ -37,6 +37,13 @@ public class SellList extends AppCompatActivity {
     Drawable image;
 
     @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        startActivity(new Intent(SellList.this, MainActivity.class));
+        finish();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sell_list);

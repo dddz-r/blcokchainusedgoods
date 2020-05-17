@@ -101,10 +101,23 @@
             android:layout_marginRight="5dp">
         </Button>-->
         <Button
-            android:id="@+id/on_deal_product"
+            android:id="@+id/on_buy_product"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="거래중인 상품"
+            android:text="구매중인 상품"
+            android:textSize="15dp"
+            android:gravity="left"
+            android:background="@color/white"
+            android:textColor="@color/mainTextColor"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:stateListAnimator="@null">
+        </Button>
+        <Button
+            android:id="@+id/on_sell_product"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="판매중인 상품"
             android:textSize="15dp"
             android:gravity="left"
             android:background="@color/white"
@@ -247,7 +260,7 @@
             android:stateListAnimator="@null">
         </Button>
 
-        <Button
+ <!--       <Button
             android:id="@+id/category8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -259,7 +272,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:stateListAnimator="@null">
-        </Button>
+        </Button>-->
 
     </LinearLayout>
     </ScrollView>

@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
     TextView main2_user_id;
     Button bought_product;
     Button sold_product;
-    Button on_deal_product;
+    Button on_sell_product;
+    Button on_buy_product;
 
     Button category1;
     Button category2;
@@ -141,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                    finish();
                 }
             });
         }
@@ -167,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,Category1.class));
+                finish();
             }
         });
         category2=(Button)findViewById(R.id.category2);
@@ -174,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,Category2.class));
+                finish();
             }
         });
         category3=(Button)findViewById(R.id.category3);
@@ -181,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,Category3.class));
+                finish();
             }
         });
         category4=(Button)findViewById(R.id.category4);
@@ -188,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,Category4.class));
+                finish();
             }
         });
         category5=(Button)findViewById(R.id.category5);
@@ -195,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,Category5.class));
+                finish();
             }
         });
         category6=(Button)findViewById(R.id.category6);
@@ -202,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,Category6.class));
+                finish();
             }
         });
         category7=(Button)findViewById(R.id.category7);
@@ -209,16 +217,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this,Category7.class));
+                finish();
             }
         });
 
-        category8 = (Button)findViewById(R.id.category8);
+       /* category8 = (Button)findViewById(R.id.category8);
         category8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, TestUploadImage.class));
             }
-        });
+        });*/
 
 
         /* 그리드 뷰 (상품목록) */
@@ -257,7 +266,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(prefManager.isLoggedIn()){
-                startActivity(new Intent(MainActivity.this, TalkList.class));}
+                    startActivity(new Intent(MainActivity.this, TalkList.class));
+                    finish();
+                }
                 else{
                     Toast.makeText(getApplicationContext(), "로그인해주세요", Toast.LENGTH_SHORT).show();
                 }
@@ -269,7 +280,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(prefManager.isLoggedIn()){
-                    startActivity(new Intent(MainActivity.this, SellScreen.class));}
+                    startActivity(new Intent(MainActivity.this, SellScreen.class));
+                    finish();
+                }
                 else{
                     Toast.makeText(getApplicationContext(), "로그인해주세요", Toast.LENGTH_SHORT).show();
                 }
@@ -286,6 +299,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, BuyList.class) ;
                 intent.putExtra("user_id", String.valueOf(user.getUser_id())) ;
                 startActivity(intent) ;
+                finish();
             }
         });
 
@@ -295,16 +309,29 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, SellList.class) ;
                 intent.putExtra("user_id", String.valueOf(user.getUser_id())) ;
                 startActivity(intent) ;
+                finish();
             }
         });
 
-        on_deal_product = (Button)findViewById(R.id.on_deal_product);
-        on_deal_product.setOnClickListener(new View.OnClickListener() {
+        on_sell_product = (Button)findViewById(R.id.on_sell_product);
+        on_sell_product.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, OnDealList.class) ;
                 intent.putExtra("user_id", String.valueOf(user.getUser_id())) ;
                 startActivity(intent) ;
+                finish();
+            }
+        });
+
+        on_buy_product = (Button)findViewById(R.id.on_buy_product);
+        on_buy_product.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, OnDealList2.class) ;
+                intent.putExtra("user_id", String.valueOf(user.getUser_id())) ;
+                startActivity(intent) ;
+                finish();
             }
         });
 
@@ -506,7 +533,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }*/
 
-            InputStream is = ThisSendPostRequest(URLS.URL_GETIMG, params);
+            InputStream is = ThisSendPostRequest(URLS.URL_GETIMGMAIN, params);
             //Log.d("is",is.toString());
 
             bitmapImg = BitmapFactory.decodeStream(is);

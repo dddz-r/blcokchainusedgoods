@@ -50,6 +50,7 @@ public class Category2  extends AppCompatActivity {
     public void onBackPressed() {
         //super.onBackPressed();
         startActivity(new Intent(Category2.this, MainActivity.class));
+        finish();
     }
 
     @Override
