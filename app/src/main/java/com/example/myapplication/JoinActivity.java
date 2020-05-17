@@ -317,41 +317,48 @@ public class JoinActivity extends AppCompatActivity {
             return;
         }
 
-        if (checkPasswordSecurity(userPassword)) { //패스워드 안전성 통과
+        if(checkIdSecurity(userId)) {
 
-            if (!userPassword.equals(userPasswordConfirm)) { //패스워드 확인 통과
+            if (checkPasswordSecurity(userPassword)) { //패스워드 안전성 통과
 
-                Toast.makeText(this, "비밀번호가 일치하지 않습니다. 재입력 해주시기 바랍니다.", Toast.LENGTH_SHORT).show();
+                if (!userPassword.equals(userPasswordConfirm)) { //패스워드 확인 통과
 
-            } else {
-
-                //여기다가 final boolean 타입의 유무 확인 두 변수가 true일 경우 를 만들어야 함
-                //만들 것 1. 아이디 중복 체크 하는 AsyncTask
-                //만들 것 2. 문자 인증하는 AsyncTask
-
-                if(afterAuth && afterCheckId) {
-
-                    JoinUser ju = new JoinUser(userId, userPassword, userName, userPhoneNumber, userAddress, userAccount);
-                    ju.execute();
-
-                } else if(!afterCheckId) {
-
-                    Toast.makeText(this, "아이디 중복검사를 진행해 주세요!", Toast.LENGTH_SHORT).show();
-
-                } else if(!afterAuth) {
-
-                    Toast.makeText(this, "휴대폰 본인인증을 진행해 주세요!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "비밀번호가 일치하지 않습니다. 재입력 해주시기 바랍니다.", Toast.LENGTH_SHORT).show();
 
                 } else {
 
-                    Toast.makeText(this, "에러 발생", Toast.LENGTH_SHORT).show();
+                    //여기다가 final boolean 타입의 유무 확인 두 변수가 true일 경우 를 만들어야 함
+                    //만들 것 1. 아이디 중복 체크 하는 AsyncTask
+                    //만들 것 2. 문자 인증하는 AsyncTask
+
+                    if (afterAuth && afterCheckId) {
+
+                        JoinUser ju = new JoinUser(userId, userPassword, userName, userPhoneNumber, userAddress, userAccount);
+                        ju.execute();
+
+                    } else if (!afterCheckId) {
+
+                        Toast.makeText(this, "아이디 중복검사를 진행해 주세요!", Toast.LENGTH_SHORT).show();
+
+                    } else if (!afterAuth) {
+
+                        Toast.makeText(this, "휴대폰 본인인증을 진행해 주세요!", Toast.LENGTH_SHORT).show();
+
+                    } else {
+
+                        Toast.makeText(this, "에러 발생", Toast.LENGTH_SHORT).show();
+
+                    }
 
                 }
+            } else {
+
+                Toast.makeText(this, "비밀번호가 안전성 정책에 어긋납니다. 규칙대로 비밀번호를 생성해주세요.", Toast.LENGTH_SHORT).show();
 
             }
         } else {
 
-            Toast.makeText(this, "비밀번호가 안전성 정책에 어긋납니다. 규칙대로 비밀번호를 생성해주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "아이디가 안전성 정책에 어긋납니다. 규칙대로 아이디를 생성해주세요.", Toast.LENGTH_SHORT).show();
 
         }
 
@@ -560,6 +567,18 @@ public class JoinActivity extends AppCompatActivity {
         }
     }
 
+    //아이디 안전성 검사
+    public boolean checkIdSecurity(String user_id) {
+
+        String idPattern = "^(?=.*[a-z0-9]).{5,12}$";
+        Matcher matcher = Pattern.compile(idPattern).matcher(user_id);
+
+        if(matcher.matches()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     //뒤로가기 버튼
     public void onClick_Back(View view) {
         Intent intent = new Intent(this, LoginActivity.class);

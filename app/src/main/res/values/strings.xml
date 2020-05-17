@@ -52,6 +52,7 @@
     <string name="user_password_confirm">비밀번호\n재입력</string>
 
     <string name="caution_password_security">특수문자, 영어소문자, 숫자를 포함하여 8~14자로 입력하세요.</string>
+    <string name="caution_id_security">영어소문자, 숫자를 포함하여 5~12자로 입력하세요.</string>
     <string name="auth_number">인증번호</string>
     <string name="permission_1">[설정] > [권한] 에서 권한을 허용할 수 있습니다.</string>
     <string name="permission_2">사진 및 파일을 저장하기 위하여 접근 권한이 필요합니다.</string>
