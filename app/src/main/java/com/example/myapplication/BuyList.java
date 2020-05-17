@@ -37,6 +37,13 @@ public class BuyList extends AppCompatActivity {
     Drawable image;
 
     @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        startActivity(new Intent(BuyList.this, MainActivity.class));
+        finish();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.buy_list);
@@ -147,7 +154,7 @@ public class BuyList extends AppCompatActivity {
                 //finish();
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -228,7 +235,7 @@ public class BuyList extends AppCompatActivity {
                 //finish();
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -315,7 +322,7 @@ public class BuyList extends AppCompatActivity {
                 buyListAdapter.notifyDataSetChanged();
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "서버가 꺼져있어요^^", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "서버가 꺼져있어요^^", Toast.LENGTH_SHORT).show();
 
             }
 

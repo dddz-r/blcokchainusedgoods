@@ -1,4 +1,6 @@
 package com.example.myapplication;
+import android.app.ListActivity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
@@ -35,6 +37,7 @@ import java.util.HashMap;
 //톡방 안에 내용
 public class TalkRoom extends AppCompatActivity {
 
+    public static Context CONTEXT;
 
     private ListView talk_contents;
     private EditText talk_edit;
@@ -49,10 +52,19 @@ public class TalkRoom extends AppCompatActivity {
     User user;
     TalkAdapter talkAdapter = new TalkAdapter();
 
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        startActivity(new Intent(TalkRoom.this, TalkList.class));
+        finish();
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.talk_room);
+
+        CONTEXT = this;
+        ((TalkRoom) TalkRoom.CONTEXT).onResume();
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
@@ -78,6 +90,18 @@ public class TalkRoom extends AppCompatActivity {
         //talkAdapter.addOppositTalkItem("나", "상대방", "안녕하신가~", "12:01");
         //talkAdapter.addMyTalkItem("나", "상대방", "반갑군~", "12:53");
 
+        /*대화목록 들고오기*/
+        /*runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        });*/
+        talkAdapter = new TalkAdapter(); //이거 새로해서 리스트뷰 초기화
+        talk_contents.setAdapter(talkAdapter);
+        talkReceiveExecute();
+        talk_contents.setSelection(talkAdapter.getCount() - 1);
+
         talkbackground= findViewById(R.id.talkbackground);
         talkbackground.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -90,6 +114,7 @@ public class TalkRoom extends AppCompatActivity {
                     case MotionEvent.ACTION_DOWN :    //화면을 터치했을때
                         talkAdapter = new TalkAdapter(); //이거 새로해서 리스트뷰 초기화
                         talk_contents.setAdapter(talkAdapter);
+                        talk_contents.setSelection(talkAdapter.getCount() - 1);
                         talkReceiveExecute();
                         break;
 
@@ -106,27 +131,23 @@ public class TalkRoom extends AppCompatActivity {
             }
         });
 
+
+
         talk_contents.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         talkAdapter = new TalkAdapter(); //이거 새로해서 리스트뷰 초기화
                         talk_contents.setAdapter(talkAdapter);
-                        //talk_contents.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+                        talk_contents.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+                        talk_contents.setSelection(talkAdapter.getCount() - 1);
                         talkReceiveExecute();
 
                     }
                 }
         );
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                talkAdapter = new TalkAdapter(); //이거 새로해서 리스트뷰 초기화
-                talk_contents.setAdapter(talkAdapter);
-                talkReceiveExecute();
-            }
-        });
+
 
         /* 보내기 버튼 눌렸을때*/
         talk_edit = (EditText) findViewById(R.id.talk_edit);
@@ -140,7 +161,8 @@ public class TalkRoom extends AppCompatActivity {
                 } else {
                     talkAdapter = new TalkAdapter(); //이거 새로해서 리스트뷰 초기화
                     talk_contents.setAdapter(talkAdapter);
-                    //talk_contents.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+                    talk_contents.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+                    talk_contents.setSelection(talkAdapter.getCount() - 1);
                     talkSendExecute();
                 }
 
@@ -155,14 +177,23 @@ public class TalkRoom extends AppCompatActivity {
             public void onChanged() {
                 super.onChanged();
                 talk_contents.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+                talk_contents.setSelection(talkAdapter.getCount() - 1);
             }
 
         });
 
-
+        //talkAdapter = new TalkAdapter(); //이거 새로해서 리스트뷰 초기화
+        //talk_contents.setAdapter(talkAdapter);
+        //talkReceiveExecute();//
     }
 
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        //talkAdapter = new TalkAdapter(); //이거 새로해서 리스트뷰 초기화
+        //talk_contents.setAdapter(talkAdapter);
+        //talkReceiveExecute();
+    }
 
     private void talkReceiveExecute() {
 
@@ -326,6 +357,10 @@ public class TalkRoom extends AppCompatActivity {
                     }
                     count++;
                 }
+
+                //talkAdapter.notifyDataSetChanged();
+                talk_contents.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+                talk_contents.setSelection(talkAdapter.getCount() - 1);
 
                 //finish();
             } catch (JSONException e) {

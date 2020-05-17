@@ -137,6 +137,14 @@ public class SellScreen extends AppCompatActivity {
     private Boolean isPermission = true;
     private static final int PICK_FROM_ALBUM = 1;
 
+
+    @Override
+    public void onBackPressed() {
+        //super.onBackPressed();
+        startActivity(new Intent(SellScreen.this, MainActivity.class));
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -238,6 +246,7 @@ public class SellScreen extends AppCompatActivity {
                 //SellScreen.insertImage ii = new SellScreen.insertImage(StringImageList);
                 //ii.execute();
                 startActivity(new Intent(SellScreen.this, MainActivity.class));
+                finish();
             }
         });
         SellScreen.selectObjectPop sop = new SellScreen.selectObjectPop(user_id);
@@ -832,7 +841,7 @@ public class SellScreen extends AppCompatActivity {
                 //finish();
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "JSONException", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -901,16 +910,15 @@ public class SellScreen extends AppCompatActivity {
 
                 if (!obj.getString("code").equals(404)) {
 
-                    Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), obj.getString("message"), Toast.LENGTH_SHORT).show();
 
                 } else if (!obj.getString("code").equals(200)) {
 
                     //Toast.makeText(getApplicationContext(), "success", Toast.LENGTH_SHORT).show();
-                    Toast.makeText(getApplicationContext(), "상품등록에 성공하였습니다.", Toast.LENGTH_SHORT).show();
 
                 } else {
 
-                    Toast.makeText(getApplicationContext(), "Some error occur", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Some error occur", Toast.LENGTH_SHORT).show();
 
                 }
                 SellScreen.getRegisterNumber grn = new SellScreen.getRegisterNumber(user_id);
@@ -986,13 +994,13 @@ public class SellScreen extends AppCompatActivity {
                         multipartImageUpload(i);
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "Bitmap is null. Try again", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Bitmap is null. Try again", Toast.LENGTH_SHORT).show();
                 }
 
 
             } catch (JSONException e) {
                 e.printStackTrace();
-                Toast.makeText(getApplicationContext(), "서버가 연결되어있지 않습니다.", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "서버연결ㄴㄴ", Toast.LENGTH_SHORT).show();
 
             }
 

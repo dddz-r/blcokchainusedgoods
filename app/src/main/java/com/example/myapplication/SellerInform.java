@@ -63,6 +63,7 @@ public class SellerInform extends AppCompatActivity {
                 Intent intent = new Intent(SellerInform.this, SellList.class) ;
                 intent.putExtra("user_id", si_seller_id.getText().toString()) ;
                 startActivity(intent) ;
+
             }
         });
 
