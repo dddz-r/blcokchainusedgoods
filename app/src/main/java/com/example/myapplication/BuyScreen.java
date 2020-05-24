@@ -781,7 +781,21 @@ public class BuyScreen extends AppCompatActivity {
 
 
                 firstRegister = json.getString("registerTime");
+                String year = firstRegister.substring(11,15);
+                String month = firstRegister.substring(4,7);
+                String day = firstRegister.substring(8,10);
+                String hour = firstRegister.substring(16,18);
+                int hours = Integer.parseInt(hour);
+                hours = hours + 9;
 
+                if(hours >= 24) {
+                    hours = hours - 24;
+                }
+
+                hour = Integer.toString(hours);
+                String minutes = firstRegister.substring(19,21);
+
+                firstRegister =  month+ " " + day + " " + year +"." + hour + ":" + minutes;
 
                 //finish();
             } catch (JSONException e) {
