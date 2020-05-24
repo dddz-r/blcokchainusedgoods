@@ -99,6 +99,9 @@ public class BuyScreen extends AppCompatActivity {
                         //bs_sendOk.setVisibility(View.GONE);
                         Message msg = handler1.obtainMessage();
                         handler1.sendMessage(msg);
+                    } else if (object_state.equals("endSale")) {
+                        Message msg = handler3.obtainMessage();
+                        handler3.sendMessage(msg);
                     } else if (object_state.equals("onBuy")) {
                         bs_buyOk.setText("구매중");
                         bs_sendOk.setText("배송 확인");
@@ -114,24 +117,26 @@ public class BuyScreen extends AppCompatActivity {
     Thread whoThread = new Thread(
             new Runnable() {
                 public void run() {
-                    if(buyer_id == null){
+                    if (object_state.equals("endSale")) {
                         Message msg = handler3.obtainMessage();
-                        handler1.sendMessage(msg);
-                    }else if (buyer_id.equals(object_owner)) {
-                        if (object_state.equals("onSale")) {//구매요청전에는 택배보내면 안되지
+                        handler3.sendMessage(msg);
+                    } else {
+                        if (buyer_id == null) {
+                            Message msg = handler3.obtainMessage();
+                            handler1.sendMessage(msg);
+                        } else if (buyer_id.equals(object_owner)) {
+                            if (object_state.equals("onSale")) {//구매요청전에는 택배보내면 안되지
+                                Message msg = handler1.obtainMessage();
+                                handler1.sendMessage(msg);
+                            }
+                            Message msg = handler2.obtainMessage();
+                            handler2.sendMessage(msg);
+                        } else {
                             Message msg = handler1.obtainMessage();
                             handler1.sendMessage(msg);
                         }
-                        Message msg = handler2.obtainMessage();
-                        handler2.sendMessage(msg);
-                        /*bs_sendOk.setVisibility(View.VISIBLE);
-                        bs_buyOk.setVisibility(View.GONE);
-                        bs_seller_inform_btn.setVisibility(View.GONE);*/
-                    }else {
-                        Message msg = handler1.obtainMessage();
-                        handler1.sendMessage(msg);
-                    }
 
+                    }
                 }
             }
     );
