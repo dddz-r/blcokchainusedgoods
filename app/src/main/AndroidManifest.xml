@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.myapplication">
+    package="com.example.weiver">
 
     <uses-sdk tools:overrideLibrary="android.support.*" />
 
@@ -21,14 +21,14 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_weiver"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_weiver_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Test2"></activity>
-        <activity android:name=".TestUploadImage">
+        <activity android:name="com.example.weiver.Test2"></activity>
+        <activity android:name="com.example.weiver.TestUploadImage">
         </activity>
 
         <meta-data
@@ -39,7 +39,7 @@
             android:value="false" />
 
         <service
-            android:name=".MyFirebaseMessangingService"
+            android:name="com.example.weiver.MyFirebaseMessangingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -53,39 +53,39 @@
         <activity android:name="com.yongbeam.y_photopicker.util.photopicker.PhotoPagerActivity"
             android:theme="@style/Theme.AppCompat.NoActionBar"/>
 
-        <activity android:name=".Login2Activity" />
-        <activity android:name=".AuthPhoneNumber" />
-        <activity android:name=".ChangePasswordActivity2" />
-        <activity android:name=".ChangePasswordActivity" />
-        <activity android:name=".FindIdActivity" />
-        <activity android:name=".JoinActivity" />
-        <activity android:name=".SellScreen" />
-        <activity android:name=".BuyList" />
-        <activity android:name=".BuyScreen" />
-        <activity android:name=".LoginActivity" />
-        <activity android:name=".TalkRoom" />
-        <activity android:name=".TalkList" />
-        <activity android:name=".SellList" />
-        <activity android:name=".SellerInform" />
-        <activity android:name=".SellerReview" />
-        <activity android:name=".WriteReview" />
-        <activity android:name=".Category1" />
-        <activity android:name=".Category2" />
-        <activity android:name=".Category3" />
-        <activity android:name=".Category4" />
-        <activity android:name=".Category5" />
-        <activity android:name=".Category6" />
-        <activity android:name=".Category7" />
-        <activity android:name=".OnDealList" />
-        <activity android:name=".OnDealList2" />
-        <activity android:name=".LoadingActivity">
+        <activity android:name="com.example.weiver.Login2Activity" />
+        <activity android:name="com.example.weiver.AuthPhoneNumber" />
+        <activity android:name="com.example.weiver.ChangePasswordActivity2" />
+        <activity android:name="com.example.weiver.ChangePasswordActivity" />
+        <activity android:name="com.example.weiver.FindIdActivity" />
+        <activity android:name="com.example.weiver.JoinActivity" />
+        <activity android:name="com.example.weiver.SellScreen" />
+        <activity android:name="com.example.weiver.BuyList" />
+        <activity android:name="com.example.weiver.BuyScreen" />
+        <activity android:name="com.example.weiver.LoginActivity" />
+        <activity android:name="com.example.weiver.TalkRoom" />
+        <activity android:name="com.example.weiver.TalkList" />
+        <activity android:name="com.example.weiver.SellList" />
+        <activity android:name="com.example.weiver.SellerInform" />
+        <activity android:name="com.example.weiver.SellerReview" />
+        <activity android:name="com.example.weiver.WriteReview" />
+        <activity android:name="com.example.weiver.Category1" />
+        <activity android:name="com.example.weiver.Category2" />
+        <activity android:name="com.example.weiver.Category3" />
+        <activity android:name="com.example.weiver.Category4" />
+        <activity android:name="com.example.weiver.Category5" />
+        <activity android:name="com.example.weiver.Category6" />
+        <activity android:name="com.example.weiver.Category7" />
+        <activity android:name="com.example.weiver.OnDealList" />
+        <activity android:name="com.example.weiver.OnDealList2" />
+        <activity android:name="com.example.weiver.LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
+        <activity android:name="com.example.weiver.MainActivity" />
     </application>
 
 </manifest>
