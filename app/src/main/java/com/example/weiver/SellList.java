@@ -76,6 +76,9 @@ public class SellList extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         String buy_data = String.valueOf(parent.getItemAtPosition(position));
                         //Toast.makeText(SellList.this, buy_data, Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(SellList.this, BuyScreen.class) ;
+                        intent.putExtra("register_number",buyItems.get(position).getRegister_number());
+                        startActivity(intent);
                     }
                 }
         );
