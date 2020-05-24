@@ -1,42 +1,34 @@
 {
   "project_info": {
-    "project_number": "971655705028",
-    "firebase_url": "https://blcokchainproject.firebaseio.com",
-    "project_id": "blcokchainproject",
-    "storage_bucket": "blcokchainproject.appspot.com"
+    "project_number": "92352635024",
+    "firebase_url": "https://weiver-f17a1.firebaseio.com",
+    "project_id": "weiver-f17a1",
+    "storage_bucket": "weiver-f17a1.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:971655705028:android:0e28519372925076813491",
+        "mobilesdk_app_id": "1:92352635024:android:71dda4f077ceab4d527815",
         "android_client_info": {
-          "package_name": "com.example.myapplication"
+          "package_name": "com.example.weiver"
         }
       },
       "oauth_client": [
         {
-          "client_id": "971655705028-7l9q4rhkmfn61in0976dqloqkdd5hjup.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.myapplication",
-            "certificate_hash": "f70636ae771c18c9bed9342d1f612342333cab24"
-          }
-        },
-        {
-          "client_id": "971655705028-dhgsm8bn76vqoqho70le2asvr07tnauj.apps.googleusercontent.com",
+          "client_id": "92352635024-ldr7qgoa5o0n6pktkjkdpu1jlabit6kn.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBPshcz5elyHJJCl2xb1R5mnahbBm9dlyw"
+          "current_key": "AIzaSyAR96LGLOvUTHUGmZ8D-C13d_jkExDmhUk"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "971655705028-dhgsm8bn76vqoqho70le2asvr07tnauj.apps.googleusercontent.com",
+              "client_id": "92352635024-ldr7qgoa5o0n6pktkjkdpu1jlabit6kn.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
